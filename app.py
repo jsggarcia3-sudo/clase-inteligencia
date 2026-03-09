@@ -1,4 +1,3 @@
-
 import streamlit as st
 
 # ==========================================
@@ -106,4 +105,46 @@ with tab_recoleccion:
     * **TECHINT:** Medios técnicos (Cámaras, Interceptación).
     * **OSINT:** Fuentes abiertas (Redes sociales).
     """)
-    st.warning("⚠️ Toda información debe evaluarse con la Tabla de **Fiabilidad (A-F)** y
+    st.warning("⚠️ Toda información debe evaluarse con la Tabla de **Fiabilidad (A-F)** y **Veracidad (1-6)**.")
+
+    st.divider()
+
+    confirmar_lectura_2 = st.checkbox("✅ Comprendo cómo se clasifica la información recolectada.")
+
+    if confirmar_lectura_2:
+        st.success("🔓 EJERCICIO DE RECOLECCIÓN DESBLOQUEADO")
+        st.subheader("⚡ Caso Práctico")
+        st.write("Escenario: Un ciudadano que nunca ha colaborado (Fuente Nueva) da un dato que usted confirma con el GPS de la patrulla.")
+        
+        fial = st.selectbox("¿Fiabilidad de la Fuente?", ["Seleccione...", "A (Confiable)", "F (Fuente Nueva)"])
+        vera = st.selectbox("¿Veracidad del Dato?", ["Seleccione...", "1 (Confirmado)", "6 (No determinado)"])
+        
+        if st.button("Validar Respuesta - Recolección"):
+            if fial.startswith("F") and vera.startswith("1"):
+                st.success("¡Excelente! Es F-1: Fuente nueva pero dato confirmado por tecnología.")
+            else:
+                st.error("Incorrecto. Si es fuente nueva es 'F' y si está confirmado es '1'.")
+    else:
+        st.info("📖 Lea la teoría de recolección para habilitar el desafío.")
+
+# --- PESTAÑA: ANÁLISIS ---
+with tab_analisis:
+    st.header("Teoría: Fase de Análisis")
+    st.info("Concepto Clave: **Polarización Geográfica**. Es cuando el delito se concentra en zonas específicas (Hotspots).")
+    
+    st.divider()
+    
+    confirmar_lectura_3 = st.checkbox("✅ He leído sobre los patrones de análisis criminal.")
+
+    if confirmar_lectura_3:
+        st.success("🔓 EJERCICIO DE ANÁLISIS DESBLOQUEADO")
+        analisis_resp = st.radio("Si los robos ocurren siempre en la misma calle, estamos ante:", 
+                                ["Dispersión", "Polarización Geográfica"])
+        if st.button("Validar Respuesta - Análisis"):
+            if analisis_resp == "Polarización Geográfica":
+                st.success("¡Correcto! Ha identificado una concentración criminal.")
+    else:
+        st.info("📖 Lea la teoría de análisis para habilitar el desafío final.")
+
+st.write("---")
+st.caption("DIPOL - Dirección de Inteligencia Policial | Honduras 2026")
