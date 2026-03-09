@@ -1,68 +1,109 @@
+
 import streamlit as st
 
-# 1. CONFIGURACIÓN INICIAL (Siempre al principio)
+# ==========================================
+# 🛡️ 1. CONFIGURACIÓN DE LA INTERFAZ
+# ==========================================
 st.set_page_config(page_title="Academia DIPOL", page_icon="👮‍♂️", layout="wide")
 
-# 2. INTERRUPTOR GLOBAL (Cerrar clase)
-clase_activa = True
-if not clase_activa:
-    st.error("🔒 ACCESO RESTRINGIDO: La sesión ha finalizado.")
-    st.stop()
+# ==========================================
+# 🚩 2. CONTROL DE ACCESO (EL INTERRUPTOR)
+# ==========================================
+# Cambia a False para cerrar la clase al terminar tus 35 diapositivas
+clase_activa = True 
 
-# 3. LOGO Y ENCABEZADO
+if not clase_activa:
+    st.error("🔒 ACCESO RESTRINGIDO: La sesión de Inteligencia ha finalizado.")
+    st.info("El material ha sido archivado por seguridad institucional. Consulte con su instructor.")
+    st.stop() 
+
+# URL del logo oficial (Ruta directa)
 logo_url = "https://www.policianacional.gob.hn/images/logo_policia_nacional.png"
-col1, col2 = st.columns([1, 5])
-with col1: st.image(logo_url, width=90)
-with col2: 
-    st.title("Dirección de Inteligencia Policial")
-    st.subheader("Plataforma de Capacitación Continua")
+
+# Estilo visual institucional
+st.markdown("""
+    <style>
+    .main { background-color: #f0f2f6; }
+    .stButton>button { width: 100%; background-color: #002d55; color: white; font-weight: bold; border-radius: 10px; }
+    .stTabs [data-baseweb="tab-list"] { gap: 24px; }
+    .stTabs [data-baseweb="tab"] { height: 50px; background-color: #f0f2f6; border-radius: 5px; }
+    .stTabs [aria-selected="true"] { background-color: #002d55; color: white ! drawing; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- ENCABEZADO ---
+col_logo, col_titulo = st.columns([1, 5])
+with col_logo:
+    st.image(logo_url, width=90)
+with col_titulo:
+    st.title("Dirección de Inteligencia Policial (DIPOL)")
+    st.subheader("Plataforma de Autoaprendizaje - Ciclo de Inteligencia")
 
 st.write("---")
 
-# 4. PESTAÑAS
-tab_inicio, tab_niveles, tab_recoleccion = st.tabs(["🏠 Inicio", "🕵️‍♂️ Niveles de Inteligencia", "📡 Recolección"])
+# ==========================================
+# 📂 3. ESTRUCTURA DE PESTAÑAS (OVA)
+# ==========================================
+tab_inicio, tab_niveles, tab_recoleccion, tab_analisis = st.tabs([
+    "🏠 Inicio", 
+    "🕵️‍♂️ 1. Niveles de Inteligencia", 
+    "📡 2. Fase: Recolección", 
+    "🧠 3. Fase: Análisis"
+])
 
+# --- PESTAÑA: INICIO ---
 with tab_inicio:
     st.header("Bienvenido, Agente")
-    nombre = st.text_input("Ingrese su nombre y placa para habilitar el sistema:")
-    if nombre:
-        st.success(f"Autenticado: Agente {nombre}. Proceda a la pestaña de Niveles.")
+    st.write("Esta plataforma guiará su aprendizaje de forma interactiva. Lea la teoría y complete los desafíos.")
+    nombre_agente = st.text_input("Ingrese su Nombre Completo y Placa:")
+    if nombre_agente:
+        st.success(f"Sesión iniciada: Agente {nombre_agente}. Proceda a la pestaña de 'Niveles'.")
 
+# --- PESTAÑA: NIVELES DE INTELIGENCIA ---
 with tab_niveles:
-    st.header("Teoría: Definiciones y Niveles")
+    st.header("Teoría: Conceptos y Niveles de Inteligencia")
     
-    # --- CONTENIDO TEÓRICO ---
     st.markdown("""
-    ### 1. Inteligencia Policial
-    Es el conocimiento procesado que permite anticipar delitos y desarticular estructuras criminales.
+    **Inteligencia Policial:** Es el proceso de transformar datos en conocimiento útil para prevenir el delito. 
+    Se divide según el nivel de decisión:
     
-    ### 2. Niveles de Inteligencia
-    * **Estratégico:** Decisiones de alto mando (Planes de Nación).
-    * **Operacional:** Grupos de tarea en zonas específicas (Regiones).
-    * **Táctico:** Ejecución inmediata (Capturas, Allanamientos).
+    1.  **Estratégica:** Apoya planes de largo plazo y políticas nacionales (Dirección General).
+    2.  **Operacional:** Se enfoca en desarticular bandas en zonas o regiones específicas (DIPOL Regional).
+    3.  **Táctica:** Información inmediata para una captura o allanamiento hoy mismo (Equipos de Campo).
     """)
-    
-    st.divider()
-    
-    # --- EL BOTÓN DE DESBLOQUEO ---
-    # Usamos un checkbox para que el alumno jure que leyó
-    leido = st.checkbox("✅ He leído y comprendido la diferencia entre los niveles Estratégico, Operacional y Táctico.")
 
-    if leido:
-        st.success("🔓 MATERIAL COMPLEMENTARIO DESBLOQUEADO")
+    st.divider()
+
+    # --- SISTEMA DE DESBLOQUEO ---
+    confirmar_lectura_1 = st.checkbox("✅ He analizado la diferencia entre los niveles Estratégico, Operacional y Táctico.")
+
+    if confirmar_lectura_1:
+        st.success("🔓 EJERCICIO DE VALIDACIÓN DESBLOQUEADO")
         st.subheader("⚡ Desafío de Clasificación")
         
-        escenario = "El Director General ordena crear un plan de 5 años para reducir el narcotráfico en todo el país."
-        opcion = st.radio("¿Qué nivel de inteligencia se está aplicando?", 
-                         ["Seleccione...", "Estratégico", "Operacional", "Táctico"])
+        pregunta_1 = st.radio(
+            "Escenario: Se está planificando la captura de un cabecilla para ejecutarse mañana a las 05:00 AM.",
+            ["Seleccione una opción...", "Inteligencia Estratégica", "Inteligencia Operacional", "Inteligencia Táctica"]
+        )
         
-        if st.button("Validar Respuesta"):
-            if opcion == "Estratégico":
+        if st.button("Validar Respuesta - Niveles"):
+            if pregunta_1 == "Inteligencia Táctica":
                 st.balloons()
-                st.success("¡Correcto! Por ser a largo plazo y de nivel nacional, es Estratégico.")
+                st.success("¡Correcto! Es Táctica porque es información para ejecución inmediata.")
+            elif pregunta_1 == "Seleccione una opción...":
+                st.warning("Por favor, seleccione una respuesta.")
             else:
-                st.error("Incorrecto. Repase la teoría: el largo plazo define el nivel Estratégico.")
+                st.error("Incorrecto. Recuerde: La inmediatez (mañana temprano) define el nivel Táctico.")
     else:
-        st.warning("⚠️ El ejercicio práctico aparecerá aquí una vez que marque la casilla de lectura superior.")
+        st.info("📖 Lea la teoría superior y marque la casilla para habilitar el ejercicio práctico.")
 
-# ... (Aquí puedes repetir la misma lógica para la pestaña de Recolección)
+# --- PESTAÑA: RECOLECCIÓN ---
+with tab_recoleccion:
+    st.header("Teoría: Fase de Recolección")
+    st.write("""
+    La recolección obtiene la 'materia prima'. Se clasifica por fuentes:
+    * **HUMINT:** Fuentes humanas (Informantes).
+    * **TECHINT:** Medios técnicos (Cámaras, Interceptación).
+    * **OSINT:** Fuentes abiertas (Redes sociales).
+    """)
+    st.warning("⚠️ Toda información debe evaluarse con la Tabla de **Fiabilidad (A-F)** y
