@@ -33,7 +33,7 @@ st.write("---")
 # 4. ESTRUCTURA AUTODIDACTA POR PESTAÑAS
 tab_inicio, tab_intel, tab_recoleccion, tab_analisis = st.tabs([
     "🏠 Inicio", 
-    "🕵️‍♂️ Niveles de Inteligencia", 
+    "🕵️‍♂️ Conceptualizacion Inteligencia", 
     "📡 Fase: Recolección", 
     "🧠 Fase: Análisis"
 ])
