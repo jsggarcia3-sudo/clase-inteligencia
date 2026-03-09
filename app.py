@@ -31,48 +31,62 @@ with col2:
 st.write("---")
 
 # 4. ESTRUCTURA AUTODIDACTA POR PESTAÑAS
-tab_inicio, tab_recoleccion, tab_analisis = st.tabs(["🏠 Inicio", "📡 Fase: Recolección", "🧠 Fase: Análisis"])
+tab_inicio, tab_intel, tab_recoleccion, tab_analisis = st.tabs([
+    "🏠 Inicio", 
+    "🕵️‍♂️ Niveles de Inteligencia", 
+    "📡 Fase: Recolección", 
+    "🧠 Fase: Análisis"
+])
 
-with tab_inicio:
-    st.header("Bienvenido, Agente")
-    st.write("Esta plataforma está diseñada para que avance a su propio ritmo. Lea la teoría en cada pestaña y complete el ejercicio práctico para validar su conocimiento.")
-    nombre = st.text_input("Ingrese su nombre para comenzar:")
-    if nombre: st.success(f"Listo para iniciar, Agente {nombre}. Diríjase a la pestaña de 'Recolección'.")
 
-with tab_recoleccion:
-    st.header("Teoría: La Recolección de Información")
-    st.write("""
-    La recolección es obtener datos brutos. Se clasifican por su origen:
-    * **HUMINT:** Fuentes humanas (entrevistas, informantes).
-    * **OSINT:** Fuentes abiertas (redes, periódicos).
-    * **TECHINT:** Medios técnicos (cámaras, interceptaciones).
-    """)
-    st.warning("📊 **REGLA DE ORO:** Toda información se califica con la tabla (A-F) para Fiabilidad y (1-6) para Veracidad.")
+with tab_intel:
+    st.header("Teoría: Conceptos y Niveles de Inteligencia")
     
+    col_a, col_b = st.columns(2)
+    with col_a:
+        st.subheader("¿Qué es Inteligencia?")
+        st.write("""
+        Es el producto resultante del procesamiento de información relativo a naciones extranjeras, 
+        fuerzas hostiles o áreas de operaciones, con el fin de **reducir la incertidumbre** del mando.
+        """)
+    with col_b:
+        st.subheader("Inteligencia Policial")
+        st.write("""
+        Es la aplicación de la inteligencia en el ámbito de seguridad pública para 
+        prevenir, neutralizar y combatir el fenómeno criminal y las estructuras delictivas.
+        """)
+
     st.markdown("---")
-    st.subheader("⚡ Ejercicio de Validación")
-    st.write("Escenario: Un ciudadano reporta una avioneta sospechosa. Usted confirma el dato con el radar de la base.")
+    st.subheader("🗺️ Niveles de Inteligencia")
+    st.write("Dependiendo de **quién** tome la decisión y el **tiempo** de ejecución, se clasifica en:")
     
-    fial = st.selectbox("¿Fiabilidad del ciudadano (Fuente nueva)?", ["F", "A", "B"])
-    vera = st.selectbox("¿Veracidad (Si el radar lo confirmó)?", ["6", "1", "2"])
+    # Usamos columnas para comparar los niveles
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        st.info("**Estratégica**")
+        st.caption("Largo Plazo / Alta Dirección")
+        st.write("Apoya planes nacionales y políticas de seguridad del Estado.")
+    with c2:
+        st.warning("**Operacional**")
+        st.caption("Mediano Plazo / Regional")
+        st.write("Se enfoca en desarticular estructuras criminales en una zona específica.")
+    with c3:
+        st.error("**Táctica**")
+        st.caption("Corto Plazo / Inmediata")
+        st.write("Información directa para una captura o allanamiento en curso.")
+
+    st.markdown("---")
+    st.subheader("⚡ Ejercicio de Validación: Clasificación de Niveles")
+    st.write("Escenario: Se está planificando un operativo de captura contra un cabecilla de banda criminal que se realizará **mañana a las 05:00 AM**.")
     
-    if st.button("Validar Recolección"):
-        if fial == "F" and vera == "1":
-            st.success("¡Excelente! Fuente nueva (F) pero dato confirmado (1). Clasificación F-1.")
+    nivel_resp = st.radio("¿A qué nivel de inteligencia pertenece este escenario?", 
+                          ["Estratégica", "Operacional", "Táctica"])
+    
+    if st.button("Validar Nivel"):
+        if nivel_resp == "Táctica":
+            st.success("¡Correcto! Es Táctica porque es información inmediata para una ejecución directa en el terreno.")
             st.balloons()
-        else: st.error("Incorrecto. Repase la teoría de evaluación de fuentes.")
+        else:
+            st.error("Incorrecto. Recuerde: si es para una acción inmediata, es Táctica.")
 
-with tab_analisis:
-    st.header("Teoría: El Análisis Criminal")
-    st.write("El análisis transforma la información en **Inteligencia**. Un concepto clave es detectar patrones.")
-    st.info("Concepto: La **Polarización Geográfica** ocurre cuando el delito se concentra en puntos calientes (Hotspots).")
-    
-    st.markdown("---")
-    st.subheader("⚡ Ejercicio de Validación")
-    preg_analisis = st.radio("Si el 80% de los robos ocurren en 2 calles de Roatán, ¿cómo llamamos a este fenómeno?", 
-                             ["Dispersión", "Polarización Geográfica", "Azar"])
-    
-    if st.button("Validar Análisis"):
-        if preg_analisis == "Polarización Geográfica":
-            st.success("¡Correcto! Ha identificado un patrón geográfico.")
-        else: st.error("Incorrecto. Revise el concepto de concentración criminal.")
+# ... (Continúa con las pestañas de Recolección y Análisis que ya teníamos)
