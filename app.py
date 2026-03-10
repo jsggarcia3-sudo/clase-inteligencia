@@ -196,7 +196,24 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
                     with st.expander("Fases de Administración de Fuentes Humanas", expanded=True):
-                        st.write("1. Exploración | 2. Aproximación | 3. Registro | 4. Entrenamiento.")
+                        col_a, col_b = st.columns(2)
+                        with col_a:
+                            st.write("#### 1. Exploración")
+                            st.write("*Búsqueda de fuentes:*")
+                            st.write("- Búsqueda\n- Forma voluntaria\n- Evaluación y motivación\n- Selección preliminar")
+                            
+                            st.write("#### 2. Aproximación")
+                            st.write("*Establecimiento de contacto:*")
+                            st.write("- La entrevista\n- Sonsacamiento\n- Evaluación")
+                        
+                        with col_b:
+                            st.write("#### 3. Registro")
+                            st.write("*Ingresar la fuente en:*")
+                            st.write("- Sistema de administración de fuentes humanas")
+                            
+                            st.write("#### 4. Entrenamiento")
+                            st.write("*Preparar la fuente:*")
+                            st.write("- Instruir\n- Orientar\n- Dirigir\n- Controlar")
 
                 with t4:
                     st.subheader("La Entrevista de Inteligencia")
