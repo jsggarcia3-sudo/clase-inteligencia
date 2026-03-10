@@ -63,7 +63,7 @@ else:
 
     if seccion == "🏠 Inicio":
         st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>INICIE SU CAPACITACION</p>", unsafe_allow_html=True)
         st.divider()
 
         # Definición de los 7 módulos con sus iconos y descripciones cortas
