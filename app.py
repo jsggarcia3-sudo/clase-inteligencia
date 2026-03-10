@@ -568,7 +568,7 @@ else:
             if not st.session_state['modo_examen']:
                 st.header("🧠 Material: Análisis de la Información")
                 
-                # PESTAÑAS DEL MÓDULO 5
+                # PESTAÑAS DEL MÓDULO 5 (Corregidas para coincidir con el contenido)
                 tab_estudio, tab_proceso, tab_lca, tab_sintesis = st.tabs([
                     "🔬 Estudio Especializado", 
                     "🧩 Proceso de Análisis", 
@@ -580,7 +580,7 @@ else:
                     st.subheader("Estudio Especializado de la Información")
                     st.write("El análisis es un proceso cuyo objeto es **generar conocimiento**, con base en la información disponible.")
                     
-                    # Representación visual de la Primera Imagen (Flujo de flechas)
+                    # Representación visual del flujo (Basado en imagen 1)
                     st.markdown("""
                     <div style="display: flex; align-items: center; justify-content: center; background-color: #001f3f; padding: 20px; border-radius: 10px; border: 1px solid #D4AF37;">
                         <div style="background-color: #0056b3; color: white; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; width: 25%;">
@@ -599,184 +599,70 @@ else:
                     """, unsafe_allow_html=True)
                     
                     st.info("""
-                    **El análisis comprende:**
+                    **Fases del Análisis:**
                     1. **Interpretación:** Dar sentido a los datos aislados.
                     2. **Integración:** Unir piezas para ver el cuadro completo.
-                    3. **Hipótesis:** Plantear suposiciones técnicas sobre lo que está ocurriendo.
-                    4. **Conclusiones:** Resultados finales del estudio.
+                    3. **Hipótesis:** Plantear suposiciones técnicas.
+                    4. **Conclusiones:** Resultados finales.
                     """)
 
                 with tab_proceso:
-                    st.subheader("🧩 El Proceso Analítico: De los Datos al Conocimiento")
+                    st.subheader("🧩 El Proceso Analítico (Descomposición)")
                     
-                    # Panel Superior: Actividades Previas
+                    # Panel Superior de Actividades (Basado en imagen 3)
                     st.markdown("""
                     <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-                        <p style="text-align: center; color: #444; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Pasos Previos Necesarios</p>
-                        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
-                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Seleccionar</div>
-                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Clasificar</div>
-                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Organizar</div>
+                        <div style="display: flex; justify-content: center; gap: 15px;">
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Seleccionar</div>
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Clasificar</div>
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Organizar</div>
                         </div>
-                        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
-                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Identificar</div>
-                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Temas</div>
-                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Ideas</div>
+                        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Identificar</div>
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Temas</div>
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Ideas</div>
                         </div>
                     </div>
                     """, unsafe_allow_html=True)
 
-                    # El proceso de las 3 fases (El Todo -> Analizar -> Sintetizar)
                     col_f1, col_f2, col_f3 = st.columns(3)
-                    
                     with col_f1:
-                        st.markdown("""
-                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">TENDENCIAS Y PATRONES</p>
-                            <div style="font-size: 50px; margin: 20px 0;">🧩</div>
-                            <div style="background-color: #f2dede; padding: 15px; border-radius: 10px;">
-                                <h4 style="color: #a94442; margin: 0;">EL TODO</h4>
-                                <p style="color: #a94442; font-size: 0.85em; margin-top: 5px;">Objeto de análisis</p>
-                            </div>
-                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">Visión global inicial de la información recolectada.</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-
+                        st.markdown('<div style="text-align:center; background:#f2dede; padding:10px; border-radius:10px; height:200px;">'
+                                    '<b>EL TODO</b><br>🧩<br><small>Objeto de análisis. Tendencias y patrones.</small></div>', unsafe_allow_html=True)
                     with col_f2:
-                        st.markdown("""
-                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #D4AF37;">
-                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">ELEMENTO QUE MODIFICA EL PATRÓN</p>
-                            <div style="font-size: 50px; margin: 20px 0;">🔍</div>
-                            <div style="background-color: #fcf8e3; padding: 15px; border-radius: 10px;">
-                                <h4 style="color: #8a6d3b; margin: 0;">ANALIZAR</h4>
-                                <p style="color: #8a6d3b; font-size: 0.85em; margin-top: 5px;">Es descomponer</p>
-                            </div>
-                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">Separar las partes para conocer sus principios o elementos constitutivos.</p>
-                        </div>
-                        """, unsafe_allow_html=True)
-
+                        st.markdown('<div style="text-align:center; background:#fcf8e3; padding:10px; border-radius:10px; height:200px;">'
+                                    '<b>ANALIZAR</b><br>🔍<br><small>Descomponer. Identificar el elemento que modifica el patrón.</small></div>', unsafe_allow_html=True)
                     with col_f3:
-                        st.markdown("""
-                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">INTERP. ELEM. COMUNES Y DIFERENTES</p>
-                            <div style="font-size: 50px; margin: 20px 0;">💡</div>
-                            <div style="background-color: #d9edf7; padding: 15px; border-radius: 10px;">
-                                <h4 style="color: #31708f; margin: 0;">SINTETIZAR</h4>
-                                <p style="color: #31708f; font-size: 0.85em; margin-top: 5px;">Es recomponer</p>
-                            </div>
-                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">¿Qué significa una parte y esa parte sumada a las otras?</p>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.markdown('<div style="text-align:center; background:#d9edf7; padding:10px; border-radius:10px; height:200px;">'
+                                    '<b>SINTETIZAR</b><br>💡<br><small>Recomponer. Significado de las partes sumadas.</small></div>', unsafe_allow_html=True)
+                    st.caption("Analizar es descomponer el todo; sintetizar es recomponer para entender el significado final.")
 
                 with tab_lca:
-                    st.subheader("LCA: Línea del Conocimiento Analítico")
-                    st.write("Esta herramienta permite al analista ubicar la información en el tiempo para transformar antecedentes en proyecciones útiles.")
-                    
-                    # Contenedor principal de la LCA
+                    st.subheader("⏳ LCA: Línea del Conocimiento Analítico")
+                    # Visual de reloj de arena (Basado en imagen 4)
                     st.markdown("""
-                    <style>
-                        .lca-container {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-                            background: linear-gradient(90deg, #2c5d63 0%, #c0392b 50%, #f39c12 100%);
-                            padding: 40px 20px;
-                            border-radius: 15px;
-                            color: white;
-                            text-align: center;
-                            position: relative;
-                            margin: 20px 0;
-                        }
-                        .lca-box {
-                            background: rgba(255, 255, 255, 0.15);
-                            backdrop-filter: blur(5px);
-                            border: 2px solid white;
-                            border-radius: 10px;
-                            padding: 15px;
-                            width: 28%;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-                        }
-                        .lca-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; text-transform: uppercase; }
-                        .lca-arrow { font-size: 2em; color: white; }
-                        .lca-line {
-                            position: absolute;
-                            bottom: 10px;
-                            left: 5%;
-                            right: 5%;
-                            height: 4px;
-                            background: white;
-                        }
-                        .lca-point {
-                            position: absolute;
-                            bottom: 5px;
-                            width: 15px;
-                            height: 15px;
-                            background: black;
-                            border: 2px solid white;
-                            border-radius: 50%;
-                        }
-                    </style>
-                    
-                    <div class="lca-container">
-                        <div class="lca-box">
-                            <div class="lca-title">Pasado</div>
-                            <div style="font-size: 0.9em;">
-                                <b>Antecedentes</b><br>
-                                Memoria Histórica
-                            </div>
-                        </div>
-                        
-                        <div class="lca-arrow">➡️</div>
-                        
-                        <div class="lca-box" style="background: rgba(192, 57, 43, 0.8);">
-                            <div class="lca-title">Presente</div>
-                            <div style="font-size: 0.9em;">
-                                <b>Situación Actual</b><br>
-                                Interpretación
-                            </div>
-                        </div>
-                        
-                        <div class="lca-arrow">➡️</div>
-                        
-                        <div class="lca-box" style="background: rgba(243, 156, 18, 0.8);">
-                            <div class="lca-title">Futuro</div>
-                            <div style="font-size: 0.9em;">
-                                <b>Proyección</b><br>
-                                Escenarios
-                            </div>
-                        </div>
-                        
-                        <div class="lca-line"></div>
-                        <div class="lca-point" style="left: 0%;"></div>
-                        <div class="lca-point" style="left: 50%; transform: translateX(-50%);"></div>
-                        <div class="lca-point" style="right: 0%;"></div>
-                    </div>
-                    
-                    <div style="text-align: center; font-weight: bold; margin-bottom: 30px;">
-                        <span style="margin: 0 15%;">PASADO</span>
-                        <span style="margin: 0 12%;">PRESENTE</span>
-                        <span style="margin: 0 15%;">FUTURO</span>
+                    <div style="display: flex; justify-content: space-around; align-items: center; background: linear-gradient(90deg, #2c5d63, #c0392b, #f39c12); padding: 30px; border-radius: 15px; color: white; font-weight: bold;">
+                        <div style="text-align: center;">PASADO<br><small>Antecedentes<br>Memoria Histórica</small></div>
+                        <div style="font-size: 2em;">➡️</div>
+                        <div style="text-align: center; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px;">PRESENTE<br><small>Situación Actual<br>Interpretación</small></div>
+                        <div style="font-size: 2em;">➡️</div>
+                        <div style="text-align: center;">FUTURO<br><small>Proyección<br>Prospectiva</small></div>
                     </div>
                     """, unsafe_allow_html=True)
-                    
-                    st.info("""
-                    **¿Cómo leer la LCA?**
-                    1. **Memoria Histórica:** Se recolectan los antecedentes para entender de dónde venimos.
-                    2. **Interpretación:** Es el "nudo" del análisis. Aquí se cruza la información actual para entender el hoy.
-                    3. **Proyección:** Es el producto final. Basados en el pasado y el presente, predecimos el comportamiento futuro.
-                    """)
-                with tab_niveles:
-                    st.subheader("🎯 Resultados del Análisis")
+                    st.info("La LCA permite transformar la memoria histórica en proyecciones de futuro mediante la interpretación del presente.")
+
+                with tab_sintesis:
+                    st.subheader("🎯 Resultados y Cursos de Acción")
                     st.markdown("""
-                    El análisis no termina en la conclusión; debe proyectar el futuro:
-                    * **Posibles Escenarios:** ¿Qué podría pasar basándonos en las tendencias?
-                    * **Cursos de Acción:** Recomendaciones sobre qué hacer ante cada escenario.
-                    * **Prospectiva:** Anticiparse a la evolución de las amenazas.
+                    El análisis genera conocimiento para:
+                    * **Formular Hipótesis:** Suposiciones basadas en datos técnicos.
+                    * **Definir Escenarios:** Posibles evoluciones del fenómeno.
+                    * **Cursos de Acción:** Recomendaciones estratégicas para el mando.
                     """)
-                    st.warning("⚠️ Sin síntesis, no hay inteligencia útil para el mando.")
-                
-                # EXAMEN M5 (Borrador)
-                if st.button("🚀 INICIAR EXAMEN M5"):
+                    st.warning("⚠️ Recuerda: Sin síntesis, no hay inteligencia útil.")
+
+                st.divider()
+                if st.button("🚀 INICIAR EXAMEN MÓDULO 5"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
 
