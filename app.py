@@ -608,7 +608,7 @@ elif modulo_selec == "Módulo 4: Tratamiento":
                         st.rerun()
 
     # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN ---
-    elif modulo_selec == "Módulo 5: Análisis":
+elif modulo_selec == "Módulo 5: Análisis":
             if not st.session_state['modo_examen']:
                 st.header("🧠 Material: Análisis de la Información")
                 
