@@ -6,45 +6,23 @@ from urllib.parse import quote_plus
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL (DIPOL COLORS)
 st.set_page_config(page_title="Sistema de Inteligencia - DIPOL", page_icon="🛡️", layout="wide")
 
-# CSS personalizado: Azul Marino (#002147) y Dorado (#D4AF37)
 st.markdown("""
     <style>
-    /* Fondo principal */
-    .stApp {
-        background-color: #001226;
-    }
-    /* Estilo de los botones (Dorado Táctico) */
+    .stApp { background-color: #001226; }
     .stButton>button {
-        width: 100%;
-        border-radius: 4px;
-        height: 3em;
-        background-color: #D4AF37;
-        color: #001226;
-        font-weight: bold;
-        border: none;
-        transition: 0.3s;
+        width: 100%; border-radius: 4px; height: 3em;
+        background-color: #D4AF37; color: #001226;
+        font-weight: bold; border: none; transition: 0.3s;
     }
-    .stButton>button:hover {
-        background-color: #FFD700;
-        color: #000000;
-        border: 1px solid #ffffff;
-    }
-    /* Contenedores de login y formularios */
-    .css-1r6slb0, .stForm {
+    .stButton>button:hover { background-color: #FFD700; color: #000000; }
+    .stForm {
         border: 1px solid #D4AF37 !important;
         background-color: #002147 !important;
-        border-radius: 10px;
-        padding: 20px;
+        border-radius: 10px; padding: 20px;
     }
-    /* Textos y Títulos */
-    h1, h2, h3, p {
-        color: #ffffff !important;
-    }
-    /* Input fields */
+    h1, h2, h3, p { color: #ffffff !important; }
     .stTextInput>div>div>input, .stNumberInput>div>div>input {
-        background-color: #003366;
-        color: white;
-        border: 1px solid #D4AF37;
+        background-color: #003366; color: white; border: 1px solid #D4AF37;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -62,31 +40,26 @@ def login():
         st.write("---")
         usuario = st.text_input("Usuario")
         clave = st.text_input("Contraseña", type="password")
-        
         if st.button("ACCEDER AL PANEL"):
-            # Credenciales de acceso
             if usuario == "admin" and clave == "DIPOL2026": 
                 st.session_state['autenticado'] = True
                 st.rerun()
             else:
-                st.error("Credenciales incorrectas. Verifique con el administrador de sistemas.")
+                st.error("Credenciales incorrectas.")
         st.write("---")
 
-# 3. INTERFAZ OPERATIVA (Solo si el login es exitoso)
+# 3. INTERFAZ OPERATIVA
 if not st.session_state['autenticado']:
     login()
 else:
-    # Barra lateral institucional
     with st.sidebar:
         st.markdown("<h2 style='color: #D4AF37;'>DIPOL</h2>", unsafe_allow_html=True)
         st.write("**Agente en Servicio**")
         st.write("Sede: Bay Islands / Roatán")
-        st.write("---")
         if st.button("SALIR DEL SISTEMA"):
             st.session_state['autenticado'] = False
             st.rerun()
 
-    # --- LÓGICA DE BASE DE DATOS (MANTENIENDO LO QUE FUNCIONA) ---
     try:
         db_s = st.secrets["connections"]["postgresql"]
         pass_segura = quote_plus(db_s['password'])
@@ -97,7 +70,6 @@ else:
 
         st.title("📋 Registro de Evaluaciones de Personal")
         
-        # Formulario de Registro
         with st.form("registro_agente", clear_on_submit=True):
             c1, c2 = st.columns(2)
             with c1:
@@ -108,12 +80,20 @@ else:
             enviar = st.form_submit_button("REGISTRAR EN BASE DE DATOS")
             
             if enviar and nombre_agente:
+                # --- LÓGICA DE ESTADO ---
+                estado = "APROBADO" if calificacion >= 70 else "REPROBADO"
+                color_msg = "success" if estado == "APROBADO" else "error"
+                
                 with engine.connect() as conn:
                     query = text("INSERT INTO calificaciones (funcionario, nota) VALUES (:n, :t)")
                     conn.execute(query, {"n": nombre_agente, "t": calificacion})
                     conn.commit()
-                st.success(f"Datos de {nombre_agente} sincronizados con éxito.")
-                st.balloons()
+                
+                if color_msg == "success":
+                    st.success(f"✅ {nombre_agente} - NOTA: {calificacion}% [{estado}]")
+                    st.balloons()
+                else:
+                    st.error(f"⚠️ {nombre_agente} - NOTA: {calificacion}% [{estado}]")
 
         # --- DASHBOARD DE ANÁLISIS ---
         st.markdown("<h2 style='color: #D4AF37;'>📊 Análisis de Rendimiento Académico</h2>", unsafe_allow_html=True)
@@ -122,26 +102,26 @@ else:
             df = pd.read_sql(text("SELECT fecha, funcionario, nota FROM calificaciones ORDER BY fecha DESC"), conn)
 
         if not df.empty:
-            # Métricas superiores
+            # Crear columna de Estado dinámicamente para el Dashboard
+            df['Estado'] = df['nota'].apply(lambda x: "🟢 APROBADO" if x >= 70 else "🔴 REPROBADO")
+            
             m1, m2, m3 = st.columns(3)
-            with m1:
-                st.metric("Total Evaluados", len(df))
-            with m2:
-                st.metric("Promedio General", f"{df['nota'].mean():.1f}%")
-            with m3:
-                st.metric("Rendimiento Máximo", f"{df['nota'].max()}%")
+            m1.metric("Total Evaluados", len(df))
+            m2.metric("Promedio General", f"{df['nota'].mean():.1f}%")
+            
+            # Contar aprobados
+            aprobados = len(df[df['nota'] >= 70])
+            m3.metric("Tasa de Aprobación", f"{(aprobados/len(df))*100:.0f}%")
 
-            # Gráfica Táctica
             st.subheader("Tendencia de Resultados")
             st.line_chart(df, x="fecha", y="nota")
             
-            # Tabla de registros
-            st.subheader("Historial de Registros Recientes")
-            st.dataframe(df, use_container_width=True)
+            st.subheader("Historial Detallado")
+            # Estilizamos la tabla para que resalte los estados
+            st.dataframe(df[['fecha', 'funcionario', 'nota', 'Estado']], use_container_width=True, hide_index=True)
         else:
-            st.info("No se registran datos previos en la base de datos local.")
+            st.info("Sin datos registrados.")
 
     except Exception as e:
-        st.error("Error Crítico: No se pudo establecer contacto con el servidor de la base de datos.")
-        st.info("Verifique que Localtonet esté activo en su estación de trabajo.")
+        st.error("Error de conexión.")
         st.exception(e)
