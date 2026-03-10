@@ -164,79 +164,105 @@ else:
                         st.write("**ACTUAR:** Mejora continua. Implementar acciones correctivas o preventivas.")
 
                 with t2:
-                    st.subheader("Operaciones de Inteligencia")
-                    st.markdown("""
-                    <div class="lectura-box">
-                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial. Para toda operación se requiere el <b>Empleo y uso de Medios Técnicos</b>.</p>
-                    </div>
-                    """, unsafe_allow_html=True)
-                    
-                    with st.expander("Operaciones Básicas", expanded=True):
-                        st.write("#### **Reconocimiento**")
-                        st.write("Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
-                        st.markdown("""
-                        **Desarrollo del Reconocimiento:**
-                        * Grupo de trabajo y medios logísticos y tecnológicos.
-                        * Actitud natural de acuerdo al entorno.
-                        * Agilidad de ubicación.
-                        * Mantener siempre las medidas de seguridad.
-                        * Realizar registros fílmicos o fotográficos.
-                        * Conocer posibles vías de acceso del objetivo.
-                        * Crear estrategias de individualización e identificación.
-                        * Descripción detallada de inmuebles y personas.
-                        """)
-                        st.divider()
-                        st.write("#### **Verificación**")
-                        st.write("Procedimiento que pretende establecer la veracidad de los datos o desvirtuar una información.")
-                        st.markdown("""
-                        **Verificar la existencia de información sobre personas y bienes en:**
-                        * Base de datos institucionales.
-                        * Bases de datos públicas.
-                        * Agencias amigas.
-                        * Internet y otros.
-                        
-                        *Nota: Se utilizan llamadas telefónicas, archivos, consulta a personas y herramientas digitales para asegurar la veracidad.*
-                        """)
-                        st.divider()
-                        st.write("#### **Vigilancia**")
-                        st.markdown("*Observación continúa y discreta sobre personas, lugares o vehículos para establecer rutinas.*")
-                        
-                        st.markdown("""
-                        **Propósito de la vigilancia:**
-                        * **Confirmar la ubicación** de una o varias personas en un lugar.
-                        * **Identificar vehículos y personas** que frecuentan el sitio.
-                        * **Establecer cambios significativos** al lugar objeto de vigilancia.
-                        * **Establecer el medio de comunicación** que utilizan.
-                        * **Conocer las actividades** que normalmente desarrollan las personas.
-                        """)
-                        
-                        st.divider()
-                        st.write("#### **Seguimiento**")
-                        st.markdown("*Actividad de inteligencia mediante la cual se ejerce control sobre una persona o elemento en movimiento.*")
-                        
-                        st.markdown("""
-                        **Propósitos del seguimiento:**
-                        * **Identificar puntos de partida y punto de llegada.**
-                        * **Reconocer vehículos** en los cuales se desplaza.
-                        * **Detectar posibles esquemas de seguridad.**
-                        * **Conocer qué personas visita** y qué lugares frecuenta.
-                        """)
-                        st.divider()
-                        st.write("#### **Sonsacamiento**")
-                        st.markdown("*Técnica de Inteligencia que permite la obtención de información mediante el diálogo sutil.*")
-                        
-                        st.markdown("""
-                        **Criterios a tomar en cuenta:**
-                        * **Conocimiento de la Fuente Humana:** Saber con quién se está hablando.
-                        * **Identificar plenamente la misión:** Tener claro qué información se busca.
-                        * **Establecer afinidad:** Crear un ambiente de confianza (Rapport).
-                        * **Dirección del diálogo:** Permitir que la fuente hable, pero guiar la conversación al área de interés.
-                        * **Cobertura coherente:** Palabras y acciones acordes a la identidad falsa asumida.
-                        * **Invisibilidad de la intención:** No dar indicios de que se está buscando información deliberadamente.
-                        * **Continuidad:** No dejar espacios vacíos o dudas que generen sospecha.
-                        """)
-                        
-                        st.divider()
+    st.subheader("🕵️ Operaciones de Inteligencia")
+    
+    # Encabezado principal con diseño destacado
+    st.markdown("""
+        <div class="lectura-box">
+            <h4 style='color: #D4AF37; margin-top: 0;'>Definición General</h4>
+            <p>Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial.</p>
+            <p style='background-color: #D4AF37; color: #001226; padding: 5px; border-radius: 5px; font-weight: bold; text-align: center;'>
+                ⚠️ Para toda operación se requiere el Empleo y uso de Medios Técnicos.
+            </p>
+        </div>
+    """, unsafe_allow_html=True)
+
+    with st.expander("🛠️ OPERACIONES BÁSICAS", expanded=True):
+        
+        # --- RECONOCIMIENTO Y VERIFICACIÓN (Lado a Lado) ---
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("### 🔍 Reconocimiento")
+            st.info("Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
+            st.markdown("""
+            **Desarrollo:**
+            * 👥 Grupo de trabajo y medios logísticos/tecnológicos.
+            * 🌿 Actitud natural de acuerdo al entorno.
+            * 📍 Agilidad de ubicación.
+            * 🛡️ Mantener siempre las medidas de seguridad.
+            * 📸 Realizar registros fílmicos o fotográficos.
+            * 🛣️ Conocer posibles vías de acceso del objetivo.
+            * 👤 Crear estrategias de individualización e identificación.
+            * 📝 Descripción detallada de inmuebles y personas.
+            """)
+
+        with col2:
+            st.markdown("### ✅ Verificación")
+            st.success("Procedimiento que pretende establecer la veracidad de los datos o desvirtuar una información.")
+            st.markdown("""
+            **Fuentes de Consulta:**
+            * 🏢 Base de datos institucionales.
+            * 🌐 Bases de datos públicas.
+            * 🤝 Agencias amigas.
+            * 💻 Internet y otros.
+            
+            **Herramientas:**
+            *Llamadas telefónicas, archivos, consulta a personas y herramientas digitales para asegurar la veracidad.*
+            """)
+
+        st.divider()
+
+        # --- VIGILANCIA Y SEGUIMIENTO (Lado a Lado) ---
+        col3, col4 = st.columns(2)
+
+        with col3:
+            st.markdown("### 🔭 Vigilancia")
+            st.warning("*Observación continúa y discreta sobre personas, lugares o vehículos para establecer rutinas.*")
+            st.markdown("""
+            **Propósitos:**
+            1. **Confirmar la ubicación** de objetivos.
+            2. **Identificar vehículos/personas** que frecuentan el sitio.
+            3. **Establecer cambios significativos** al lugar.
+            4. **Establecer el medio de comunicación** utilizado.
+            5. **Conocer las actividades** que desarrollan normalmente.
+            """)
+
+        with col4:
+            st.markdown("### 🚗 Seguimiento")
+            st.warning("*Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.*")
+            st.markdown("""
+            **Propósitos:**
+            1. **Identificar puntos de partida y llegada.**
+            2. **Reconocer vehículos** en los que se desplaza.
+            3. **Detectar posibles esquemas de seguridad.**
+            4. **Conocer qué personas visita** y qué lugares frecuenta.
+            """)
+
+        st.divider()
+
+        # --- SONSACAMIENTO (Ancho completo por su complejidad técnica) ---
+        st.markdown("### 🗣️ Sonsacamiento")
+        st.markdown("> *Técnica de Inteligencia que permite la obtención de información mediante el diálogo sutil.*")
+        
+        # Usamos 3 columnas para los criterios y que no sea una lista tan larga
+        s1, s2 = st.columns(2)
+        with s1:
+            st.markdown("""
+            **Fase de Preparación y Rapport:**
+            * **Conocimiento de la Fuente Humana:** Saber con quién se habla.
+            * **Identificar plenamente la misión:** Qué información se busca.
+            * **Establecer afinidad:** Crear ambiente de confianza.
+            * **Dirección del diálogo:** Guiar al área de interés sutilmente.
+            """)
+        with s2:
+            st.markdown("""
+            **Fase de Ejecución y Cobertura:**
+            * **Cobertura coherente:** Acciones acordes a la identidad falsa.
+            * **Invisibilidad de intención:** No dar indicios de búsqueda de info.
+            * **Desvirtuar sospechas:** Negar que se está buscando información.
+            * **Continuidad:** No dejar espacios vacíos o dudas.
+            """)
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
