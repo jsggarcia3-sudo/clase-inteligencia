@@ -19,8 +19,8 @@ except Exception as e:
 def guardar_nota(nombre_agente, nota):
     try:
         with conn.session as session:
-            # Usamos text() para evitar el error de declaración SQL
-            query = text("INSERT INTO calificaciones (agente, nota) VALUES (:nombre, :nota)")
+            # Ahora usamos "funcionario" para que coincida con tu pgAdmin
+            query = text("INSERT INTO calificaciones (funcionario, nota) VALUES (:nombre, :nota)")
             session.execute(query, {"nombre": nombre_agente, "nota": nota})
             session.commit()
         return True
