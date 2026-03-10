@@ -606,52 +606,64 @@ else:
                     """)
 
                 with tab_proceso:
-                    st.subheader("🧩 El Método Analítico (Segunda Imagen)")
-                    st.write("Para analizar, primero debemos identificar los temas y luego descomponer el problema.")
+                    st.subheader("🧩 El Proceso Analítico: De los Datos al Conocimiento")
                     
-                    # Encabezado de la segunda imagen: Seleccionar e identificar
+                    # Panel Superior: Actividades Previas
                     st.markdown("""
-                    <div style="border: 1px dashed red; padding: 10px; text-align: center; margin-bottom: 20px;">
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Seleccionar</span>
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Clasificar</span>
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Organizar</span><br>
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Identificar</span>
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Temas</span>
-                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Ideas</span>
+                    <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                        <p style="text-align: center; color: #444; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Pasos Previos Necesarios</p>
+                        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px;">
+                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Seleccionar</div>
+                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Clasificar</div>
+                            <div style="background: white; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 50px; color: #002b55; font-weight: bold; box-shadow: 2px 2px 5px rgba(0,0,0,0.1);">Organizar</div>
+                        </div>
+                        <div style="display: flex; justify-content: center; flex-wrap: wrap; gap: 15px; margin-top: 15px;">
+                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Identificar</div>
+                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Temas</div>
+                            <div style="background: #002b55; border: 2px solid #D4AF37; padding: 10px 20px; border-radius: 5px; color: white; font-weight: bold;">Ideas</div>
+                        </div>
                     </div>
                     """, unsafe_allow_html=True)
+
+                    # El proceso de las 3 fases (El Todo -> Analizar -> Sintetizar)
+                    col_f1, col_f2, col_f3 = st.columns(3)
                     
-                    col_an1, col_an2, col_an3 = st.columns(3)
-                    with col_an1:
+                    with col_f1:
                         st.markdown("""
-                        <div style="text-align:center;">
-                            <p style="color:#d9534f; font-weight:bold;">TENDENCIAS Y PATRONES</p>
-                            <img src="https://img.icons8.com/clouds/100/000000/puzzle.png" style="width:80px;">
-                            <div style="background:#f2dede; color:#a94442; padding:10px; border-radius:5px;">
-                                <b>EL TODO</b><br><small>(Objeto de análisis)</small>
+                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">TENDENCIAS Y PATRONES</p>
+                            <div style="font-size: 50px; margin: 20px 0;">🧩</div>
+                            <div style="background-color: #f2dede; padding: 15px; border-radius: 10px;">
+                                <h4 style="color: #a94442; margin: 0;">EL TODO</h4>
+                                <p style="color: #a94442; font-size: 0.85em; margin-top: 5px;">Objeto de análisis</p>
                             </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    
-                    with col_an2:
-                        st.markdown("""
-                        <div style="text-align:center;">
-                            <p style="color:#d9534f; font-weight:bold;">ELEMENTO QUE MODIFICA EL PATRÓN</p>
-                            <img src="https://img.icons8.com/clouds/100/000000/disconnected.png" style="width:80px;">
-                            <div style="background:#fcf8e3; color:#8a6d3b; padding:10px; border-radius:5px;">
-                                <b>ANALIZAR</b><br><small>(Es descomponer)</small>
-                            </div>
+                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">Visión global inicial de la información recolectada.</p>
                         </div>
                         """, unsafe_allow_html=True)
 
-                    with col_an3:
+                    with col_f2:
                         st.markdown("""
-                        <div style="text-align:center;">
-                            <p style="color:#d9534f; font-weight:bold;">INTERP. ELEM. COMUNES Y DIFERENTES</p>
-                            <img src="https://img.icons8.com/clouds/100/000000/connected.png" style="width:80px;">
-                            <div style="background:#d9edf7; color:#31708f; padding:10px; border-radius:5px;">
-                                <b>SINTETIZAR</b><br><small>(Recomponer y sumar partes)</small>
+                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #D4AF37;">
+                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">ELEMENTO QUE MODIFICA EL PATRÓN</p>
+                            <div style="font-size: 50px; margin: 20px 0;">🔍</div>
+                            <div style="background-color: #fcf8e3; padding: 15px; border-radius: 10px;">
+                                <h4 style="color: #8a6d3b; margin: 0;">ANALIZAR</h4>
+                                <p style="color: #8a6d3b; font-size: 0.85em; margin-top: 5px;">Es descomponer</p>
                             </div>
+                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">Separar las partes para conocer sus principios o elementos constitutivos.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with col_f3:
+                        st.markdown("""
+                        <div style="background-color: #ffffff; border: 1px solid #e0e0e0; padding: 20px; border-radius: 15px; text-align: center; height: 350px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                            <p style="color: #b03a2e; font-weight: bold; font-size: 0.9em; height: 40px;">INTERP. ELEM. COMUNES Y DIFERENTES</p>
+                            <div style="font-size: 50px; margin: 20px 0;">💡</div>
+                            <div style="background-color: #d9edf7; padding: 15px; border-radius: 10px;">
+                                <h4 style="color: #31708f; margin: 0;">SINTETIZAR</h4>
+                                <p style="color: #31708f; font-size: 0.85em; margin-top: 5px;">Es recomponer</p>
+                            </div>
+                            <p style="font-size: 0.8em; color: #666; margin-top: 15px;">¿Qué significa una parte y esa parte sumada a las otras?</p>
                         </div>
                         """, unsafe_allow_html=True)
 
