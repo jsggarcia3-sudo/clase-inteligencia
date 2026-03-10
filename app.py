@@ -186,7 +186,18 @@ else:
                         * Descripción detallada de inmuebles y personas.
                         """)
                         st.divider()
-                        st.write("**Verificación:** Procedimiento que pretende establecer la veracidad o desvirtuar una información, a través de la exploración en bases de datos, reconocimientos, administración de fuentes, vigilancias y seguimientos.")
+                        st.write("#### **Verificación**")
+                        st.write("Procedimiento que pretende establecer la veracidad de los datos o desvirtuar una información.")
+                        st.markdown("""
+                        **Verificar la existencia de información sobre personas y bienes en:**
+                        * Base de datos institucionales.
+                        * Bases de datos públicas.
+                        * Agencias amigas.
+                        * Internet y otros.
+                        
+                        *Nota: Se utilizan llamadas telefónicas, archivos, consulta a personas y herramientas digitales para asegurar la veracidad.*
+                        """)
+                        st.divider()
                         st.write("**Vigilancia:** Observación continúa y discreta sobre una persona, lugar, vehículo o hecho, con el fin de establecer rutinas.")
                         st.write("**Seguimiento:** Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.")
                         st.write("**Sonsacamiento:** Técnica que permite la obtención de información mediante el diálogo donde la fuente no debe percatarse de su explotación.")
