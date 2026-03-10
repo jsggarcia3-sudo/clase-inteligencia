@@ -177,8 +177,8 @@ else:
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
-                        st.write("**Admon. de Fuentes Humanas:** Obtener colaboración permanente de alguien que ya tiene acceso.")
-                        st.write("**Entrevista:** Obtener colaboración permanente de alguien que ya tiene acceso.")
+                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIJE y CONTROLA,  la fuente humana empleada en el proceso Operacional de Inteligencia.")
+                        st.write("**Entrevista:** Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas y la correcta formulación de preguntas por el agente de inteligencia.")
                         st.write("**Caracterizacion y Fachada:** Obtener colaboración permanente de alguien que ya tiene acceso.")
 
                 with t3:
