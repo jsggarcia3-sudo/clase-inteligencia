@@ -569,10 +569,11 @@ else:
                 st.header("🧠 Material: Análisis de la Información")
                 
                 # PESTAÑAS DEL MÓDULO 5
-                tab_estudio, tab_proceso, tab_niveles = st.tabs([
+                tab_estudio, tab_proceso, tab_lca, tab_sintesis = st.tabs([
                     "🔬 Estudio Especializado", 
                     "🧩 Proceso de Análisis", 
-                    "📈 Resultados y Cursos de Acción"
+                    "⏳ Línea LCA",
+                    "💡 Síntesis y Resultados"
                 ])
                 
                 with tab_estudio:
@@ -676,7 +677,104 @@ else:
                     * **Prospectiva:** Anticiparse a la evolución de las amenazas.
                     """)
                     st.warning("⚠️ Sin síntesis, no hay inteligencia útil para el mando.")
-
+                
+                with tab_lca:
+                    st.subheader("LCA: Línea del Conocimiento Analítico")
+                    st.write("Esta herramienta permite al analista ubicar la información en el tiempo para transformar antecedentes en proyecciones útiles.")
+                    
+                    # Contenedor principal de la LCA
+                    st.markdown("""
+                    <style>
+                        .lca-container {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            background: linear-gradient(90deg, #2c5d63 0%, #c0392b 50%, #f39c12 100%);
+                            padding: 40px 20px;
+                            border-radius: 15px;
+                            color: white;
+                            text-align: center;
+                            position: relative;
+                            margin: 20px 0;
+                        }
+                        .lca-box {
+                            background: rgba(255, 255, 255, 0.15);
+                            backdrop-filter: blur(5px);
+                            border: 2px solid white;
+                            border-radius: 10px;
+                            padding: 15px;
+                            width: 28%;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+                        }
+                        .lca-title { font-weight: bold; font-size: 1.2em; margin-bottom: 10px; text-transform: uppercase; }
+                        .lca-arrow { font-size: 2em; color: white; }
+                        .lca-line {
+                            position: absolute;
+                            bottom: 10px;
+                            left: 5%;
+                            right: 5%;
+                            height: 4px;
+                            background: white;
+                        }
+                        .lca-point {
+                            position: absolute;
+                            bottom: 5px;
+                            width: 15px;
+                            height: 15px;
+                            background: black;
+                            border: 2px solid white;
+                            border-radius: 50%;
+                        }
+                    </style>
+                    
+                    <div class="lca-container">
+                        <div class="lca-box">
+                            <div class="lca-title">Pasado</div>
+                            <div style="font-size: 0.9em;">
+                                <b>Antecedentes</b><br>
+                                Memoria Histórica
+                            </div>
+                        </div>
+                        
+                        <div class="lca-arrow">➡️</div>
+                        
+                        <div class="lca-box" style="background: rgba(192, 57, 43, 0.8);">
+                            <div class="lca-title">Presente</div>
+                            <div style="font-size: 0.9em;">
+                                <b>Situación Actual</b><br>
+                                Interpretación
+                            </div>
+                        </div>
+                        
+                        <div class="lca-arrow">➡️</div>
+                        
+                        <div class="lca-box" style="background: rgba(243, 156, 18, 0.8);">
+                            <div class="lca-title">Futuro</div>
+                            <div style="font-size: 0.9em;">
+                                <b>Proyección</b><br>
+                                Escenarios
+                            </div>
+                        </div>
+                        
+                        <div class="lca-line"></div>
+                        <div class="lca-point" style="left: 0%;"></div>
+                        <div class="lca-point" style="left: 50%; transform: translateX(-50%);"></div>
+                        <div class="lca-point" style="right: 0%;"></div>
+                    </div>
+                    
+                    <div style="text-align: center; font-weight: bold; margin-bottom: 30px;">
+                        <span style="margin: 0 15%;">PASADO</span>
+                        <span style="margin: 0 12%;">PRESENTE</span>
+                        <span style="margin: 0 15%;">FUTURO</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.info("""
+                    **¿Cómo leer la LCA?**
+                    1. **Memoria Histórica:** Se recolectan los antecedentes para entender de dónde venimos.
+                    2. **Interpretación:** Es el "nudo" del análisis. Aquí se cruza la información actual para entender el hoy.
+                    3. **Proyección:** Es el producto final. Basados en el pasado y el presente, predecimos el comportamiento futuro.
+                    """)
                 # EXAMEN M5 (Borrador)
                 if st.button("🚀 INICIAR EXAMEN M5"):
                     st.session_state['modo_examen'] = True
