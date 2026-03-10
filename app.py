@@ -710,7 +710,7 @@ elif modulo_selec == "Módulo 5: Análisis":
                     st.session_state['modo_examen'] = True
                     st.rerun()
 # --- MÓDULO 6: COMUNICAR E INTEGRAR ---
-    elif modulo_selec == "Módulo 6: Comunicación":
+elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state['modo_examen']:
                 st.header("📢 Material: Comunicar e Integrar")
                 
