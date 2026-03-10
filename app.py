@@ -164,165 +164,130 @@ else:
                         st.write("**ACTUAR:** Mejora continua. Implementar acciones correctivas o preventivas.")
 
                 with t2:
-    st.subheader("🕵️ Operaciones de Inteligencia")
-    
-    # Encabezado principal con diseño destacado
-    st.markdown("""
-        <div class="lectura-box">
-            <h4 style='color: #D4AF37; margin-top: 0;'>Definición General</h4>
-            <p>Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial.</p>
-            <p style='background-color: #D4AF37; color: #001226; padding: 5px; border-radius: 5px; font-weight: bold; text-align: center;'>
-                ⚠️ Para toda operación se requiere el Empleo y uso de Medios Técnicos.
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+                    st.subheader("🕵️ Operaciones de Inteligencia")
+                    st.markdown("""
+                        <div class="lectura-box">
+                            <h4 style='color: #D4AF37; margin-top: 0;'>Definición General</h4>
+                            <p>Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial. Para toda operación se requiere el <b>Empleo y uso de Medios Técnicos</b>.</p>
+                        </div>
+                    """, unsafe_allow_html=True)
 
-    with st.expander("🛠️ OPERACIONES BÁSICAS", expanded=True):
-        
-        # --- RECONOCIMIENTO Y VERIFICACIÓN (Lado a Lado) ---
-        col1, col2 = st.columns(2)
-        
-        with col1:
-            st.markdown("### 🔍 Reconocimiento")
-            st.info("Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
-            st.markdown("""
-            **Desarrollo:**
-            * 👥 Grupo de trabajo y medios logísticos/tecnológicos.
-            * 🌿 Actitud natural de acuerdo al entorno.
-            * 📍 Agilidad de ubicación.
-            * 🛡️ Mantener siempre las medidas de seguridad.
-            * 📸 Realizar registros fílmicos o fotográficos.
-            * 🛣️ Conocer posibles vías de acceso del objetivo.
-            * 👤 Crear estrategias de individualización e identificación.
-            * 📝 Descripción detallada de inmuebles y personas.
-            """)
+                    with st.expander("🛠️ OPERACIONES BÁSICAS", expanded=True):
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.markdown("### 🔍 Reconocimiento")
+                            st.info("Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
+                            st.markdown("""
+                            **Desarrollo:**
+                            * 👥 Grupo de trabajo y medios logísticos/tecnológicos.
+                            * 🌿 Actitud natural de acuerdo al entorno.
+                            * 📍 Agilidad de ubicación.
+                            * 🛡️ Mantener siempre las medidas de seguridad.
+                            * 📸 Realizar registros fílmicos o fotográficos.
+                            * 🛣️ Conocer posibles vías de acceso del objetivo.
+                            * 👤 Crear estrategias de individualización e identificación.
+                            * 📝 Descripción detallada de inmuebles y personas.
+                            """)
+                        with col2:
+                            st.markdown("### ✅ Verificación")
+                            st.success("Procedimiento que pretende establecer la veracidad de los datos o desvirtuar una información.")
+                            st.markdown("""
+                            **Fuentes de Consulta:**
+                            * 🏢 Base de datos institucionales.
+                            * 🌐 Bases de datos públicas.
+                            * 🤝 Agencias amigas.
+                            * 💻 Internet y otros.
+                            
+                            **Herramientas:**
+                            Llamadas telefónicas, archivos, consulta a personas y herramientas digitales.
+                            """)
+                        st.divider()
+                        
+                        col3, col4 = st.columns(2)
+                        with col3:
+                            st.markdown("### 🔭 Vigilancia")
+                            st.warning("*Observación continúa y discreta sobre personas, lugares o vehículos para establecer rutinas.*")
+                            st.markdown("""
+                            **Propósitos:**
+                            * **Confirmar la ubicación** de objetivos.
+                            * **Identificar vehículos/personas** que frecuentan el sitio.
+                            * **Establecer cambios significativos** al lugar.
+                            * **Establecer el medio de comunicación** utilizado.
+                            * **Conocer las actividades** que desarrollan normalmente.
+                            """)
+                        with col4:
+                            st.markdown("### 🚗 Seguimiento")
+                            st.warning("*Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.*")
+                            st.markdown("""
+                            **Propósitos:**
+                            * **Identificar puntos de partida y llegada.**
+                            * **Reconocer vehículos** en los que se desplaza.
+                            * **Detectar posibles esquemas de seguridad.**
+                            * **Conocer qué personas visita** y qué lugares frecuenta.
+                            """)
+                        st.divider()
+                        
+                        st.markdown("### 🗣️ Sonsacamiento")
+                        st.markdown("> *Técnica de Inteligencia que permite la obtención de información mediante el diálogo sutil.*")
+                        s1, s2 = st.columns(2)
+                        with s1:
+                            st.markdown("""
+                            **Fase de Preparación:**
+                            * **Conocimiento de la Fuente Humana.**
+                            * **Identificar plenamente la misión.**
+                            * **Establecer afinidad (Rapport).**
+                            * **Dirección del diálogo sutil.**
+                            """)
+                        with s2:
+                            st.markdown("""
+                            **Fase de Ejecución:**
+                            * **Cobertura coherente.**
+                            * **Invisibilidad de intención.**
+                            * **Desvirtuar sospechas.**
+                            * **Continuidad sin espacios vacíos.**
+                            """)
 
-        with col2:
-            st.markdown("### ✅ Verificación")
-            st.success("Procedimiento que pretende establecer la veracidad de los datos o desvirtuar una información.")
-            st.markdown("""
-            **Fuentes de Consulta:**
-            * 🏢 Base de datos institucionales.
-            * 🌐 Bases de datos públicas.
-            * 🤝 Agencias amigas.
-            * 💻 Internet y otros.
-            
-            **Herramientas:**
-            *Llamadas telefónicas, archivos, consulta a personas y herramientas digitales para asegurar la veracidad.*
-            """)
-
-        st.divider()
-
-        # --- VIGILANCIA Y SEGUIMIENTO (Lado a Lado) ---
-        col3, col4 = st.columns(2)
-
-        with col3:
-            st.markdown("### 🔭 Vigilancia")
-            st.warning("*Observación continúa y discreta sobre personas, lugares o vehículos para establecer rutinas.*")
-            st.markdown("""
-            **Propósitos:**
-            1. **Confirmar la ubicación** de objetivos.
-            2. **Identificar vehículos/personas** que frecuentan el sitio.
-            3. **Establecer cambios significativos** al lugar.
-            4. **Establecer el medio de comunicación** utilizado.
-            5. **Conocer las actividades** que desarrollan normalmente.
-            """)
-
-        with col4:
-            st.markdown("### 🚗 Seguimiento")
-            st.warning("*Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.*")
-            st.markdown("""
-            **Propósitos:**
-            1. **Identificar puntos de partida y llegada.**
-            2. **Reconocer vehículos** en los que se desplaza.
-            3. **Detectar posibles esquemas de seguridad.**
-            4. **Conocer qué personas visita** y qué lugares frecuenta.
-            """)
-
-        st.divider()
-
-        # --- SONSACAMIENTO (Ancho completo por su complejidad técnica) ---
-        st.markdown("### 🗣️ Sonsacamiento")
-        st.markdown("> *Técnica de Inteligencia que permite la obtención de información mediante el diálogo sutil.*")
-        
-        # Usamos 3 columnas para los criterios y que no sea una lista tan larga
-        s1, s2 = st.columns(2)
-        with s1:
-            st.markdown("""
-            **Fase de Preparación y Rapport:**
-            * **Conocimiento de la Fuente Humana:** Saber con quién se habla.
-            * **Identificar plenamente la misión:** Qué información se busca.
-            * **Establecer afinidad:** Crear ambiente de confianza.
-            * **Dirección del diálogo:** Guiar al área de interés sutilmente.
-            """)
-        with s2:
-            st.markdown("""
-            **Fase de Ejecución y Cobertura:**
-            * **Cobertura coherente:** Acciones acordes a la identidad falsa.
-            * **Invisibilidad de intención:** No dar indicios de búsqueda de info.
-            * **Desvirtuar sospechas:** Negar que se está buscando información.
-            * **Continuidad:** No dejar espacios vacíos o dudas.
-            """)
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
-                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIGE y CONTROLA la fuente humana empleada.")
-                        st.write("**Entrevista:** Procedimiento para la obtención de información mediante el intercambio de ideas y formulación de preguntas.")
-                        st.write("**Caracterización y Fachada:** La *caracterización* es la identidad falsa (documentos, comportamiento); la *fachada* es la entidad o cobertura física real que la respalda.")
+                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIGE y CONTROLA la fuente humana.")
+                        st.write("**Entrevista:** Procedimiento para la obtención de información mediante intercambio de ideas.")
+                        st.write("**Caracterización y Fachada:** La *caracterización* es la identidad falsa; la *fachada* es la cobertura física real.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
                     st.markdown("""
                     <div class="lectura-box">
                         <h3>Fuentes de Información</h3>
-                        <p><b>Clasificación de las fuentes de Información:</b></p>
-                        <ul>
-                            <li>Abiertas o Publicas</li>
-                            <li>Cerradas Especializadas</li>
-                            <li>Cerradas Humanas</li>
-                            <li>Técnicas</li>
-                        </ul>
+                        <p><b>Clasificación:</b> Abiertas/Públicas, Cerradas Especializadas, Cerradas Humanas y Técnicas.</p>
                     </div>
                     """, unsafe_allow_html=True)
                     with st.expander("Fases de Administración de Fuentes Humanas", expanded=True):
                         col_a, col_b = st.columns(2)
                         with col_a:
                             st.write("#### 1. Exploración")
-                            st.write("*Búsqueda de fuentes:*")
-                            st.write("- Búsqueda\n- Forma voluntaria\n- Evaluación y motivación\n- Selección preliminar")
-                            
+                            st.write("- Búsqueda / Voluntaria\n- Evaluación y motivación\n- Selección preliminar")
                             st.write("#### 2. Aproximación")
-                            st.write("*Establecimiento de contacto:*")
                             st.write("- La entrevista\n- Sonsacamiento\n- Evaluación")
-                        
                         with col_b:
                             st.write("#### 3. Registro")
-                            st.write("*Ingresar la fuente en:*")
                             st.write("- Sistema de administración de fuentes humanas")
-                            
                             st.write("#### 4. Entrenamiento")
-                            st.write("*Preparar la fuente:*")
-                            st.write("- Instruir\n- Orientar\n- Dirigir\n- Controlar")
+                            st.write("- Instruir, Orientar, Dirigir y Controlar")
 
                 with t4:
                     st.subheader("La Entrevista de Inteligencia")
-                    
                     with st.expander("Etapas de la Entrevista", expanded=True):
                         st.markdown("""
                         <div class="lectura-box">
-                            <p><b>PLANEACIÓN:</b> Comprende todos los procedimientos para realizar la entrevista apropiadamente, delimitando necesidades y objetivos.</p>
-                            <p><b>DESARROLLO:</b> Conversación con la fuente manteniendo armonía y entendimiento sin perder el control.</p>
-                            <p><b>TERMINACIÓN:</b> Finalizada la recepción, se termina la entrevista al no existir más información por explorar.</p>
-                            <p><b>INFORME:</b> Finalizada la recepción, se procede a terminar la entrevista dando lugar al proceso de administración.</p>
+                            <p><b>PLANEACIÓN:</b> Delimitar necesidades y objetivos.</p>
+                            <p><b>DESARROLLO:</b> Conversación con armonía sin perder el control.</p>
+                            <p><b>TERMINACIÓN:</b> Finalización al agotar la exploración.</p>
+                            <p><b>INFORME:</b> Procesamiento para la administración.</p>
                         </div>
                         """, unsafe_allow_html=True)
                     with st.expander("Tipos de entrevistador a EVITAR", expanded=True):
-                        st.write("* **El estrella:** Habla más que la fuente, usa lenguaje rebuscado.")
-                        st.write("* **El sordo:** Se preocupa por el cuestionario y no escucha.")
-                        st.write("* **El metralleta:** Sugiere la pregunta siguiente sin parar.")
-                        st.write("* **El enredado:** Usa palabras difíciles.")
-                        st.write("* **El improvisado:** Trabaja desordenadamente.")
-                        st.write("* **El estrellado:** Tímido ante la fuente.")
+                        st.write("* **El estrella:** Habla más que la fuente.\n* **El sordo:** Solo mira su cuestionario.\n* **El metralleta:** Pregunta sin parar.\n* **El enredado:** Usa palabras difíciles.\n* **El improvisado:** Desordenado.\n* **El estrellado:** Tímido.")
 
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 3", engine)
                 if nota_p is None:
@@ -354,7 +319,6 @@ else:
                         st.session_state['modo_examen'] = False
                         st.rerun()
 
-    # --- SECCIONES EXTRA ---
     elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
