@@ -40,7 +40,6 @@ def login():
             else: st.error("Credenciales incorrectas.")
 
 def verificar_intento(nombre, modulo, engine):
-    """Verifica si el usuario ya tiene una nota registrada."""
     try:
         query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
         with engine.connect() as conn:
@@ -88,7 +87,7 @@ else:
                         <h3>Inteligencia según su nivel</h3>
                         <p><b>INTELIGENCIA ESTRATÉGICA:</b> Los líderes políticos y policiales emplean algunas áreas del conjunto de conocimientos de inteligencia para la formulación de planes y políticas orientada hacia los objetivos nacionales, para llegar a decisiones relacionadas con la seguridad y bienestar de la nación.</p>
                         <p><b>INTELIGENCIA OPERACIONAL:</b> Requerida para el planeamiento de operaciones dentro de un área específica. Se concentra en la recolección, identificación, localización y análisis para apoyar en el nivel operacional, asesorando al jefe de la operación sobre el mejor empleo de las unidades disponibles y minimizar los riesgos.</p>
-                        <p><b>INTELIGENCIA TÁCTICA:</b> Requerida para la conducción de operaciones tácticas al nivel de equipos. Se enfoca en las capacidades del objetivo, sus posibilidades inmediatas y el ambiente. Las posibilidades inmediatas son dinámicas, tienden a variar constantemente y no permite prever situaciones a futuro mediato.</p>
+                        <p><b>INTELIGENCIA TÁCTICA:</b> Requerida para la conducción de operaciones tácticas al nivel de equipos. Se enfoca en las capacidades del objetivo, sus posibilidades inmediatas y el ambiente.</p>
                     </div>
                     """, unsafe_allow_html=True)
                 
@@ -104,7 +103,7 @@ else:
                     q1 = st.radio("1. ¿Cuál es la función principal de la inteligencia?", ["Sancionar", "Asesoramiento para reducir incertidumbres", "Operaciones de choque"])
                     q2 = st.radio("2. Nivel de inteligencia para formular objetivos nacionales:", ["Táctica", "Estratégica", "Operacional"])
                     q3 = st.radio("3. La inteligencia operativa se concentra en:", ["Políticas de estado", "Un área específica para planeamiento de operaciones", "Capacidades inmediatas del objetivo"])
-                    if st.form_submit_button("GUARDAR CALIFICACIÓN M1"):
+                    if st.form_submit_button("GUARDAR"):
                         res = [q1=="Asesoramiento para reducir incertidumbres", q2=="Estratégica", q3=="Un área específica para planeamiento de operaciones"]
                         nota = (sum(res)/3)*100
                         with engine.connect() as conn:
@@ -133,6 +132,7 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
                 
+                
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 2", engine)
                 if nota_p is None:
                     if st.button("🚀 INICIAR EXAMEN M2"):
@@ -145,7 +145,7 @@ else:
                     q1 = st.radio("1. ¿Cuántos pasos componen el Ciclo de Inteligencia?", ["3", "5", "7"])
                     q2 = st.radio("2. ¿En qué paso se transforman los datos en inteligencia?", ["Tratar", "Analizar", "Comunicar"])
                     q3 = st.radio("3. ¿Qué paso asegura la calidad y ajuste a requerimientos?", ["Recolectar", "Evaluar y Retroalimentar", "Tratar"])
-                    if st.form_submit_button("GUARDAR CALIFICACIÓN M2"):
+                    if st.form_submit_button("GUARDAR"):
                         res = [q1=="5", q2=="Analizar", q3=="Evaluar y Retroalimentar"]
                         nota = (sum(res)/3)*100
                         with engine.connect() as conn:
@@ -154,7 +154,7 @@ else:
                         st.session_state['modo_examen'] = False
                         st.rerun()
 
-        # --- MÓDULO 3 ---
+        # --- MÓDULO 3: RECOLECCIÓN ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material Completo: Recolección de Información")
@@ -162,6 +162,15 @@ else:
                 
                 with t1:
                     st.markdown("""
+                    <div class="lectura-box">
+                        <h3>¿Que es información?</h3>
+                        <ul>
+                            <li>Conjunto de datos integrados y ordenados, que sirven para construir un mensaje basado en un cierto fenómeno o ente.</li>
+                            <li>Materia prima para resolver problemas y tomar decisiones, ya que su aprovechamiento racional es la base del conocimiento.</li>
+                        </ul>
+                        <p><b>Dato es la unidad básica que comprende la información</b></p>
+                        <p>La información está constituida por un grupo de datos ya supervisados y ordenados, que sirven para construir un mensaje basado en un cierto fenómeno. Permite resolver problemas y tomar decisiones, ya que su aprovechamiento racional es la base del conocimiento.</p>
+                    </div>
                     <div class="lectura-box">
                         <h3>Definición de Recolección</h3>
                         <p>Consiste en juntar aquellos datos o información relevante para el objetivo de nuestra investigación. Esta información, generalmente, se encuentra de forma dispersa en nuestro entorno y, por ello, debemos desarrollar técnicas precisas para acceder a ella.</p>
@@ -175,6 +184,9 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
                     
+
+[Image of the PDCA cycle: Plan, Do, Check, Act diagram]
+
                     with st.expander("Proceso de Recolección (PHVA)", expanded=True):
                         st.write("**PLANEAR:** Es establecer los objetivos y procesos necesarios para alcanzarlos. Planificación de la recolección, Identificar y administrar los riesgos, Planificar recursos requeridos.")
                         st.write("**HACER:** Implementación y desarrollo. Búsqueda de información, Desarrollar actividades de inteligencia, Elaborar y registrar productos, Suministrar los productos, Ejecutar controles de seguridad.")
@@ -183,6 +195,12 @@ else:
 
                 with t2:
                     st.subheader("Operaciones de Inteligencia")
+                    st.markdown("""
+                    <div class="lectura-box">
+                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
                     with st.expander("Operaciones Básicas", expanded=True):
                         st.write("**Reconocimiento:** Concretar y ampliar datos del propietario, residentes, vehículos, seguridad del sitio y entorno.")
                         st.write("**Verificación:** Establecer veracidad o desvirtuar información (bases de datos, llamadas, internet).")
@@ -195,7 +213,17 @@ else:
 
                 with t3:
                     st.subheader("Fuentes de Información")
-                    st.write("**Tipos de Fuentes:** Abiertas o Públicas, Cerradas Especializadas, Cerradas Humanas y Técnicas.")
+                    st.markdown("""
+                    <div class="lectura-box">
+                        <h3>Clasificación de las fuentes de Información</h3>
+                        <ul>
+                            <li><b>Abiertas o Publicas</b></li>
+                            <li><b>Cerradas Especializadas</b></li>
+                            <li><b>Cerradas Humanas</b></li>
+                            <li><b>Técnicas</b></li>
+                        </ul>
+                    </div>
+                    """, unsafe_allow_html=True)
                     with st.expander("Fases de Administración de Fuentes Humanas", expanded=True):
                         st.write("1. Exploración (Búsqueda) | 2. Aproximación (Contacto) | 3. Registro | 4. Entrenamiento (Instruir, orientar, dirigir, controlar).")
 
@@ -212,13 +240,13 @@ else:
 
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 3", engine)
                 if nota_p is None:
-                    if st.button("🚀 INICIAR EXAMEN M3 (10 PREGUNTAS)"):
+                    if st.button("🚀 INICIAR EXAMEN M3"):
                         st.session_state['modo_examen'] = True
                         st.rerun()
                 else: st.warning(f"Examen completado. Calificación: {nota_p}%")
             
             else:
-                st.header("📝 Evaluación: Módulo 3 (Recolección)")
+                st.header("📝 Evaluación: Módulo 3")
                 with st.form("exam_final"):
                     c1 = st.radio("1. ¿Qué es el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no debe percatarse de la explotación", "Técnica de vigilancia fija"])
                     c2 = st.radio("2. En PHVA, ¿qué implica la etapa HACER?", ["Planificar recursos", "Búsqueda de información y elaboración de productos", "Acciones preventivas"])
@@ -252,14 +280,7 @@ else:
         if st.session_state['es_admin']:
             st.title("🛡️ Panel Administrativo")
             df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), engine)
-            estudiantes = sorted(df_all['funcionario'].unique())
-            seleccion_estudiante = st.selectbox("Seleccione un funcionario:", ["-- Ver Todos --"] + list(estudiantes))
-            if seleccion_estudiante != "-- Ver Todos --":
-                df_filtrado = df_all[df_all['funcionario'] == seleccion_estudiante]
-                st.table(df_filtrado)
-                st.metric(label="Promedio", value=f"{df_filtrado['nota'].mean():.2f}%")
-            else:
-                st.dataframe(df_all, use_container_width=True)
+            st.dataframe(df_all, use_container_width=True)
             st.divider()
             st.bar_chart(df_all.groupby('modulo')['nota'].mean())
         else: st.warning("Acceso restringido.")
