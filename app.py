@@ -1,42 +1,35 @@
 import streamlit as st
 from sqlalchemy import create_engine, text
+from urllib.parse import quote_plus
 
-st.set_page_config(page_title="Sistema DIPOL", page_icon="🛡️")
-st.title("🛡️ Registro de Evaluaciones DIPOL")
+st.title("🛡️ Diagnóstico de Conexión DIPOL")
 
-# 1. Conexión Directa
-db = st.secrets["connections"]["postgresql"]
-conn_url = f"postgresql://{db['username']}:{db['password']}@{db['host']}:{db['port']}/{db['database']}"
-
-@st.cache_resource
-def get_engine():
-    return create_engine(conn_url, pool_pre_ping=True)
+# 1. Verificación de Secrets
+db_s = st.secrets["connections"]["postgresql"]
+st.info(f"Intentando conectar a: {db_s['host']} a través del puerto: {db_s['port']}")
 
 try:
-    engine = get_engine()
+    pass_segura = quote_plus(db_s['password'])
+    # Creamos el motor
+    engine = create_engine(
+        f"postgresql://{db_s['username']}:{pass_segura}@{db_s['host']}:{db_s['port']}/{db_s['database']}",
+        connect_args={'connect_timeout': 5} # No esperar demasiado si falla
+    )
     
-    # --- Formulario de Registro ---
-    with st.form("form_evaluacion"):
-        nombre = st.text_input("Nombre del Funcionario:")
-        nota = st.number_input("Calificación (0-100):", 0, 100)
-        enviar = st.form_submit_button("Guardar Registro")
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+        st.success("✅ ¡ENLACE EXITOSO! PostgreSQL detectado.")
         
-        if enviar and nombre:
-            with engine.connect() as conn:
-                # Usamos los nombres reales de tu tabla
-                sql = text("INSERT INTO calificaciones (funcionario, nota) VALUES (:f, :n)")
-                conn.execute(sql, {"f": nombre, "n": nota})
+        # Formulario rápido
+        with st.form("registro"):
+            nom = st.text_input("Agente:")
+            nt = st.number_input("Nota:", 0, 100)
+            if st.form_submit_button("Guardar"):
+                conn.execute(text("INSERT INTO calificaciones (funcionario, nota) VALUES (:n, :t)"), {"n":nom, "t":nt})
                 conn.commit()
-                st.success(f"¡Éxito! {nombre} ha sido evaluado.")
                 st.balloons()
 
-    # --- Visualización de Datos ---
-    if st.checkbox("Mostrar historial reciente"):
-        with engine.connect() as conn:
-            query = text("SELECT funcionario, nota, fecha FROM calificaciones ORDER BY id DESC LIMIT 5")
-            data = conn.execute(query).fetchall()
-            st.table(data)
-
 except Exception as e:
-    st.error("Error de conexión. Verifica si Localtonet sigue conectado.")
-    st.info(f"Puerto actual: {db['port']}")
+    st.error("❌ Fallo de comunicación")
+    st.write("Detalle para análisis:")
+    st.code(str(e))
