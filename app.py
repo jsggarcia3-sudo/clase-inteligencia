@@ -100,8 +100,7 @@ else:
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-                
-
+                # 
         # --- MÓDULO 3 ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
@@ -128,11 +127,7 @@ else:
                         st.write("**HACER:** Implementación y desarrollo. Búsqueda de información, Desarrollar actividades de inteligencia, Elaborar y registrar productos, Suministrar los productos, Ejecutar controles de seguridad.")
                         st.write("**VERIFICAR:** Seguimiento y medición de los procesos. Realizar autoevaluación de control y gestión.")
                         st.write("**ACTUAR:** Tomar acciones para ajustar y mejorar continuamente el desarrollo de los procesos. Implementar acciones correctivas, preventivas o de mejora.")
-                    
-
-[Image of the PDCA cycle for continuous improvement]
-
-
+                    # 
                 with t2:
                     st.subheader("Operaciones de Inteligencia")
                     with st.expander("Operaciones Básicas", expanded=True):
@@ -157,7 +152,7 @@ else:
                     with st.expander("Tipos de entrevistador a EVITAR", expanded=True):
                         st.write("* **El estrella:** Habla más que la fuente, utiliza lenguaje rebuscado, se siente superior.")
                         st.write("* **El sordo:** Se preocupa tanto por su cuestionario que olvida escuchar a la fuente.")
-                        st.write("* **El metralleta:** Bombardea con preguntas sin dar tiempo a responder.")
+                        st.write("* **El metralleta:** Antes de comenzar ya está sugiriendo la siguiente pregunta.")
                         st.write("* **El enredado:** Utiliza palabras difíciles o da muchas vueltas al tema.")
                         st.write("* **El improvisado:** Hace el trabajo de manera desordenada y a la carrera.")
                         st.write("* **El estrellado:** Aquel que es tímido ante la fuente.")
