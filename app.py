@@ -3,15 +3,14 @@ import pandas as pd
 from datetime import datetime
 from streamlit_gsheets import GSheetsConnection
 
-# 🛡️ CONFIGURACIÓN Y ESTILO
-st.set_page_config(page_title="DIPOL - HUB DE INTELIGENCIA", page_icon="🛡️", layout="wide")
+# 🛡️ CONFIGURACIÓN
+st.set_page_config(page_title="DIPOL - SISTEMA DE NOTAS", layout="wide")
 
 st.markdown("""
     <style>
     .stApp { background-color: #0e1117; color: #e0e0e0; }
-    .doctrina-card { background-color: #161b22; padding: 25px; border-left: 5px solid #004a99; border-radius: 12px; margin-bottom: 25px; }
-    .sub-titulo { color: #00d4ff; font-weight: bold; text-transform: uppercase; font-size: 1.2rem; }
-    .stButton>button { background: linear-gradient(135deg, #004a99 0%, #002d55 100%); color: white; border-radius: 8px; font-weight: bold; padding: 12px; }
+    .doctrina-card { background-color: #161b22; padding: 20px; border-left: 5px solid #004a99; border-radius: 10px; margin-bottom: 20px; }
+    .stButton>button { background: linear-gradient(135deg, #004a99 0%, #002d55 100%); color: white; width: 100%; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -19,71 +18,65 @@ st.markdown("""
 if "identificado" not in st.session_state:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.title("🔐 Intelligence Access")
+        st.title("🔐 Acceso DIPOL")
         with st.form("login"):
-            usuario = st.text_input("Funcionario (Nombre / Placa)")
-            clave = st.text_input("Access Key", type="password")
+            usuario = st.text_input("Funcionario")
+            clave = st.text_input("Clave", type="password")
             if st.form_submit_button("INGRESAR"):
                 if clave == "DIPOL2026":
                     st.session_state["identificado"] = True
                     st.session_state["funcionario"] = usuario
                     st.rerun()
-                else: st.error("ACCESO DENEGADO")
+                else: st.error("Clave incorrecta")
     st.stop()
 
-# 📊 CONEXIÓN
+# 📊 CONEXIÓN FORZADA AL ID DE TU HOJA
+# Aquí usamos directamente el ID que extraje de tu enlace
+URL_HOJA = "https://docs.google.com/spreadsheets/d/1fw89-tdtBGU76hl6msHPlWlNdER12cYAfgIr0NpaT_M"
+
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
 except Exception as e:
-    st.error(f"Error de conexión: {e}")
+    st.error(f"Error inicial: {e}")
 
 # 🚀 INTERFAZ
-st.markdown(f"### ⚡ Terminal Activa: {st.session_state['funcionario']}")
-tab_niveles, tab_admin = st.tabs(["📂 DOCTRINA Y NIVELES", "📊 PANEL INSTRUCTOR"])
+tab_eval, tab_admin = st.tabs(["📂 EVALUACIÓN", "📊 PANEL INSTRUCTOR"])
 
-with tab_niveles:
-    st.header("📖 Marco Doctrinal")
-    st.markdown('<div class="doctrina-card"><p class="sub-titulo">I. Definición de Inteligencia</p>Conocimiento obtenido mediante el procesamiento de información para la toma de decisiones.</div>', unsafe_allow_html=True)
-    
-    if st.checkbox("✅ He analizado la doctrina"):
-        st.subheader("⚡ EVALUACIÓN")
-        e1 = st.selectbox("1. Plan nacional (5 años):", ["...", "Estratégica", "Operacional", "Táctica"], key="q1")
-        e2 = st.selectbox("2. Allanamientos el próximo mes:", ["...", "Estratégica", "Operacional", "Táctica"], key="q2")
-        e3 = st.selectbox("3. Persecución inmediata:", ["...", "Estratégica", "Operacional", "Táctica"], key="q3")
+with tab_eval:
+    st.markdown('<div class="doctrina-card">Analice los escenarios y seleccione el nivel de inteligencia adecuado.</div>', unsafe_allow_html=True)
+    e1 = st.selectbox("1. Plan de 5 años:", ["...", "Estratégica", "Operacional", "Táctica"])
+    e2 = st.selectbox("2. Allanamientos próximo mes:", ["...", "Estratégica", "Operacional", "Táctica"])
+    e3 = st.selectbox("3. Persecución inmediata:", ["...", "Estratégica", "Operacional", "Táctica"])
 
-        if st.button("🚀 ENVIAR CALIFICACIÓN"):
-            if "..." in [e1, e2, e3]:
-                st.warning("⚠️ Responda todas las preguntas.")
-            else:
-                puntos = 0
-                if e1 == "Estratégica": puntos += 33
-                if e2 == "Operacional": puntos += 33
-                if e3 == "Táctica": puntos += 34
-                
-                nueva_nota = pd.DataFrame([{
-                    "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                    "Funcionario": st.session_state['funcionario'],
-                    "Modulo": "Niveles",
-                    "Nota": puntos
-                }])
-                
-                try:
-                    df_actual = conn.read()
-                    df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
-                    conn.update(data=df_final)
-                    st.success(f"✅ ¡ÉXITO! Nota de {puntos}/100 guardada.")
-                    st.balloons()
-                except Exception as e:
-                    st.error(f"❌ Error al guardar: {str(e)}")
-                    st.info(f"Su nota: {puntos}/100. Tome captura.")
+    if st.button("🚀 ENVIAR CALIFICACIÓN"):
+        if "..." in [e1, e2, e3]:
+            st.warning("Responda todo.")
+        else:
+            puntos = 0
+            if e1 == "Estratégica": puntos += 33
+            if e2 == "Operacional": puntos += 33
+            if e3 == "Táctica": puntos += 34
+            
+            nueva_fila = pd.DataFrame([{
+                "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                "Funcionario": st.session_state['funcionario'],
+                "Modulo": "Niveles",
+                "Nota": puntos
+            }])
+            
+            try:
+                # IMPORTANTE: Aquí le decimos a la conexión exactamente qué URL usar
+                df_actual = conn.read(spreadsheet=URL_HOJA)
+                df_final = pd.concat([df_actual, nueva_fila], ignore_index=True)
+                conn.update(spreadsheet=URL_HOJA, data=df_final)
+                st.success(f"✅ REGISTRADO: {puntos}/100")
+                st.balloons()
+            except Exception as e:
+                st.error(f"Error 404 persistente. Detalles: {e}")
+                st.info(f"Nota: {puntos}/100. Tome captura.")
 
 with tab_admin:
-    st.header("📊 Registro")
-    if st.text_input("Clave de Mando:", type="password") == "DIPOL_MASTER":
+    if st.text_input("Clave Instructor", type="password") == "DIPOL_MASTER":
         try:
-            df_total = conn.read(ttl=0)
-            st.dataframe(df_total, use_container_width=True)
-        except Exception as e:
-            st.error(f"Error: {e}")
-
-st.caption("🔒 DIPOL HUB | 2026")
+            st.dataframe(conn.read(spreadsheet=URL_HOJA, ttl=0))
+        except: st.error("No se pudo leer la base de datos.")
