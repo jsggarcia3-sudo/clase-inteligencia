@@ -110,17 +110,29 @@ with tab_niveles:
         st.info("📖 Lea la doctrina para habilitar el examen.")
 
 # --- PANEL DE INSTRUCTOR ---
-with tab_admin:
-    st.header("📊 Registro de Calificaciones")
-    if st.text_input("Clave de Mando:", type="password") == "DIPOL_MASTER":
-        try:
-            df_total = conn.read()
-            # Mostramos la tabla con tus columnas: Fecha, Funcionario, Modulo, Nota
-            st.dataframe(df_total, use_container_width=True)
+if st.button("🚀 ENVIAR CALIFICACIÓN"):
+            puntos = 0
+            if e1 == "Estratégica": puntos += 33
+            if e2 == "Operacional": puntos += 33
+            if e3 == "Táctica": puntos += 34
             
-            csv = df_total.to_csv(index=False).encode('utf-8')
-            st.download_button("📥 Descargar Reporte Excel", csv, "reporte_notas.csv", "text/csv")
-        except:
-            st.error("Aún no hay registros en la base de datos.")
+            nueva_nota = pd.DataFrame([{
+                "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                "Funcionario": st.session_state['funcionario'],
+                "Modulo": "Niveles de Inteligencia",
+                "Nota": puntos
+            }])
+            
+            try:
+                # Intento de conexión con diagnóstico
+                df_actual = conn.read()
+                df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
+                conn.update(data=df_final)
+                st.success(f"✅ ¡ÉXITO! Nota de {puntos}/100 guardada en la base de datos.")
+                st.balloons()
+            except Exception as e:
+                # Esto nos dirá qué está fallando realmente
+                st.error(f"❌ Error de conexión: {str(e)}")
+                st.info(f"Su nota fue: {puntos}/100. Por favor, tome captura de pantalla.")
 
 st.caption("🔒 DIPOL HUB v2.5 | Bay Islands | 2026")
