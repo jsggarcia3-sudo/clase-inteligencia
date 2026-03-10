@@ -99,18 +99,23 @@ with tab_niveles:
                     "Nota": puntos
                 }])
                 
-                try:
-                    # LEER DATOS ACTUALES
-                    df_actual = conn.read()
-                    # CONCATENAR
+              try:
+                    # Usamos la conexión para leer la hoja completa
+                    # Si tu pestaña de Excel se llama distinto a "Hoja 1", 
+                    # esta función la encontrará automáticamente.
+                    df_actual = conn.read() 
+                    
+                    # Unimos la nota nueva
                     df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
-                    # ACTUALIZAR NUBE
+                    
+                    # Actualizamos la hoja
                     conn.update(data=df_final)
+                    
                     st.success(f"✅ ¡ÉXITO! Nota de {puntos}/100 guardada en la base de datos.")
-                    if puntos == 100: st.balloons()
+                    st.balloons()
                 except Exception as e:
                     st.error(f"❌ Error de conexión: {str(e)}")
-                    st.info(f"Su nota fue: {puntos}/100. Tome captura de pantalla como respaldo.")
+                    st.info(f"Su nota fue: {puntos}/100. Tome captura de pantalla.")
     else:
         st.info("📖 Lea la doctrina superior para habilitar el examen.")
 
