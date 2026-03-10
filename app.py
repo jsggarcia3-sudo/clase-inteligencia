@@ -57,12 +57,12 @@ else:
         
         # Diccionario con el contenido de los 6 módulos
         modulos = {
-            "Módulo 1: Criptografía": ["¿Qué protocolo asegura la confidencialidad?", ["AES", "HTTP", "FTP"], "AES"],
-            "Módulo 2: Redes": ["¿Qué puerto usa PostgreSQL por defecto?", ["80", "5432", "443"], "5432"],
-            "Módulo 3: OSINT": ["¿Qué significa OSINT?", ["Open Source Intelligence", "Operating System Info", "Office Security"], "Open Source Intelligence"],
-            "Módulo 4: Análisis de Riesgos": ["¿Cuál es el primer paso en un análisis?", ["Identificar Activos", "Comprar Servidores", "Formatear PC"], "Identificar Activos"],
-            "Módulo 5: Protocolo TLS": ["¿Qué versión de TLS es la más segura actualmente?", ["TLS 1.0", "TLS 1.2", "TLS 1.3"], "TLS 1.3"],
-            "Módulo 6: Ética": ["¿Cuál es el objetivo del hacking ético?", ["Dañar sistemas", "Mejorar la seguridad", "Robar datos"], "Mejorar la seguridad"]
+            "Módulo 1: Conceptualizacion de Inteligencia": ["¿Qué protocolo asegura la confidencialidad?", ["AES", "HTTP", "FTP"], "AES"],
+            "Módulo 2: Recoleccion": ["¿Qué puerto usa PostgreSQL por defecto?", ["80", "5432", "443"], "5432"],
+            "Módulo 3: Tratamiento": ["¿Qué significa OSINT?", ["Open Source Intelligence", "Operating System Info", "Office Security"], "Open Source Intelligence"],
+            "Módulo 4: Análisis": ["¿Cuál es el primer paso en un análisis?", ["Identificar Activos", "Comprar Servidores", "Formatear PC"], "Identificar Activos"],
+            "Módulo 5: Difusion": ["¿Qué versión de TLS es la más segura actualmente?", ["TLS 1.0", "TLS 1.2", "TLS 1.3"], "TLS 1.3"],
+            "Módulo 6: Retroalimentacion": ["¿Cuál es el objetivo del hacking ético?", ["Dañar sistemas", "Mejorar la seguridad", "Robar datos"], "Mejorar la seguridad"]
         }
 
         seleccion = st.selectbox("Seleccione un Módulo:", list(modulos.keys()))
