@@ -248,24 +248,21 @@ else:
                             """)
 
                     with st.expander("🛡️ Operaciones Especializadas", expanded=True):
-    # Creamos un layout de cuadrícula
-    rows = [st.columns(2), st.columns(2), st.columns(1)]
-    
-    content = [
-        ("Infiltración", "Ubicar agentes dentro de una organización mediante una cobertura.", "👤"),
-        ("Penetración", "Obtener colaboración permanente de alguien con acceso.", "🔑"),
-        ("Admón. de Fuentes", "Proceso de orientación, dirección y control de fuentes.", "🤝"),
-        ("Entrevista", "Obtención de información mediante intercambio de ideas.", "🎙️"),
-    ]
+                        rows = [st.columns(2), st.columns(2)]
+                        content = [
+                            ("Infiltración", "Ubicar agentes dentro de una organización mediante una cobertura.", "👤"),
+                            ("Penetración", "Obtener colaboración permanente de alguien con acceso.", "🔑"),
+                            ("Admón. de Fuentes", "Proceso de orientación, dirección y control de fuentes.", "🤝"),
+                            ("Entrevista", "Obtención de información mediante intercambio de ideas.", "🎙️"),
+                        ]
 
-    for i, (title, desc, icon) in enumerate(content):
-        with rows[i // 2][i % 2]:
-            st.subheader(f"{icon} {title}")
-            st.write(desc)
-            st.divider()
+                        for i, (title, desc, icon) in enumerate(content):
+                            with rows[i // 2][i % 2]:
+                                st.subheader(f"{icon} {title}")
+                                st.write(desc)
+                                st.divider()
 
-    # Nota especial para Caracterización al final
-    st.warning("**🎭 Caracterización vs Fachada:** La *caracterización* es quién dices ser; la *fachada* es el entorno físico que lo respalda.")
+                        st.warning("**🎭 Caracterización vs Fachada:** La *caracterización* es quién dices ser; la *fachada* es el entorno físico que lo respalda.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
@@ -326,24 +323,28 @@ else:
                     if st.form_submit_button("FINALIZAR EXAMEN"):
                         res = [c1=="Diálogo donde la fuente no debe percatarse de la explotación", c2=="Búsqueda de información y elaboración de productos", c3=="Infiltración mete al agente; Penetración usa a alguien de adentro", c4=="El dato", c5=="Concretar datos de propietarios, vehículos, seguridad y entorno", c6=="Realizar autoevaluación de control y gestión", c7=="El sordo", c8=="Exploración", c9=="Abiertas, Cerradas Especializadas, Cerradas Humanas y Técnicas", c10=="Conjunto de datos integrados y ordenados para construir un mensaje"]
                         nota = (sum(res) / 10) * 100
-                        with engine.connect() as conn:
+                        with engine.begin() as conn:
                             conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": "Módulo 3"})
-                            conn.commit()
                         st.session_state['modo_examen'] = False
                         st.rerun()
 
     elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
-            df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), engine, params={"n": st.session_state['agente_nombre']})
-            st.dataframe(df, use_container_width=True)
+            with engine.connect() as conn:
+                df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), conn, params={"n": st.session_state['agente_nombre']})
+            if not df.empty:
+                st.dataframe(df, use_container_width=True)
+            else: st.info("No hay registros aún.")
         except: st.info("No hay registros aún.")
 
     elif seccion == "📈 Dashboard General":
         if st.session_state['es_admin']:
             st.title("🛡️ Panel Administrativo")
-            df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), engine)
+            with engine.connect() as conn:
+                df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
             st.dataframe(df_all, use_container_width=True)
             st.divider()
-            st.bar_chart(df_all.groupby('modulo')['nota'].mean())
+            if not df_all.empty:
+                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
         else: st.warning("Acceso restringido a administradores.")
