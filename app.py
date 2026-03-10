@@ -42,7 +42,6 @@ def login():
 if not st.session_state['autenticado']:
     login()
 else:
-    # Conexión a Base de Datos
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
@@ -56,7 +55,7 @@ else:
 
     if seccion == "🏠 Inicio":
         st.title("🛡️ Panel de Control")
-        st.info("Bienvenido. Seleccione '📚 Módulos' para acceder al contenido técnico completo.")
+        st.info("Bienvenido. Seleccione '📚 Módulos' para acceder al contenido técnico.")
 
     elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección"])
@@ -75,19 +74,13 @@ else:
                 </div>
                 <div class="lectura-box">
                     <h3>¿Qué es Inteligencia Policial?</h3>
-                    <p>Conjunto de procesos mediante los cuales se obtiene, trata, evalúa y analiza la información, para generar conocimiento relacionado con la <b>seguridad y convivencia ciudadana</b>, a fin de contribuir a la definición de políticas a cargo de las autoridades de la administración pública a nivel nacional, departamental y local, al diseño de estrategias institucionales y a orientar la ejecución de operaciones en cumplimiento de la misión policial.</p>
-                </div>
-                <div class="lectura-box">
-                    <h3>Inteligencia según su nivel</h3>
-                    <p><b>INTELIGENCIA ESTRATÉGICA:</b> Los líderes políticos y policiales emplean algunas áreas del conjunto de conocimientos de inteligencia para la formulación de planes y políticas orientada hacia los objetivos nacionales, para llegar a decisiones relacionadas con la seguridad y bienestar de la nación.</p>
-                    <p><b>INTELIGENCIA OPERACIONAL:</b> Requerida para el planeamiento de operaciones dentro de un área específica. Se concentra en la recolección, identificación, localización y análisis para apoyar en el nivel operacional, asesorando al jefe de la operación sobre el mejor empleo de las unidades disponibles y minimizar los riesgos.</p>
-                    <p><b>INTELIGENCIA TÁCTICA:</b> Requerida para la conducción de operaciones tácticas al nivel de equipos. Se enfoca en las capacidades del objetivo, sus posibilidades inmediatas y el ambiente. Las posibilidades inmediatas son dinámicas, tienden a variar constantemente y no permite prever situaciones a futuro mediato.</p>
+                    <p>Conjunto de procesos mediante los cuales se obtiene, trata, evalúa y analiza la información, para generar conocimiento relacionado con la <b>seguridad y convivencia ciudadana</b>...</p>
                 </div>
                 """, unsafe_allow_html=True)
                 if st.button("🚀 INICIAR EVALUACIÓN M1"): st.session_state['modo_examen']=True; st.rerun()
             else:
                 with st.form("ex_m1"):
-                    p1 = st.radio("Función de la inteligencia:", ["Duda", "Asesoramiento para reducir incertidumbres", "Fuerza"])
+                    p1 = st.radio("Función de la inteligencia:", ["Asesoramiento", "Fuerza"])
                     if st.form_submit_button("Guardar Nota M1"): st.session_state['modo_examen']=False; st.rerun()
 
         # --- MÓDULO 2 ---
@@ -96,28 +89,21 @@ else:
                 st.header("📖 Material: Ciclo de Inteligencia")
                 st.markdown("""
                 <div class="lectura-box">
-                    <h3>Definición</h3>
-                    <p>Se define como una serie de <b>cinco pasos</b> orientados a la generación de conocimiento estratégico útil, verdadero y ajustado a los requerimientos de información preestablecidos por un destinatario final (decisor), a quien se difunde selectivamente el resultado plasmado en un instrumento determinado.</p>
-                    <h3>Pasos:</h3>
-                    <ul>
-                        <li><b>Recolectar:</b> Obtención de datos relevantes.</li>
-                        <li><b>Tratar:</b> Procesamiento y organización.</li>
-                        <li><b>Analizar:</b> Transformación en conocimiento.</li>
-                        <li><b>Comunicar e Integrar:</b> Difusión al decisor.</li>
-                        <li><b>Evaluar y Retroalimentar:</b> Ajuste y mejora.</li>
-                    </ul>
+                    <h3>Definición y Pasos</h3>
+                    <p>Serie de <b>cinco pasos</b> orientados a la generación de conocimiento estratégico útil, verdadero y ajustado a los requerimientos del decisor.</p>
+                    <ul><li>Recolectar, Tratar, Analizar, Comunicar e Integrar, Evaluar y Retroalimentar.</li></ul>
                 </div>
                 """, unsafe_allow_html=True)
                 if st.button("🚀 INICIAR EVALUACIÓN M2"): st.session_state['modo_examen']=True; st.rerun()
             else:
                 with st.form("ex_m2"):
-                    p1 = st.radio("¿Pasos del ciclo?", ["5 pasos", "3 pasos"])
+                    p1 = st.radio("¿Cuántos pasos tiene el ciclo?", ["5 pasos", "3 pasos"])
                     if st.form_submit_button("Guardar Nota M2"): st.session_state['modo_examen']=False; st.rerun()
 
-        # --- MÓDULO 3 ---
+        # --- MÓDULO 3: RECOLECCIÓN (LECTURA COMPLETA Y EXAMEN DE 10 PREGUNTAS) ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
-                st.header("📖 Material: Recolección de Información")
+                st.header("📖 Material Completo: Recolección de Información")
                 
                 with st.expander("1. Definición y Proceso de Recolección", expanded=True):
                     st.markdown("""
@@ -128,47 +114,68 @@ else:
                     * Distribuir y organizar los resultados de la recolección.
                     * Reunir y retroalimentar.
                     """)
-                    
                     st.subheader("Recolección de Información (PHVA)")
-                    st.write("**PLANEAR:** Establecer objetivos y procesos necesarios. Planificación de la recolección, Identificar y administrar riesgos, Planificar recursos.")
-                    st.write("**HACER:** Implementación. Búsqueda de información, Desarrollar actividades, Elaborar y registrar productos, Suministrar productos, Controles de seguridad.")
-                    st.write("**VERIFICAR:** Seguimiento y medición. Realizar autoevaluación de control y gestión.")
-                    st.write("**ACTUAR:** Ajustar y mejorar continuamente. Implementar acciones correctivas, preventivas o de mejora.")
+                    st.write("**PLANEAR:** Establecer objetivos y procesos. Planificación, riesgos y recursos.")
+                    st.write("**HACER:** Búsqueda, desarrollo de actividades, elaboración y suministro de productos, controles de seguridad.")
+                    st.write("**VERIFICAR:** Seguimiento y medición, autoevaluación de control y gestión.")
+                    st.write("**ACTUAR:** Ajustar y mejorar, acciones correctivas o preventivas.")
 
                 with st.expander("2. ¿Qué es Información y Datos?"):
-                    st.write("**¿Qué es información?** Conjunto de datos integrados y ordenados que sirven para construir un mensaje basado en un cierto fenómeno. Materia prima para resolver problemas.")
-                    st.write("**Dato:** Es la unidad básica que comprende la información.")
+                    st.write("**Información:** Conjunto de datos integrados y ordenados que sirven para construir un mensaje. Materia prima para resolver problemas.")
+                    st.write("**Dato:** Unidad básica que comprende la información.")
                     st.subheader("Fuentes de Información")
-                    st.write("* Abiertas o Públicas | Cerradas Especializadas | Cerradas Humanas | Técnicas")
+                    st.write("* Abiertas (Públicas), Cerradas Especializadas, Cerradas Humanas y Técnicas.")
 
                 with st.expander("3. Operaciones de Inteligencia"):
                     st.markdown("""
-                    **Básicas:**
-                    * **Reconocimiento:** Concretar datos de propietario, residentes, vehículos y seguridad del sitio.
+                    **Operaciones Básicas:**
+                    * **Reconocimiento:** Concretar datos de inmuebles, personas, vehículos y seguridad.
                     * **Verificación:** Establecer veracidad o desvirtuar información.
                     * **Vigilancia:** Observación continua y discreta para establecer rutinas.
                     * **Seguimiento:** Control sobre objetivos en movimiento (A pie / Vehículo).
                     * **Sonsacamiento:** Diálogo donde la fuente no percibe la intención del agente.
                     
-                    **Especializadas:**
-                    * **Infiltración:** Ubicar agentes dentro de una organización con una cobertura.
-                    * **Penetración:** Obtener colaboración de una persona que ya pertenece a la organización.
+                    **Operaciones Especializadas:**
+                    * **Infiltración:** Ubicar agentes dentro de una organización.
+                    * **Penetración:** Obtener colaboración de alguien que ya está dentro.
                     """)
 
                 with st.expander("4. Administración de Fuentes Humanas y Entrevista"):
-                    st.write("**Fases de Admón:** Exploración -> Aproximación -> Registro -> Entrenamiento.")
+                    st.write("**Fases Admón:** Exploración -> Aproximación -> Registro -> Entrenamiento.")
                     st.subheader("Tipos de Entrevistador (A EVITAR)")
-                    st.write("* **El estrella:** Habla más que la fuente. | **El sordo:** Olvida escuchar por mirar el cuestionario.")
-                    st.write("* **El metralleta:** No da tiempo de responder. | **El enredado:** Usa palabras difíciles.")
-                    st.write("**Etapas de Entrevista:** Planeación, Desarrollo, Terminación e Informe.")
+                    st.write("- **El estrella:** Se siente superior. | **El sordo:** Olvida escuchar.")
+                    st.write("- **El metralleta:** Bombardea preguntas. | **El enredado:** Lenguaje complejo.")
+                    st.write("- **El improvisado:** No prepara nada. | **El estrellado:** Tímido.")
 
-                if st.button("🚀 INICIAR EVALUACIÓN M3"): st.session_state['modo_examen']=True; st.rerun()
+                if st.button("🚀 INICIAR EXAMEN DE RECOLECCIÓN (10 PREGUNTAS)"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
             else:
-                with st.form("ex_m3"):
-                    p1 = st.radio("¿Qué busca el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no nota la intención", "Vigilancia"])
-                    if st.form_submit_button("FINALIZAR M3"): 
-                        st.success("Nota guardada"); st.session_state['modo_examen']=False; st.rerun()
+                st.header("📝 Evaluación: Módulo 3 (Recolección)")
+                with st.form("ex_m3_final"):
+                    c1 = st.radio("1. ¿Qué es el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no debe percatarse de la explotación", "Tortura psicológica"])
+                    c2 = st.radio("2. En el ciclo PHVA, ¿qué implica PLANEAR?", ["Búsqueda de información", "Establecer objetivos, riesgos y recursos", "Acciones correctivas"])
+                    c3 = st.radio("3. ¿Cuál es la diferencia entre Infiltración y Penetración?", ["No hay diferencia", "Infiltración mete al agente; Penetración usa a alguien que ya está dentro", "Infiltración es técnica; Penetración es humana"])
+                    c4 = st.radio("4. ¿Cuál es la unidad básica que comprende la información?", ["El mensaje", "El dato", "El informe"])
+                    c5 = st.radio("5. ¿Qué busca el Reconocimiento específicamente?", ["Solo vigilar", "Concretar datos de propietarios, vehículos, seguridad y entorno", "Sonsacar a la fuente"])
+                    c6 = st.radio("6. En PHVA, ¿qué acción corresponde a VERIFICAR?", ["Ejecutar controles", "Realizar autoevaluación de control y gestión", "Planificar recursos"])
+                    c7 = st.radio("7. Tipo de entrevistador que habla más que la fuente y se siente superior:", ["El metralleta", "El estrella", "El sordo"])
+                    c8 = st.radio("8. ¿Cuál es el primer paso en la Administración de Fuentes Humanas?", ["Registro", "Entrenamiento", "Exploración (Búsqueda)"])
+                    c9 = st.radio("9. Las operaciones Estructurales tienen como fin:", ["Solo flagrancias", "Desarticulación de estructuras y ruptura de cadena criminal", "Fines comunitarios"])
+                    c10 = st.radio("10. ¿Qué etapa de la entrevista busca mantener armonía sin perder el control?", ["Planeación", "Desarrollo", "Informe"])
+
+                    if st.form_submit_button("FINALIZAR Y GUARDAR CALIFICACIÓN"):
+                        res = [c1=="Diálogo donde la fuente no debe percatarse de la explotación", c2=="Establecer objetivos, riesgos y recursos", c3=="Infiltración mete al agente; Penetración usa a alguien que ya está dentro", c4=="El dato", c5=="Concretar datos de propietarios, vehículos, seguridad y entorno", c6=="Realizar autoevaluación de control y gestión", c7=="El estrella", c8=="Exploración (Búsqueda)", c9=="Desarticulación de estructuras y ruptura de cadena criminal", c10=="Desarrollo"]
+                        nota = (sum(res) / 10) * 100
+                        try:
+                            with engine.connect() as conn:
+                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": "Módulo 3: Recolección"})
+                                conn.commit()
+                            st.success(f"Evaluación finalizada. Su nota es: {nota}%")
+                            st.session_state['modo_examen'] = False
+                        except Exception as e: st.error(f"Error al guardar: {e}")
 
     elif seccion == "📊 Mi Progreso":
         st.title("Historial Personal")
-        st.info("Aquí aparecerán sus resultados almacenados.")
+        df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), engine, params={"n": st.session_state['agente_nombre']})
+        st.dataframe(df, use_container_width=True)
