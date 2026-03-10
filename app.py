@@ -30,8 +30,9 @@ if "identificado" not in st.session_state:
                 else: st.error("Clave incorrecta")
     st.stop()
 
-# 📊 CONFIGURACIÓN DE LA HOJA
+# 📊 CONFIGURACIÓN DE LA HOJA (Asegúrate que la pestaña se llame 'Resultados')
 URL_HOJA = "https://docs.google.com/spreadsheets/d/1fw89-tdtBGU76hl6msHPlWlNdER12cYAfgIr0NpaT_M"
+NOMBRE_PESTANA = "Resultados"
 
 try:
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -64,30 +65,27 @@ with tab_eval:
                 "Nota": puntos
             }])
             
-           try:
-                    # Usamos el nombre 'Resultados' que pusiste en la pestaña del Excel
-                    df_actual = conn.read(spreadsheet=URL_HOJA, worksheet="Resultados", ttl=0)
-                    
-                    # Unir la nueva nota
-                    df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
-                    
-                    # Actualizar la hoja de Google
-                    conn.update(spreadsheet=URL_HOJA, worksheet="Resultados", data=df_final)
-                    
-                    st.success(f"✅ ¡REGISTRO EXITOSO! Nota: {puntos}/100")
-                    st.balloons()
-                except Exception as e:
-                    st.error(f"Error al guardar. Verifique el nombre de la pestaña.")
-                    st.code(f"Detalle técnico: {str(e)}")
+            try:
+                # Lectura de la hoja
+                df_actual = conn.read(spreadsheet=URL_HOJA, worksheet=NOMBRE_PESTANA, ttl=0)
+                # Unión de datos
+                df_final = pd.concat([df_actual, nueva_fila], ignore_index=True)
+                # Actualización en la nube
+                conn.update(spreadsheet=URL_HOJA, worksheet=NOMBRE_PESTANA, data=df_final)
+                
+                st.success(f"✅ ¡REGISTRO EXITOSO! Nota: {puntos}/100")
+                st.balloons()
+            except Exception as e:
+                st.error(f"Error al guardar. Verifique que la pestaña se llame '{NOMBRE_PESTANA}' y sea Editor.")
+                st.code(f"Detalle técnico: {str(e)}")
 
 with tab_admin:
     st.header("📊 Registro de Calificaciones")
     if st.text_input("Clave Instructor", type="password") == "DIPOL_MASTER":
         try:
-            # Forzamos lectura fresca
-            df_resumen = conn.read(spreadsheet=URL_HOJA, worksheet="Hoja 1", ttl=0)
+            df_resumen = conn.read(spreadsheet=URL_HOJA, worksheet=NOMBRE_PESTANA, ttl=0)
             st.dataframe(df_resumen, use_container_width=True)
-        except:
-            st.error("No se pudo cargar la base de datos.")
+        except Exception as e:
+            st.error(f"No se pudo cargar la base de datos: {e}")
 
 st.caption("🔒 DIPOL HUB | Bay Islands | 2026")
