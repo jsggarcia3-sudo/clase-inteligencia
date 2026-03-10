@@ -54,9 +54,10 @@ if "identificado" not in st.session_state:
 # 📊 3. CONEXIÓN A GOOGLE SHEETS
 # ==========================================
 try:
+    # Usamos ttl=0 para que siempre lea datos frescos del instructor
     conn = st.connection("gsheets", type=GSheetsConnection)
-except:
-    st.error("Error de configuración en Secrets.")
+except Exception as e:
+    st.error(f"Error crítico de conexión: {e}")
 
 # ==========================================
 # 🚀 4. INTERFAZ OPERATIVA
@@ -67,16 +68,15 @@ tab_niveles, tab_recoleccion, tab_admin = st.tabs([
     "📂 DOCTRINA Y NIVELES", "📡 RECOLECCIÓN", "📊 PANEL INSTRUCTOR"
 ])
 
+# --- TAB 1: NIVELES ---
 with tab_niveles:
     st.header("📖 Marco Doctrinal de Inteligencia")
 
-    # Contenido Doctrinal (Definiciones que pediste)
     st.markdown('<div class="doctrina-card"><p class="sub-titulo">I. Definición de Inteligencia</p>Es el conocimiento obtenido a través del procesamiento adecuado de la información...</div>', unsafe_allow_html=True)
     st.markdown('<div class="doctrina-card" style="border-left-color: #00d4ff;"><p class="sub-titulo">II. Inteligencia Policial</p>Conjunto de procesos mediante los cuales se obtiene, trata, evalúa y analiza la información...</div>', unsafe_allow_html=True)
     
     st.divider()
     
-    # --- EVALUACIÓN ---
     if st.checkbox("✅ He analizado la doctrina de Inteligencia"):
         st.subheader("⚡ SIMULADOR DE EVALUACIÓN")
         e1 = st.selectbox("1. Plan de 5 años para seguridad nacional:", ["...", "Estratégica", "Operacional", "Táctica"], key="q1")
@@ -84,55 +84,59 @@ with tab_niveles:
         e3 = st.selectbox("3. Persecución en curso (inmediata):", ["...", "Estratégica", "Operacional", "Táctica"], key="q3")
 
         if st.button("🚀 ENVIAR CALIFICACIÓN"):
-            puntos = 0
-            if e1 == "Estratégica": puntos += 33
-            if e2 == "Operacional": puntos += 33
-            if e3 == "Táctica": puntos += 34
-            
-            # Preparar datos con tus nuevas columnas
-            nueva_nota = pd.DataFrame([{
-                "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                "Funcionario": st.session_state['funcionario'],
-                "Modulo": "Niveles de Inteligencia",
-                "Nota": puntos
-            }])
-            
-            try:
-                # Leer datos actuales y concatenar
-                df_actual = conn.read()
-                df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
-                conn.update(data=df_final)
-                st.success(f"Nota de {puntos}/100 registrada exitosamente.")
-                if puntos == 100: st.balloons()
-            except:
-                st.info(f"Nota obtenida: {puntos}/100 (No se pudo conectar a la base de datos).")
+            if "..." in [e1, e2, e3]:
+                st.warning("⚠️ Por favor responda todas las preguntas.")
+            else:
+                puntos = 0
+                if e1 == "Estratégica": puntos += 33
+                if e2 == "Operacional": puntos += 33
+                if e3 == "Táctica": puntos += 34
+                
+                nueva_nota = pd.DataFrame([{
+                    "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                    "Funcionario": st.session_state['funcionario'],
+                    "Modulo": "Niveles de Inteligencia",
+                    "Nota": puntos
+                }])
+                
+                try:
+                    # LEER DATOS ACTUALES
+                    df_actual = conn.read()
+                    # CONCATENAR
+                    df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
+                    # ACTUALIZAR NUBE
+                    conn.update(data=df_final)
+                    st.success(f"✅ ¡ÉXITO! Nota de {puntos}/100 guardada en la base de datos.")
+                    if puntos == 100: st.balloons()
+                except Exception as e:
+                    st.error(f"❌ Error de conexión: {str(e)}")
+                    st.info(f"Su nota fue: {puntos}/100. Tome captura de pantalla como respaldo.")
     else:
-        st.info("📖 Lea la doctrina para habilitar el examen.")
+        st.info("📖 Lea la doctrina superior para habilitar el examen.")
 
-# --- PANEL DE INSTRUCTOR ---
-if st.button("🚀 ENVIAR CALIFICACIÓN"):
-            puntos = 0
-            if e1 == "Estratégica": puntos += 33
-            if e2 == "Operacional": puntos += 33
-            if e3 == "Táctica": puntos += 34
-            
-            nueva_nota = pd.DataFrame([{
-                "Fecha": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                "Funcionario": st.session_state['funcionario'],
-                "Modulo": "Niveles de Inteligencia",
-                "Nota": puntos
-            }])
-            
-            try:
-                # Intento de conexión con diagnóstico
-                df_actual = conn.read()
-                df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
-                conn.update(data=df_final)
-                st.success(f"✅ ¡ÉXITO! Nota de {puntos}/100 guardada en la base de datos.")
-                st.balloons()
-            except Exception as e:
-                # Esto nos dirá qué está fallando realmente
-                st.error(f"❌ Error de conexión: {str(e)}")
-                st.info(f"Su nota fue: {puntos}/100. Por favor, tome captura de pantalla.")
+# --- TAB 2: RECOLECCIÓN (VACÍO POR AHORA) ---
+with tab_recoleccion:
+    st.info("Módulo de Recolección de Información - Próximamente.")
 
+# --- TAB 3: PANEL INSTRUCTOR (CORREGIDO) ---
+with tab_admin:
+    st.header("📊 Registro de Calificaciones (Instructor)")
+    clave_maestra = st.text_input("Ingrese Clave de Mando para ver resultados:", type="password")
+    
+    if clave_maestra == "DIPOL_MASTER":
+        try:
+            # Forzamos lectura sin caché para ver los 30 alumnos al instante
+            df_total = conn.read(ttl=0)
+            st.write("### Listado de Agentes Evaluados")
+            st.dataframe(df_total, use_container_width=True)
+            
+            # Botón para descargar reporte
+            csv = df_total.to_csv(index=False).encode('utf-8')
+            st.download_button("📥 Descargar Reporte CSV", csv, "reporte_dipol.csv", "text/csv")
+        except Exception as e:
+            st.error(f"No se pudo cargar la base de datos: {e}")
+    elif clave_maestra != "":
+        st.error("Clave incorrecta.")
+
+st.markdown("---")
 st.caption("🔒 DIPOL HUB v2.5 | Bay Islands | 2026")
