@@ -333,41 +333,23 @@ else:
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Tratamiento de la Información")
                 
-                # SECCIÓN ACTUALIZADA CON TRES PESTAÑAS
-                tab_cont, tab_tipos, tab_comp = st.tabs(["📌 Fundamentos", "🔍 Tipos y Elementos (EEI)", "🛠️ Componentes y Ejemplos"])
+                # SISTEMA DE CUATRO PESTAÑAS
+                tab_cont, tab_tipos, tab_comp, tab_4x4 = st.tabs([
+                    "📌 Fundamentos", 
+                    "🔍 Tipos y Elementos (EEI)", 
+                    "🛠️ Componentes", 
+                    "📊 Código 4x4"
+                ])
                 
                 with tab_cont:
                     with st.expander("Ver Contenido Completo Módulo 4", expanded=True):
                         st.markdown("""
                         <div class="lectura-box">
                             <h3>Definición</h3>
-                            <p>Procedimiento <b>sistemático</b> que consiste en someter todos los datos e información recolectada a un proceso de organización, clasificación y valoración preliminar, con el fin de garantizar que su registro y almacenamiento en bases de datos se enmarque en los fines de la actividad de inteligencia y contrainteligencia contenidos en la <b>Constitución y la Jurisprudencia nacional</b>.</p>
-                        </div>
-                        <div class="lectura-box">
-                            <h3>Procedimiento y Finalidad</h3>
-                            <p>Consiste en organizar la información con el fin de determinar la <b>utilidad</b> de la misma y su <b>pertinencia</b> a los objetivos o la misión. Una adecuada organización de la información:</p>
-                            <ul>
-                                <li>Evita la saturación.</li>
-                                <li>Coadyuva a resolver en forma efectiva las prioridades.</li>
-                                <li>Garantiza el desarrollo normal de los procesos operacionales.</li>
-                            </ul>
+                            <p>Procedimiento <b>sistemático</b> de organización, clasificación y valoración preliminar para garantizar que el almacenamiento de datos se enmarque en los fines de inteligencia.</p>
                         </div>
                         """, unsafe_allow_html=True)
-
-                        st.subheader("📊 Esquema de Tratamiento")
-                        col_e1, col_e2 = st.columns(2)
-                        with col_e1:
-                            st.info("**Flujo de Trabajo:**\n\nInsumos ➡️ Proceso ➡️ Producto")
-                        with col_e2:
-                            st.success("**Transformación:**\n\nInformación ➡️ Transformación ➡️ Inteligencia")
-                        
-                        st.divider()
-                        st.markdown("""
-                        <div class="lectura-box" style="background-color: #003366; border: 2px solid #D4AF37;">
-                            <h3 style="text-align: center;">Ecuación de Tratamiento</h3>
-                            <h2 style="text-align: center; color: #D4AF37;">Información + Conocimiento = Decisión</h2>
-                        </div>
-                        """, unsafe_allow_html=True)
+                        st.info("**Ecuación de Tratamiento:**\n\nInformación + Conocimiento = Decisión")
 
                 with tab_tipos:
                     col_t1, col_t2 = st.columns(2)
@@ -375,74 +357,115 @@ else:
                         st.markdown("""
                         <div class="lectura-box">
                             <h4>💡 Tipos de Información</h4>
-                            <p><b>1. Genérica:</b> Es la información de contexto o referencia que no tiene un objetivo específico inmediato pero ayuda a entender el entorno general.</p>
-                            <p><b>2. Específica:</b> Información puntual y detallada sobre un blanco, organización o fenómeno particular, necesaria para la toma de decisiones tácticas u operativas.</p>
+                            <p><b>1. Genérica:</b> Contexto general.</p>
+                            <p><b>2. Específica:</b> Detalle puntual sobre un blanco.</p>
                         </div>
                         """, unsafe_allow_html=True)
-                    
                     with col_t2:
                         st.markdown("""
                         <div class="lectura-box">
-                            <h4>🔑 Elementos Esenciales de Información (EEI)</h4>
-                            <p>Son las preguntas fundamentales que el analista debe responder para convertir el dato en conocimiento útil:</p>
-                            <ul>
-                                <li><b>¿QUÉ?:</b> El hecho o fenómeno observado.</li>
-                                <li><b>¿CUÁNDO?:</b> Temporalidad y cronología.</li>
-                                <li><b>¿DÓNDE?:</b> Ubicación geográfica o espacial.</li>
-                                <li><b>¿CÓMO?:</b> El modus operandi o método.</li>
-                                <li><b>¿QUIÉN?:</b> Actores, sujetos y organizaciones.</li>
-                                <li><b>¿POR QUÉ?:</b> Causas y motivaciones.</li>
-                                <li><b>¿PARA QUÉ?:</b> El objetivo o finalidad del hecho.</li>
-                            </ul>
+                            <h4>🔑 Elementos Esenciales (EEI)</h4>
+                            <p>¿Qué?, ¿Cuándo?, ¿Dónde?, ¿Cómo?, ¿Quién?, ¿Por qué?, ¿Para qué?</p>
                         </div>
                         """, unsafe_allow_html=True)
-                    
-                    st.info("⚠️ **Nota:** Responder estos elementos permite estructurar un informe de inteligencia completo y evita la ambigüedad en la asesoría al mando.")
 
                 with tab_comp:
-                    st.subheader("⚙️ Componentes del Tratamiento de Información")
-                    
+                    st.subheader("⚙️ Componentes y Ejemplos")
                     c1, c2 = st.columns(2)
                     with c1:
                         st.markdown("""
                         <div class="lectura-box">
                             <h4>📂 ORGANIZACIÓN</h4>
                             <ul>
-                                <li><b>Tipo de información:</b> Determinar si es técnica, humana o abierta.<br><i>Ej: Clasificar un video de vigilancia como fuente técnica.</i></li>
-                                <li><b>Blanco:</b> Identificar el objetivo al que pertenece.<br><i>Ej: Vincular un dato a un Grupo Delictivo Organizado específico.</i></li>
-                                <li><b>Prioridad:</b> Urgencia de la información.<br><i>Ej: Asignar "Prioridad 1" a información sobre un atentado en las próximas 24h.</i></li>
+                                <li><b>Tipo:</b> Técnica, humana o abierta.</li>
+                                <li><b>Blanco:</b> Objetivo o estructura.</li>
+                                <li><b>Prioridad:</b> Urgencia del dato.</li>
                             </ul>
                         </div>
                         <div class="lectura-box">
                             <h4>🛡️ CLASIFICACIÓN</h4>
                             <ul>
-                                <li><b>Origen:</b> De dónde proviene la información.<br><i>Ej: Identificar si proviene de un informante cerrado o de una red social (fuente abierta).</i></li>
-                                <li><b>Estado:</b> Fase actual del procesamiento.<br><i>Ej: Marcar como información "Preliminar" antes de ser confirmada.</i></li>
-                                <li><b>Nivel de Seg.:</b> Restricción según sensibilidad.<br><i>Ej: Etiquetar como "Secreto" un documento que compromete la seguridad nacional.</i></li>
+                                <li><b>Origen:</b> Fuente de procedencia.</li>
+                                <li><b>Estado:</b> Fase (Preliminar/Final).</li>
+                                <li><b>Seguridad:</b> Nivel de restricción.</li>
                             </ul>
                         </div>
                         """, unsafe_allow_html=True)
-
                     with c2:
                         st.markdown("""
                         <div class="lectura-box">
                             <h4>⚖️ VALORACIÓN</h4>
                             <ul>
-                                <li><b>Oportuna:</b> Si el dato llega en el momento útil.<br><i>Ej: Recibir la ubicación de un prófugo mientras aún se encuentra en el sitio.</i></li>
-                                <li><b>Confiable:</b> Según el historial de la fuente.<br><i>Ej: Una fuente que siempre ha entregado datos veraces es considerada "Altamente Confiable".</i></li>
-                                <li><b>Creíble:</b> Si el contenido tiene lógica y coherencia.<br><i>Ej: Verificar si el dato coincide con la realidad geográfica o técnica conocida.</i></li>
+                                <li><b>Oportuna:</b> Tiempo útil.</li>
+                                <li><b>Confiable:</b> Historial de fuente.</li>
+                                <li><b>Creíble:</b> Lógica del dato.</li>
                             </ul>
                         </div>
                         <div class="lectura-box">
                             <h4>📝 REGISTRO</h4>
                             <ul>
-                                <li><b>Cronológico:</b> Ordenado por fecha y hora de suceso.<br><i>Ej: Bitácora de movimientos de un objetivo minuto a minuto.</i></li>
-                                <li><b>Detallado:</b> Incluye todos los pormenores sin omitir nada.<br><i>Ej: Describir no solo el vehículo, sino el estado de las llantas, calcomanías y ocupantes.</i></li>
-                                <li><b>Sistemático:</b> Ingreso bajo formatos y protocolos estandarizados.<br><i>Ej: Cargar la información en el sistema centralizado siguiendo la nomenclatura oficial.</i></li>
+                                <li><b>Cronológico:</b> Por fecha/hora.</li>
+                                <li><b>Detallado:</b> Sin omitir pormenores.</li>
+                                <li><b>Sistemático:</b> Formato oficial.</li>
                             </ul>
                         </div>
                         """, unsafe_allow_html=True)
 
+                with tab_4x4:
+                    st.subheader("📋 Matriz de Evaluación 4x4")
+                    st.write("Este sistema estandarizado permite calificar la **Confiabilidad** de la fuente y la **Credibilidad** de la información.")
+                    
+                    # Representación de la tabla de la imagen
+                    st.markdown("""
+                    <style>
+                        .t-4x4 { width: 100%; border-collapse: collapse; color: white; }
+                        .t-4x4 th { background-color: #D4AF37; color: #001226; padding: 10px; border: 1px solid #444; }
+                        .t-4x4 td { padding: 8px; border: 1px solid #444; background-color: #002b55; font-size: 0.9em; }
+                        .perc-100 { background-color: #4CAF50 !important; font-weight: bold; text-align: center; color: white; }
+                        .perc-75 { background-color: #FFEB3B !important; color: black; font-weight: bold; text-align: center; }
+                        .perc-50 { background-color: #FF9800 !important; font-weight: bold; text-align: center; }
+                        .perc-25 { background-color: #F44336 !important; font-weight: bold; text-align: center; }
+                    </style>
+                    <table class="t-4x4">
+                        <tr>
+                            <th colspan="2">CONFIABILIDAD DE LA FUENTE</th>
+                            <th colspan="2">CREDIBILIDAD DE LA INFORMACIÓN</th>
+                            <th>%</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center"><b>A</b></td>
+                            <td>Sin duda de autenticidad o fuente confiable en casos anteriores.</td>
+                            <td style="text-align:center"><b>1</b></td>
+                            <td>Información conocida y confirmada como cierta sin duda.</td>
+                            <td class="perc-100">100</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center"><b>B</b></td>
+                            <td>Información ha resultado cierta en la mayoría de los casos.</td>
+                            <td style="text-align:center"><b>2</b></td>
+                            <td>Información conocida de primera mano por la fuente.</td>
+                            <td class="perc-75">75</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center"><b>C</b></td>
+                            <td>Información en el pasado NO ha resultado cierta en la mayoría de los casos.</td>
+                            <td style="text-align:center"><b>3</b></td>
+                            <td>No es de primera mano, pero puede ser corroborada por fuentes alternas.</td>
+                            <td class="perc-50">50</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align:center"><b>D</b></td>
+                            <td>Fuentes no utilizadas o dudas sobre su autenticidad.</td>
+                            <td style="text-align:center"><b>4</b></td>
+                            <td>No es de primera mano y NO puede ser corroborada por ningún medio.</td>
+                            <td class="perc-25">25</td>
+                        </tr>
+                    </table>
+                    <br>
+                    """, unsafe_allow_html=True)
+                    st.warning("**Nota Operativa:** Una calificación **A-1** representa la máxima calidad de inteligencia, mientras que una **D-4** requiere verificación extrema.")
+
+                # EXAMEN M4 (Actualizado con preguntas del Código 4x4)
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
                 if nota_p is None:
                     if st.button("🚀 INICIAR EXAMEN M4"):
@@ -453,19 +476,19 @@ else:
             else:
                 st.header("📝 Evaluación: Módulo 4")
                 with st.form("exam_m4"):
-                    m4_1 = st.radio("1. ¿Qué es el Tratamiento de la Información?", ["Captura de objetivos", "Procedimiento sistemático de organización, clasificación y valoración preliminar", "La difusión de noticias"])
-                    m4_2 = st.radio("2. El criterio de 'Confiabilidad' dentro de la Valoración se refiere a:", ["Si la información llegó rápido", "El historial y veracidad demostrada de la fuente", "Si el dato está escrito en computadora"])
-                    m4_3 = st.radio("3. ¿Cuál es la 'Ecuación de Tratamiento'?", ["Datos + Reportes = Informe", "Información + Conocimiento = Decisión", "Agente + Cámara = Vigilancia"])
-                    m4_4 = st.radio("4. El registro que se realiza sin omitir pormenores y con descripciones exactas es:", ["Sistemático", "Cronológico", "Detallado"])
-                    m4_5 = st.radio("5. Vincular un dato a un objetivo u organización específica es parte de la Organización bajo el ítem:", ["Tipo de información", "Blanco", "Prioridad"])
+                    m4_1 = st.radio("1. En el sistema 4x4, ¿qué significa el Código A?", ["Fuente que no ha sido utilizada", "Fuente confiable en casos anteriores / Sin duda de autenticidad", "Información de primera mano"])
+                    m4_2 = st.radio("2. Si la información no es de primera mano y no puede ser corroborada por ningún medio, ¿qué código de credibilidad se asigna?", ["1", "3", "4"])
+                    m4_3 = st.radio("3. ¿Qué porcentaje de efectividad representa un código B-2?", ["100%", "75%", "25%"])
+                    m4_4 = st.radio("4. El registro que se realiza sin omitir pormenores es:", ["Sistemático", "Detallado", "Oportuno"])
+                    m4_5 = st.radio("5. ¿Cuál es la ecuación fundamental del tratamiento?", ["Datos + Agente = Caso", "Información + Conocimiento = Decisión", "Vigilancia + Seguimiento = Captura"])
 
                     if st.form_submit_button("FINALIZAR EXAMEN"):
                         res_m4 = [
-                            m4_1 == "Procedimiento sistemático de organización, clasificación y valoración preliminar",
-                            m4_2 == "El historial y veracidad demostrada de la fuente",
-                            m4_3 == "Información + Conocimiento = Decisión",
+                            m4_1 == "Fuente confiable en casos anteriores / Sin duda de autenticidad",
+                            m4_2 == "4",
+                            m4_3 == "75%",
                             m4_4 == "Detallado",
-                            m4_5 == "Blanco"
+                            m4_5 == "Información + Conocimiento = Decisión"
                         ]
                         nota_m4 = (sum(res_m4) / 5) * 100
                         with engine.begin() as conn:
