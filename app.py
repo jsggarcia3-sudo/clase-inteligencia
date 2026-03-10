@@ -53,7 +53,7 @@ else:
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
-    # 1. SIDEBAR (Solo para navegación)
+# 1. SIDEBAR (Solo para navegación)
 with st.sidebar:
     st.title("📂 MENÚ")
     opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
@@ -111,9 +111,6 @@ if seccion == "🏠 Inicio":
                 st.session_state['modulo_activo'] = m['full']
                 st.session_state['seccion_ir'] = "📚 Módulos"
                 st.rerun()
-
-        st.markdown("---")
-        st.info("💡 **Consejo:** Complete los módulos en orden cronológico para un mejor entendimiento del Ciclo de Inteligencia.")
 
     elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
