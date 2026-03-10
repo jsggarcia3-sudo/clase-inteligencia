@@ -898,7 +898,7 @@ elif seccion == "📊 Mi Progreso":
             else: st.info("No hay registros aún.")
         except: st.info("No hay registros aún.")
 
-    elif seccion == "📈 Dashboard General":
+elif seccion == "📈 Dashboard General":
         if st.session_state['es_admin']:
             st.title("🛡️ Panel Administrativo")
             with engine.connect() as conn:
