@@ -37,13 +37,11 @@ def login():
         clave = st.text_input("Contraseña", type="password")
         
         if st.button("ACCEDER"):
-            # Lógica para Administrador
             if usuario == "admin_dipol" and clave == "DIPOL2026":
                 st.session_state['autenticado'] = True
                 st.session_state['es_admin'] = True
                 st.session_state['agente_nombre'] = nombre if nombre else "Administrador"
                 st.rerun()
-            # Lógica para Estudiantes
             elif nombre and usuario and clave == "ESTUDIANTE2026":
                 st.session_state['autenticado'] = True
                 st.session_state['es_admin'] = False
@@ -76,8 +74,56 @@ else:
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
 
-    # --- LÓGICA DE MÓDULOS (Se mantiene igual con definiciones completas) ---
-    if seccion == "📚 Módulos":
+    # --- LÓGICA DE INICIO (NUEVA SECCIÓN DETALLADA) ---
+    if seccion == "🏠 Inicio":
+        st.title(f"🛡️ Panel de Control Académico")
+        st.subheader(f"Bienvenido, {st.session_state['agente_nombre']}")
+        
+        if st.session_state['es_admin']:
+            st.info("Sessión activa con privilegios de **Administrador General**.")
+            try:
+                with engine.connect() as conn:
+                    total_e = conn.execute(text("SELECT COUNT(*) FROM calificaciones")).scalar()
+                    promedio_u = conn.execute(text("SELECT AVG(nota) FROM calificaciones")).scalar()
+                    agentes_u = conn.execute(text("SELECT COUNT(DISTINCT funcionario) FROM calificaciones")).scalar()
+                
+                col1, col2, col3 = st.columns(3)
+                col1.metric("Exámenes Realizados", total_e if total_e else 0)
+                col2.metric("Promedio de Unidad", f"{promedio_u:.1f}%" if promedio_u else "0%")
+                col3.metric("Agentes en Sistema", agentes_u if agentes_u else 0)
+            except:
+                st.warning("Inicie la base de datos para visualizar estadísticas globales.")
+        else:
+            st.success("Listo para continuar su formación técnica institucional.")
+            try:
+                query_last = text("SELECT nota, modulo FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC LIMIT 1")
+                last_data = pd.read_sql(query_last, engine, params={"n": st.session_state['agente_nombre']})
+                
+                if not last_data.empty:
+                    c1, c2 = st.columns(2)
+                    c1.metric("Última Calificación", f"{last_data['nota'].iloc[0]}%")
+                    c2.write(f"**Último Módulo Completado:**\n{last_data['modulo'].iloc[0]}")
+                else:
+                    st.info("🚀 Aún no tienes evaluaciones registradas. ¡Empieza hoy mismo en la sección de Módulos!")
+            except:
+                st.write("Conexión activa. Pendiente de registro de primera evaluación.")
+
+        st.divider()
+        st.write("### 📂 Guía de Navegación")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.markdown("""
+            - **📚 Módulos:** Acceda al material de estudio técnico.
+            - **📝 Evaluaciones:** Pruebas de conocimiento al finalizar cada lectura.
+            """)
+        with col_b:
+            st.markdown("""
+            - **📊 Mi Progreso:** Revise sus notas personales.
+            - **📈 Dashboard:** (Solo Admin) Vista global de la unidad.
+            """)
+
+    # --- LÓGICA DE MÓDULOS ---
+    elif seccion == "📚 Módulos":
         st.title("📚 Módulos de Especialización")
         seleccion = st.selectbox("Seleccione un Módulo:", ["Módulo 1: Conceptualización de Inteligencia"])
         
@@ -126,7 +172,6 @@ else:
                             st.session_state['modo_examen'] = False
                         except Exception as e: st.error(f"Error: {e}")
 
-    # --- VISTA PRIVADA: SOLO MIS NOTAS ---
     elif seccion == "📊 Mi Progreso":
         st.title("📊 Mi Historial Personal")
         query = text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC")
@@ -136,7 +181,6 @@ else:
             st.dataframe(df, use_container_width=True)
         else: st.info("No tienes exámenes registrados.")
 
-    # --- VISTA ADMIN: DASHBOARD TOTAL ---
     elif seccion == "📈 Dashboard General":
         st.title("📊 Panel de Supervisión (DIPOL)")
         df_all = pd.read_sql(text("SELECT * FROM calificaciones"), engine)
@@ -145,10 +189,8 @@ else:
             c1.metric("Total Exámenes", len(df_all))
             c2.metric("Promedio General", f"{df_all['nota'].mean():.1f}%")
             c3.metric("Agentes Evaluados", df_all['funcionario'].nunique())
-            
             st.subheader("Rendimiento por Estudiante")
             df_chart = df_all.groupby('funcionario')['nota'].mean().reset_index()
             st.bar_chart(df_chart.set_index('funcionario'))
-            
             st.subheader("Tabla Maestra de Calificaciones")
             st.dataframe(df_all, use_container_width=True)
