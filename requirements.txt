@@ -3,4 +3,3 @@ pandas
 st-gsheets-connection
 psycopg2-binary
 sqlalchemy
-pandas as pd
