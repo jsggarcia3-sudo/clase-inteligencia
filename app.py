@@ -217,7 +217,16 @@ else:
 
                 with t4:
                     st.subheader("La Entrevista de Inteligencia")
-                    st.write("**Etapas:** Planeación, Desarrollo, Terminación e Informe.")
+                    
+                    with st.expander("Etapas de la Entrevista", expanded=True):
+                        st.markdown("""
+                        <div class="lectura-box">
+                            <p><b>PLANEACIÓN:</b> Comprende todos los procedimientos para realizar la entrevista apropiadamente, delimitando necesidades y objetivos.</p>
+                            <p><b>DESARROLLO:</b> Conversación con la fuente manteniendo armonía y entendimiento sin perder el control.</p>
+                            <p><b>TERMINACIÓN:</b> Finalizada la recepción, se termina la entrevista al no existir más información por explorar.</p>
+                            <p><b>INFORME:</b> Finalizada la recepción, se procede a terminar la entrevista dando lugar al proceso de administración.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
                     with st.expander("Tipos de entrevistador a EVITAR", expanded=True):
                         st.write("* **El estrella:** Habla más que la fuente, usa lenguaje rebuscado.")
                         st.write("* **El sordo:** Se preocupa por el cuestionario y no escucha.")
