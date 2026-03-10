@@ -53,20 +53,34 @@ else:
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
-    with st.sidebar:
-        st.title("📂 MENÚ")
-        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
-        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
-        if st.button("Cerrar Sesión"):
-            for key in list(st.session_state.keys()): del st.session_state[key]
-            st.rerun()
+    # --- EN EL SIDEBAR ---
+with st.sidebar:
+    st.title("📂 MENÚ")
+    # Creamos una lista de opciones
+    opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
+    
+    # Verificamos si queremos forzar una pestaña desde otra pantalla
+    if 'seccion_ir' in st.session_state:
+        indice_defecto = opciones.index(st.session_state['seccion_ir'])
+        # Limpiamos la variable para que no se quede trabado
+        del st.session_state['seccion_ir']
+    else:
+        indice_defecto = 0
+
+    seccion = st.radio("Ir a:", opciones, index=indice_defecto)
 
     if seccion == "🏠 Inicio":
         st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
-        st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>INICIE SU CAPACITACION</p>", unsafe_allow_html=True)
-        st.divider()
+        st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
+        
+        # Dashboard de bienvenida con métricas rápidas o estado
+        st.markdown(f"""
+        <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
+            <span style="color: white;">Bienvenido Agente: <b>{st.session_state['agente_nombre']}</b> | Estado: <span style="color: #4CAF50;">● En Línea</span></span>
+        </div>
+        """, unsafe_allow_html=True)
 
-        # Definición de los 7 módulos con sus iconos y descripciones cortas
+        # Definición de los 7 módulos
         modulos_home = [
             {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
             {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -77,37 +91,29 @@ else:
             {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
         ]
 
-        # Creación de la Grilla Tecnológica (Cards)
-        # Usamos un contenedor para centrar y organizar
-        cols = st.columns(3) # Organizado en 3 columnas
-
+        # Grilla de Tarjetas
+        cols = st.columns(3)
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
                 st.markdown(f"""
                 <div style="background: linear-gradient(145deg, #002147, #001226); 
-                            padding: 25px; 
-                            border-radius: 15px; 
-                            border: 1px solid #D4AF37; 
-                            text-align: center; 
-                            margin-bottom: 20px;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-                            min-height: 220px;">
-                    <div style="font-size: 3em; margin-bottom: 10px;">{m['icon']}</div>
-                    <h3 style="color: #D4AF37; margin: 0;">{m['tit']}</h3>
-                    <p style="color: #ffffff; font-size: 0.9em; opacity: 0.8;">{m['sub']}</p>
+                            padding: 20px; border-radius: 15px; border: 1px solid #D4AF37; 
+                            text-align: center; margin-bottom: 10px; min-height: 200px;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                    <div style="font-size: 2.5em; margin-bottom: 10px;">{m['icon']}</div>
+                    <h4 style="color: #D4AF37; margin: 0;">{m['tit']}</h4>
+                    <p style="color: #ccc; font-size: 0.85em;">{m['sub']}</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Botón de acción para cada Card
-                if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
+                # Botón de Redirección Directa
+                if st.button(f"ABRIR {m['id']}", key=f"btn_h_{m['id']}", use_container_width=True):
                     st.session_state['modulo_activo'] = m['full']
-                    # Forzamos el cambio de sección a "📚 Módulos" internamente
-                    # Nota: Para que el cambio de radio sea automático, podrías necesitar 
-                    # manejar la selección del radio con session_state.
-                    st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
+                    st.session_state['seccion_ir'] = "📚 Módulos"
+                    st.rerun()
 
         st.markdown("---")
-        st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
+        st.info("💡 **Consejo:** Complete los módulos en orden cronológico para un mejor entendimiento del Ciclo de Inteligencia.")
 
     elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
