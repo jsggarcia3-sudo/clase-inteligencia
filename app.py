@@ -66,7 +66,8 @@ else:
         st.info("Bienvenido. Acceda a los Módulos para estudiar el material completo.")
 
     elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección"])
+        # ACTUALIZACIÓN: Se agrega Módulo 4 a la lista
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento"])
         
         # --- MÓDULO 1 ---
         if modulo_selec == "Módulo 1: Conceptualización":
@@ -325,6 +326,73 @@ else:
                         nota = (sum(res) / 10) * 100
                         with engine.begin() as conn:
                             conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": "Módulo 3"})
+                        st.session_state['modo_examen'] = False
+                        st.rerun()
+
+        # --- NUEVO: MÓDULO 4: TRATAMIENTO DE LA INFORMACIÓN ---
+        elif modulo_selec == "Módulo 4: Tratamiento":
+            if not st.session_state['modo_examen']:
+                st.header("📖 Material: Tratamiento de la Información")
+                
+                with st.expander("Ver Contenido Completo Módulo 4", expanded=True):
+                    st.markdown("""
+                    <div class="lectura-box">
+                        <h3>Definición</h3>
+                        <p>Procedimiento <b>sistemático</b> que consiste en someter todos los datos e información recolectada a un proceso de organización, clasificación y valoración preliminar, con el fin de garantizar que su registro y almacenamiento en bases de datos se enmarque en los fines de la actividad de inteligencia y contrainteligencia contenidos en la <b>Constitución y la Jurisprudencia nacional</b>.</p>
+                    </div>
+                    <div class="lectura-box">
+                        <h3>Procedimiento y Finalidad</h3>
+                        <p>Consiste en organizar la información con el fin de determinar la <b>utilidad</b> de la misma y su <b>pertinencia</b> a los objetivos o la misión. Una adecuada organización de la información:</p>
+                        <ul>
+                            <li>Evita la saturación.</li>
+                            <li>Coadyuva a resolver en forma efectiva las prioridades.</li>
+                            <li>Garantiza el desarrollo normal de los procesos operacionales.</li>
+                        </ul>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    st.subheader("📊 Esquema de Tratamiento")
+                    col_e1, col_e2 = st.columns(2)
+                    with col_e1:
+                        st.info("**Flujo de Trabajo:**\n\nInsumos ➡️ Proceso ➡️ Producto")
+                    with col_e2:
+                        st.success("**Transformación:**\n\nInformación ➡️ Transformación ➡️ Inteligencia")
+                    
+                    st.divider()
+                    st.markdown("""
+                    <div class="lectura-box" style="background-color: #003366; border: 2px solid #D4AF37;">
+                        <h3 style="text-align: center;">Ecuación de Tratamiento</h3>
+                        <h2 style="text-align: center; color: #D4AF37;">Información + Conocimiento = Decisión</h2>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN M4"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: st.warning(f"Examen completado. Calificación: {nota_p}%")
+            
+            else:
+                st.header("📝 Evaluación: Módulo 4")
+                with st.form("exam_m4"):
+                    m4_1 = st.radio("1. ¿Qué es el Tratamiento de la Información?", ["Captura de objetivos", "Procedimiento sistemático de organización, clasificación y valoración preliminar", "La difusión de noticias"])
+                    m4_2 = st.radio("2. ¿Para qué se organiza la información en esta fase?", ["Para borrar lo que no sirve", "Para determinar su utilidad y pertinencia a los objetivos", "Para publicarla en redes sociales"])
+                    m4_3 = st.radio("3. ¿Cuál es la 'Ecuación de Tratamiento'?", ["Datos + Reportes = Informe", "Información + Conocimiento = Decisión", "Agente + Cámara = Vigilancia"])
+                    m4_4 = st.radio("4. ¿Qué evita una adecuada organización de la información?", ["El trabajo extra", "La saturación de información", "El uso de la Constitución"])
+                    m4_5 = st.radio("5. ¿Cuál es el producto final del esquema de tratamiento?", ["La información bruta", "Los insumos", "La Inteligencia"])
+
+                    if st.form_submit_button("FINALIZAR EXAMEN"):
+                        res_m4 = [
+                            m4_1 == "Procedimiento sistemático de organización, clasificación y valoración preliminar",
+                            m4_2 == "Para determinar su utilidad y pertinencia a los objetivos",
+                            m4_3 == "Información + Conocimiento = Decisión",
+                            m4_4 == "La saturación de información",
+                            m4_5 == "La Inteligencia"
+                        ]
+                        nota_m4 = (sum(res_m4) / 5) * 100
+                        with engine.begin() as conn:
+                            conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota_m4, "m": "Módulo 4"})
                         st.session_state['modo_examen'] = False
                         st.rerun()
 
