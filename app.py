@@ -4,15 +4,16 @@ import pandas as pd
 from urllib.parse import quote_plus
 
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
-st.set_page_config(page_title="Plataforma DIPOL", page_icon="🛡️", layout="wide")
+st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
 
 st.markdown("""
     <style>
     .stApp { background-color: #001226; }
     .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; }
-    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 20px; border-radius: 10px; }
+    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
     h1, h2, h3 { color: #D4AF37 !important; }
-    .stRadio>label { color: white !important; font-weight: bold; }
+    .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
+    .highlight { color: #D4AF37; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -50,56 +51,88 @@ else:
 
     if seccion == "🏠 Inicio":
         st.title("Bienvenido al Panel Académico")
-        st.write("Seleccione 'Módulos' en el menú lateral para comenzar su formación.")
+        st.write("Seleccione 'Módulos' en el menú lateral para comenzar su formación técnica.")
 
     elif seccion == "📚 Módulos":
         st.title("📚 Módulos de Especialización")
         
-        # Diccionario con el contenido de los 6 módulos
-        modulos = {
-            "Módulo 1: Conceptualizacion de Inteligencia": ["¿Qué protocolo asegura la confidencialidad?", ["AES", "HTTP", "FTP"], "AES"],
-            "Módulo 2: Recoleccion": ["¿Qué puerto usa PostgreSQL por defecto?", ["80", "5432", "443"], "5432"],
-            "Módulo 3: Tratamiento": ["¿Qué significa OSINT?", ["Open Source Intelligence", "Operating System Info", "Office Security"], "Open Source Intelligence"],
-            "Módulo 4: Análisis": ["¿Cuál es el primer paso en un análisis?", ["Identificar Activos", "Comprar Servidores", "Formatear PC"], "Identificar Activos"],
-            "Módulo 5: Difusion": ["¿Qué versión de TLS es la más segura actualmente?", ["TLS 1.0", "TLS 1.2", "TLS 1.3"], "TLS 1.3"],
-            "Módulo 6: Retroalimentacion": ["¿Cuál es el objetivo del hacking ético?", ["Dañar sistemas", "Mejorar la seguridad", "Robar datos"], "Mejorar la seguridad"]
-        }
+        seleccion = st.selectbox("Seleccione un Módulo:", [
+            "Módulo 1: Conceptualización de Inteligencia",
+            "Módulo 2: Redes y Comunicaciones",
+            "Módulo 3: Inteligencia de Fuentes Abiertas",
+            "Módulo 4: Análisis de Riesgos",
+            "Módulo 5: Protocolo TLS/SSL",
+            "Módulo 6: Ética y Ciberseguridad"
+        ])
 
-        seleccion = st.selectbox("Seleccione un Módulo:", list(modulos.keys()))
-        
-        # Mostrar Contenido y Evaluación
         st.divider()
-        st.subheader(f"📖 Contenido de {seleccion}")
-        st.info(f"Usted está cursando el {seleccion}. Lea cuidadosamente y responda al final.")
-        
-        pregunta, opciones, correcta = modulos[seleccion]
-        
-        with st.form(key=f"form_{seleccion}"):
-            st.write(f"**Pregunta de Evaluación:** {pregunta}")
-            respuesta_usuario = st.radio("Elija su respuesta:", opciones)
-            btn_evaluar = st.form_submit_button("FINALIZAR Y GUARDAR")
 
-            if btn_evaluar:
-                nota = 100 if respuesta_usuario == correcta else 0
-                try:
-                    with engine.connect() as conn:
-                        query = text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)")
-                        conn.execute(query, {"f": "Agente_DIPOL", "n": nota, "m": seleccion})
-                        conn.commit()
-                    
-                    if nota == 100:
-                        st.success(f"¡Excelente! Aprobado con {nota}%")
-                        st.balloons()
-                    else:
-                        st.error(f"Nota: {nota}%. Le recomendamos repasar el contenido.")
-                except Exception as e:
-                    st.error(f"Error al guardar: {e}")
+        # --- LÓGICA DEL MÓDULO 1 ---
+        if seleccion == "Módulo 1: Conceptualización de Inteligencia":
+            st.header("📖 Material de Lectura: Conceptualización de Inteligencia")
+            
+            with st.container():
+                st.markdown(f"""
+                <div class="lectura-box">
+                    <h3>Definición de Inteligencia</h3>
+                    <p>1. Es el <b>conocimiento obtenido</b> a través del procesamiento adecuado de la información, brindado a los responsables de tomar decisiones.</p>
+                    <p>2. Es una actividad <b>multi y transdisciplinaria</b>, compleja y dinámica necesaria en un mundo donde el éxito depende de aprovechar el futuro.</p>
+                    <p>3. Su función es el <b>asesoramiento</b>, proporcionando conocimiento integrado que reduzca incertidumbres.</p>
+                    <p>4. Es la capacidad de aprender o comprender, diferenciándose del intelecto por el énfasis en <b>habilidades concretas</b> y experiencia sensorial.</p>
+                </div>
+                
+                <div class="lectura-box">
+                    <h3>¿Qué es Inteligencia Policial?</h3>
+                    <p>Conjunto de procesos mediante los cuales se obtiene, trata, evalúa y analiza la información para generar conocimiento relacionado con la <b>seguridad y convivencia ciudadana</b>. Contribuye a la definición de políticas públicas, diseño de estrategias institucionales y orientación de operaciones policiales.</p>
+                </div>
+
+                <div class="lectura-box">
+                    <h3>Inteligencia según su nivel</h3>
+                    <ul>
+                        <li><b class="highlight">ESTRATÉGICA:</b> Empleada por líderes políticos y policiales para formulación de planes y políticas nacionales de seguridad.</li>
+                        <li><b class="highlight">OPERACIONAL:</b> Requerida para el planeamiento de operaciones en áreas específicas. Asesora al jefe de operación para minimizar riesgos.</li>
+                        <li><b class="highlight">TÁCTICA:</b> Enfocada en operaciones de equipos, capacidades del objetivo y su ambiente inmediato (situaciones dinámicas).</li>
+                    </ul>
+                </div>
+                """, unsafe_allow_html=True)
+
+            # EVALUACIÓN AUTOMÁTICA MÓDULO 1
+            st.subheader("📝 Evaluación del Módulo")
+            with st.form(key="form_mod1"):
+                pregunta = "¿Qué nivel de inteligencia se enfoca en el planeamiento de operaciones en áreas específicas y asesora al jefe de operación?"
+                opciones = ["Inteligencia Estratégica", "Inteligencia Operacional", "Inteligencia Táctica"]
+                respuesta = st.radio(pregunta, opciones)
+                
+                btn_evaluar = st.form_submit_button("FINALIZAR Y GUARDAR NOTA")
+
+                if btn_evaluar:
+                    # La respuesta correcta es Inteligencia Operacional
+                    nota = 100 if respuesta == "Inteligencia Operacional" else 0
+                    try:
+                        with engine.connect() as conn:
+                            query = text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)")
+                            conn.execute(query, {"f": "Agente_DIPOL", "n": nota, "m": seleccion})
+                            conn.commit()
+                        
+                        if nota == 100:
+                            st.success(f"¡Excelente! Aprobado con {nota}%. Los datos se han guardado en PostgreSQL.")
+                            st.balloons()
+                        else:
+                            st.error(f"Nota: {nota}%. Repase los niveles de inteligencia y vuelva a intentarlo.")
+                    except Exception as e:
+                        st.error(f"Error al conectar con la base de datos: {e}")
+
+        else:
+            st.info(f"El contenido para el {seleccion} se cargará próximamente.")
 
     elif seccion == "📊 Progreso":
         st.title("📊 Historial de Capacitación")
-        df = pd.read_sql(text("SELECT fecha, modulo, nota FROM calificaciones ORDER BY fecha DESC"), engine)
-        if not df.empty:
-            st.dataframe(df, use_container_width=True)
-            st.line_chart(df, x="fecha", y="nota")
-        else:
-            st.info("No hay registros disponibles.")
+        try:
+            df = pd.read_sql(text("SELECT fecha, modulo, nota FROM calificaciones ORDER BY fecha DESC"), engine)
+            if not df.empty:
+                st.dataframe(df, use_container_width=True)
+                st.line_chart(df, x="fecha", y="nota")
+            else:
+                st.info("Aún no hay registros disponibles.")
+        except:
+            st.error("No se pudo cargar el historial. Verifique la conexión.")
