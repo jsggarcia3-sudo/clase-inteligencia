@@ -198,10 +198,45 @@ else:
                         *Nota: Se utilizan llamadas telefónicas, archivos, consulta a personas y herramientas digitales para asegurar la veracidad.*
                         """)
                         st.divider()
-                        st.write("**Vigilancia:** Observación continúa y discreta sobre una persona, lugar, vehículo o hecho, con el fin de establecer rutinas.")
-                        st.write("**Seguimiento:** Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.")
-                        st.write("**Sonsacamiento:** Técnica que permite la obtención de información mediante el diálogo donde la fuente no debe percatarse de su explotación.")
-
+                        st.write("#### **Vigilancia**")
+                        st.markdown("*Observación continúa y discreta sobre personas, lugares o vehículos para establecer rutinas.*")
+                        
+                        st.markdown("""
+                        **Propósito de la vigilancia:**
+                        * **Confirmar la ubicación** de una o varias personas en un lugar.
+                        * **Identificar vehículos y personas** que frecuentan el sitio.
+                        * **Establecer cambios significativos** al lugar objeto de vigilancia.
+                        * **Establecer el medio de comunicación** que utilizan.
+                        * **Conocer las actividades** que normalmente desarrollan las personas.
+                        """)
+                        
+                        st.divider()
+                        st.write("#### **Seguimiento**")
+                        st.markdown("*Actividad de inteligencia mediante la cual se ejerce control sobre una persona o elemento en movimiento.*")
+                        
+                        st.markdown("""
+                        **Propósitos del seguimiento:**
+                        * **Identificar puntos de partida y punto de llegada.**
+                        * **Reconocer vehículos** en los cuales se desplaza.
+                        * **Detectar posibles esquemas de seguridad.**
+                        * **Conocer qué personas visita** y qué lugares frecuenta.
+                        """)
+                        st.divider()
+                        st.write("#### **Sonsacamiento**")
+                        st.markdown("*Técnica de Inteligencia que permite la obtención de información mediante el diálogo sutil.*")
+                        
+                        st.markdown("""
+                        **Criterios a tomar en cuenta:**
+                        * **Conocimiento de la Fuente Humana:** Saber con quién se está hablando.
+                        * **Identificar plenamente la misión:** Tener claro qué información se busca.
+                        * **Establecer afinidad:** Crear un ambiente de confianza (Rapport).
+                        * **Dirección del diálogo:** Permitir que la fuente hable, pero guiar la conversación al área de interés.
+                        * **Cobertura coherente:** Palabras y acciones acordes a la identidad falsa asumida.
+                        * **Invisibilidad de la intención:** No dar indicios de que se está buscando información deliberadamente.
+                        * **Continuidad:** No dejar espacios vacíos o dudas que generen sospecha.
+                        """)
+                        
+                        st.divider()
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
