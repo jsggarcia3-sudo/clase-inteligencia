@@ -37,7 +37,7 @@ def login():
 if not st.session_state['autenticado']:
     login()
 else:
-    # CONEXIÓN (Mantenemos tu lógica funcional)
+    # CONEXIÓN (Lógica funcional del usuario)
     db_s = st.secrets["connections"]["postgresql"]
     pass_segura = quote_plus(db_s['password'])
     engine = create_engine(f"postgresql://{db_s['username']}:{pass_segura}@{db_s['host']}:{db_s['port']}/{db_s['database']}", pool_pre_ping=True)
@@ -96,29 +96,51 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
 
-            # EVALUACIÓN AUTOMÁTICA MÓDULO 1
-            st.subheader("📝 Evaluación del Módulo")
-            with st.form(key="form_mod1"):
-                pregunta = "¿Qué nivel de inteligencia se enfoca en el planeamiento de operaciones en áreas específicas y asesora al jefe de operación?"
-                opciones = ["Inteligencia Estratégica", "Inteligencia Operacional", "Inteligencia Táctica"]
-                respuesta = st.radio(pregunta, opciones)
+            # EVALUACIÓN AUTOMÁTICA MÓDULO 1 (5 PREGUNTAS)
+            st.subheader("📝 Evaluación Final: Módulo 1")
+            st.write("Responda las siguientes preguntas basándose en la lectura anterior:")
+            
+            with st.form(key="form_mod1_completo"):
+                p1 = st.radio("1. ¿Cuál es la función principal de la inteligencia?", 
+                              ["Generar incertidumbre", "Asesoramiento para reducir incertidumbres en la toma de decisión", "Ejecutar operaciones tácticas sin análisis"])
                 
+                p2 = st.radio("2. ¿Qué nivel de inteligencia emplean los líderes para la formulación de planes y políticas nacionales?", 
+                              ["Inteligencia Operacional", "Inteligencia Táctica", "Inteligencia Estratégica"])
+                
+                p3 = st.radio("3. ¿Cuál nivel de inteligencia se enfoca en las capacidades del objetivo y su ambiente inmediato?", 
+                              ["Inteligencia Táctica", "Inteligencia Operacional", "Inteligencia Estratégica"])
+                
+                p4 = st.radio("4. ¿Qué diferencia a la inteligencia del intelecto según el texto?", 
+                              ["Son exactamente lo mismo", "El énfasis en habilidades para manejar situaciones concretas", "Que la inteligencia no usa la experiencia sensorial"])
+                
+                p5 = st.radio("5. La Inteligencia Operacional es requerida principalmente para:", 
+                              ["Definir políticas de administración pública", "El planeamiento de operaciones en áreas específicas y minimizar riesgos", "Estudiar la historia de la criminalidad"])
+
                 btn_evaluar = st.form_submit_button("FINALIZAR Y GUARDAR NOTA")
 
                 if btn_evaluar:
-                    # La respuesta correcta es Inteligencia Operacional
-                    nota = 100 if respuesta == "Inteligencia Operacional" else 0
+                    # Sistema de calificación (20 puntos cada una)
+                    aciertos = 0
+                    if p1 == "Asesoramiento para reducir incertidumbres en la toma de decisión": aciertos += 1
+                    if p2 == "Inteligencia Estratégica": aciertos += 1
+                    if p3 == "Inteligencia Táctica": aciertos += 1
+                    if p4 == "El énfasis en habilidades para manejar situaciones concretas": aciertos += 1
+                    if p5 == "El planeamiento de operaciones en áreas específicas y minimizar riesgos": aciertos += 1
+                    
+                    nota = (aciertos / 5) * 100
+                    
                     try:
                         with engine.connect() as conn:
                             query = text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)")
                             conn.execute(query, {"f": "Agente_DIPOL", "n": nota, "m": seleccion})
                             conn.commit()
                         
-                        if nota == 100:
-                            st.success(f"¡Excelente! Aprobado con {nota}%. Los datos se han guardado en PostgreSQL.")
-                            st.balloons()
+                        if nota >= 70:
+                            st.success(f"¡Examen completado! Nota: {nota}%. Aprobado.")
+                            if nota == 100: st.balloons()
                         else:
-                            st.error(f"Nota: {nota}%. Repase los niveles de inteligencia y vuelva a intentarlo.")
+                            st.error(f"Nota: {nota}%. No ha alcanzado el puntaje mínimo. Repase la lectura.")
+                            
                     except Exception as e:
                         st.error(f"Error al conectar con la base de datos: {e}")
 
