@@ -152,5 +152,56 @@ else:
                             st.error(f"Error: {e}")
 
     elif seccion == "📊 Progreso":
-        st.session_state['modo_examen'] = False
-        # ... (Mantener lógica de progreso de los mensajes anteriores)
+        st.title("📊 Historial de Capacitación")
+        
+        try:
+            # Consultamos los datos de la tabla calificaciones
+            with engine.connect() as conn:
+                # Traemos funcionario, modulo, nota y la fecha formateada
+                query = text("""
+                    SELECT 
+                        funcionario, 
+                        modulo, 
+                        nota, 
+                        TO_CHAR(fecha, 'DD/MM/YYYY HH24:MI') as fecha_formateada 
+                    FROM calificaciones 
+                    ORDER BY fecha DESC
+                """)
+                df = pd.read_sql(query, conn)
+            
+            if not df.empty:
+                # --- MÉTRICAS RÁPIDAS ---
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Total Exámenes", len(df))
+                with col2:
+                    st.metric("Promedio General", f"{df['nota'].mean():.1f}%")
+                with col3:
+                    # Contamos aprobados (nota >= 70)
+                    aprobados = len(df[df['nota'] >= 70])
+                    st.metric("Aprobados", aprobados)
+
+                st.divider()
+
+                # --- TABLA DE RESULTADOS ---
+                st.subheader("📋 Detalle de Calificaciones")
+                # Renombramos columnas para que se vean mejor en la interfaz
+                df_display = df.rename(columns={
+                    "fecha_formateada": "Fecha y Hora",
+                    "funcionario": "Agente",
+                    "modulo": "Módulo Cursado",
+                    "nota": "Calificación (%)"
+                })
+                st.dataframe(df_display, use_container_width=True)
+
+                # --- GRÁFICO DE RENDIMIENTO ---
+                st.subheader("📈 Evolución del Aprendizaje")
+                # Creamos un gráfico de barras para ver las notas por módulo
+                st.bar_chart(data=df, x="modulo", y="nota")
+                
+            else:
+                st.info("💡 Aún no hay registros en la base de datos. Realice su primer examen en la sección de 'Módulos'.")
+                
+        except Exception as e:
+            st.error(f"❌ Error al conectar con PostgreSQL: {e}")
+            st.warning("Asegúrese de que la tabla 'calificaciones' tenga las columnas: funcionario, modulo, nota y fecha.")
