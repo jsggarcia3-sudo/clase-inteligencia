@@ -60,6 +60,7 @@ else:
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
+            
 if seccion == "🏠 Inicio":
         st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
@@ -108,11 +109,11 @@ if seccion == "🏠 Inicio":
         st.markdown("---")
         st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
         
-elif seccion == "📚 Módulos":
+    elif seccion == "📚 Módulos":
     modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
         
     # --- MÓDULO 1 ---
-        if modulo_selec == "Módulo 1: Conceptualización":
+    if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Conceptualización de Inteligencia")
                 with st.expander("Ver Contenido Completo Módulo 1", expanded=True):
