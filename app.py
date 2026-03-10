@@ -668,16 +668,6 @@ else:
                         </div>
                         """, unsafe_allow_html=True)
 
-                with tab_niveles:
-                    st.subheader("🎯 Resultados del Análisis")
-                    st.markdown("""
-                    El análisis no termina en la conclusión; debe proyectar el futuro:
-                    * **Posibles Escenarios:** ¿Qué podría pasar basándonos en las tendencias?
-                    * **Cursos de Acción:** Recomendaciones sobre qué hacer ante cada escenario.
-                    * **Prospectiva:** Anticiparse a la evolución de las amenazas.
-                    """)
-                    st.warning("⚠️ Sin síntesis, no hay inteligencia útil para el mando.")
-                
                 with tab_lca:
                     st.subheader("LCA: Línea del Conocimiento Analítico")
                     st.write("Esta herramienta permite al analista ubicar la información en el tiempo para transformar antecedentes en proyecciones útiles.")
@@ -775,6 +765,16 @@ else:
                     2. **Interpretación:** Es el "nudo" del análisis. Aquí se cruza la información actual para entender el hoy.
                     3. **Proyección:** Es el producto final. Basados en el pasado y el presente, predecimos el comportamiento futuro.
                     """)
+                with tab_niveles:
+                    st.subheader("🎯 Resultados del Análisis")
+                    st.markdown("""
+                    El análisis no termina en la conclusión; debe proyectar el futuro:
+                    * **Posibles Escenarios:** ¿Qué podría pasar basándonos en las tendencias?
+                    * **Cursos de Acción:** Recomendaciones sobre qué hacer ante cada escenario.
+                    * **Prospectiva:** Anticiparse a la evolución de las amenazas.
+                    """)
+                    st.warning("⚠️ Sin síntesis, no hay inteligencia útil para el mando.")
+                
                 # EXAMEN M5 (Borrador)
                 if st.button("🚀 INICIAR EXAMEN M5"):
                     st.session_state['modo_examen'] = True
