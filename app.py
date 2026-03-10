@@ -105,7 +105,11 @@ else:
                 with st.expander("Ver Contenido Completo Módulo 2", expanded=True):
                     st.markdown("""
                     <div class="lectura-box">
-                        <h3>Los 5 Pasos:</h3>
+                        <h3>Definición</h3>
+                        <p>Se define como una serie de <b>cinco pasos</b> orientados a la generación de conocimiento estratégico útil, verdadero y ajustado a los requerimientos de información preestablecidos por un destinatario final (decisor), a quien se difunde selectivamente el resultado plasmado en un instrumento determinado.</p>
+                    </div>
+                    <div class="lectura-box">
+                        <h3>Los 5 Pasos del Ciclo:</h3>
                         <ul>
                             <li><b>Recolectar:</b> Obtención de la información bruta necesaria para producir la inteligencia.</li>
                             <li><b>Tratar:</b> Procesamiento y organización de los datos obtenidos.</li>
