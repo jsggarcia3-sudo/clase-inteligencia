@@ -143,7 +143,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                 else: st.warning(f"Examen completado. Calificación: {nota_p}%")
 
         # --- MÓDULO 2 ---
-        elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
+elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Ciclo de Inteligencia")
                 with st.expander("Ver Contenido Completo Módulo 2", expanded=True):
@@ -172,7 +172,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                 else: st.warning(f"Examen completado. Calificación: {nota_p}%")
 
         # --- MÓDULO 3 ---
-        elif modulo_selec == "Módulo 3: Recolección":
+elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material Completo: Recolección de Información")
                 t1, t2, t3, t4 = st.tabs(["📌 Fundamentos y PHVA", "🕵️ Operaciones", "👥 Fuentes Humana", "🎤 La Entrevista"])
@@ -373,7 +373,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                         st.rerun()
 
        # --- MÓDULO 4: TRATAMIENTO DE LA INFORMACIÓN ---
-        elif modulo_selec == "Módulo 4: Tratamiento":
+elif modulo_selec == "Módulo 4: Tratamiento":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Tratamiento de la Información")
                 
@@ -608,7 +608,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                         st.rerun()
 
     # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN ---
-        elif modulo_selec == "Módulo 5: Análisis":
+    elif modulo_selec == "Módulo 5: Análisis":
             if not st.session_state['modo_examen']:
                 st.header("🧠 Material: Análisis de la Información")
                 
@@ -710,7 +710,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                     st.session_state['modo_examen'] = True
                     st.rerun()
 # --- MÓDULO 6: COMUNICAR E INTEGRAR ---
-        elif modulo_selec == "Módulo 6: Comunicación":
+    elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state['modo_examen']:
                 st.header("📢 Material: Comunicar e Integrar")
                 
@@ -789,7 +789,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                     st.rerun()
 
     # --- MÓDULO 7: EVALUAR Y RETROALIMENTAR ---
-        elif modulo_selec == "Módulo 7: Evaluación":
+    elif modulo_selec == "Módulo 7: Evaluación":
             if not st.session_state['modo_examen']:
                 st.header("🔄 Material: Evaluar y Retroalimentar")
                 
@@ -884,7 +884,7 @@ if modulo_selec == "Módulo 1: Conceptualización":
                     st.session_state['modo_examen'] = True
                     st.rerun()
                     
-    elif seccion == "📊 Mi Progreso":
+elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
             with engine.connect() as conn:
