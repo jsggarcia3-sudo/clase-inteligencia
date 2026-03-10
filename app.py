@@ -163,7 +163,7 @@ else:
                     st.subheader("Operaciones de Inteligencia")
                     st.markdown("""
                     <div class="lectura-box">
-                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial.</p>
+                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial. Para toda operacion se Empleo y uso de Medios Técnicos</p>
                     </div>
                     """, unsafe_allow_html=True)
                     
@@ -173,9 +173,13 @@ else:
                         st.write("**Vigilancia:** Observación continúa y discreta para establecer rutinas.")
                         st.write("**Seguimiento:** Control sobre objetivos en movimiento.")
                         st.write("**Sonsacamiento:** Diálogo donde la fuente no percibe la intención.")
+                        
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
+                        st.write("**Admon. de Fuentes Humanas:** Obtener colaboración permanente de alguien que ya tiene acceso.")
+                        st.write("**Entrevista:** Obtener colaboración permanente de alguien que ya tiene acceso.")
+                        st.write("**Caracterizacion y Fachada:** Obtener colaboración permanente de alguien que ya tiene acceso.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
