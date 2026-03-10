@@ -66,7 +66,68 @@ else:
         st.info("Bienvenido. Acceda a los Módulos para estudiar el material completo.")
 
     elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
+        # Inicializar el estado del módulo seleccionado si no existe
+        if 'modulo_activo' not in st.session_state:
+            st.session_state['modulo_activo'] = None
+
+        # BOTÓN PARA VOLVER AL MENÚ DE MÓDULOS (Solo se muestra si hay un módulo abierto)
+        if st.session_state['modulo_activo'] is not None and not st.session_state['modo_examen']:
+            if st.button("⬅️ VOLVER AL MENÚ DE MÓDULOS"):
+                st.session_state['modulo_activo'] = None
+                st.rerun()
+
+        # PANTALLA PRINCIPAL DE MÓDULOS (GRILLA DE TARJETAS)
+        if st.session_state['modulo_activo'] is None:
+            st.title("📚 Módulos de Capacitación")
+            st.write("Seleccione un módulo para comenzar el estudio:")
+            
+            # Definición de los módulos para la grilla
+            modulos = [
+                {"id": "M1", "titulo": "Módulo 1", "sub": "Conceptualización", "icon": "📖"},
+                {"id": "M2", "titulo": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄"},
+                {"id": "M3", "titulo": "Módulo 3", "sub": "Recolección", "icon": "🕵️"},
+                {"id": "M4", "titulo": "Módulo 4", "sub": "Tratamiento", "icon": "📊"},
+                {"id": "M5", "titulo": "Módulo 5", "sub": "Análisis", "icon": "🧠"},
+                {"id": "M6", "titulo": "Módulo 6", "sub": "Comunicación", "icon": "📢"},
+                {"id": "M7", "titulo": "Módulo 7", "sub": "Evaluación", "icon": "🔄"}
+            ]
+
+            # Crear grilla de 3 columnas
+            cols = st.columns(3)
+            for i, m in enumerate(modulos):
+                with cols[i % 3]:
+                    st.markdown(f"""
+                    <div style="background-color: #002147; padding: 20px; border-radius: 10px; border: 1px solid #D4AF37; text-align: center; margin-bottom: 10px; min-height: 180px;">
+                        <h1 style="margin: 0;">{m['icon']}</h1>
+                        <h3 style="color: #D4AF37; margin: 10px 0 5px 0;">{m['titulo']}</h3>
+                        <p style="color: white; font-size: 0.9em;">{m['sub']}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    if st.button(f"Entrar a {m['titulo']}", key=m['id']):
+                        st.session_state['modulo_activo'] = m['titulo']
+                        st.rerun()
+
+        # --- LÓGICA DE CONTENIDO DE CADA MÓDULO ---
+        else:
+            modulo_selec = st.session_state['modulo_activo']
+
+            # Aquí pegas toda la lógica de los módulos que ya tenemos:
+            # if modulo_selec == "Módulo 1": ...
+            # elif modulo_selec == "Módulo 2": ...
+            # ... hasta el Módulo 7.
+            
+            # NOTA: Asegúrate de que los nombres coincidan exactamente 
+            # con los de la lista 'modulos' de arriba.
+            
+            if modulo_selec == "Módulo 1":
+                st.header("📖 Módulo 1: Conceptualización")
+                # (Aquí va tu código del Módulo 1)
+                
+            elif modulo_selec == "Módulo 2":
+                st.header("🔄 Módulo 2: Ciclo de Inteligencia")
+                # (Aquí va tu código del Módulo 2)
+                
+            # ... etc para los 7 módulos.
         
         # --- MÓDULO 1 ---
         if modulo_selec == "Módulo 1: Conceptualización":
