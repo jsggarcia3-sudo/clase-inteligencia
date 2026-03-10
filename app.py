@@ -3,27 +3,16 @@ from sqlalchemy import create_engine, text
 import pandas as pd
 from urllib.parse import quote_plus
 
-# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (DIPOL COLORS)
-st.set_page_config(page_title="Sistema de Inteligencia - DIPOL", page_icon="🛡️", layout="wide")
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL
+st.set_page_config(page_title="Plataforma DIPOL", page_icon="🛡️", layout="wide")
 
 st.markdown("""
     <style>
     .stApp { background-color: #001226; }
-    .stButton>button {
-        width: 100%; border-radius: 4px; height: 3em;
-        background-color: #D4AF37; color: #001226;
-        font-weight: bold; border: none; transition: 0.3s;
-    }
-    .stButton>button:hover { background-color: #FFD700; color: #000000; }
-    .stForm {
-        border: 1px solid #D4AF37 !important;
-        background-color: #002147 !important;
-        border-radius: 10px; padding: 20px;
-    }
-    h1, h2, h3, p { color: #ffffff !important; }
-    .stTextInput>div>div>input, .stNumberInput>div>div>input {
-        background-color: #003366; color: white; border: 1px solid #D4AF37;
-    }
+    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; }
+    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 20px; border-radius: 10px; }
+    h1, h2, h3 { color: #D4AF37 !important; }
+    .stRadio>label { color: white !important; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -32,96 +21,85 @@ if 'autenticado' not in st.session_state:
     st.session_state['autenticado'] = False
 
 def login():
-    st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ DIRECCIÓN DE INTELIGENCIA POLICIAL</h1>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>Acceso Restringido - Operaciones Roatán</h3>", unsafe_allow_html=True)
-    
+    st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1,1.5,1])
     with col2:
-        st.write("---")
         usuario = st.text_input("Usuario")
         clave = st.text_input("Contraseña", type="password")
-        if st.button("ACCEDER AL PANEL"):
-            if usuario == "admin" and clave == "DIPOL2026": 
+        if st.button("ACCEDER"):
+            if usuario == "admin" and clave == "DIPOL2026":
                 st.session_state['autenticado'] = True
                 st.rerun()
-            else:
-                st.error("Credenciales incorrectas.")
-        st.write("---")
+            else: st.error("Acceso Denegado")
 
 # 3. INTERFAZ OPERATIVA
 if not st.session_state['autenticado']:
     login()
 else:
+    # CONEXIÓN (Mantenemos tu lógica funcional)
+    db_s = st.secrets["connections"]["postgresql"]
+    pass_segura = quote_plus(db_s['password'])
+    engine = create_engine(f"postgresql://{db_s['username']}:{pass_segura}@{db_s['host']}:{db_s['port']}/{db_s['database']}", pool_pre_ping=True)
+
     with st.sidebar:
-        st.markdown("<h2 style='color: #D4AF37;'>DIPOL</h2>", unsafe_allow_html=True)
-        st.write("**Agente en Servicio**")
-        st.write("Sede: Bay Islands / Roatán")
-        if st.button("SALIR DEL SISTEMA"):
+        st.title("📂 MENÚ")
+        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Progreso"])
+        if st.button("Cerrar Sesión"):
             st.session_state['autenticado'] = False
             st.rerun()
 
-    try:
-        db_s = st.secrets["connections"]["postgresql"]
-        pass_segura = quote_plus(db_s['password'])
-        engine = create_engine(
-            f"postgresql://{db_s['username']}:{pass_segura}@{db_s['host']}:{db_s['port']}/{db_s['database']}",
-            pool_pre_ping=True
-        )
+    if seccion == "🏠 Inicio":
+        st.title("Bienvenido al Panel Académico")
+        st.write("Seleccione 'Módulos' en el menú lateral para comenzar su formación.")
 
-        st.title("📋 Registro de Evaluaciones de Personal")
+    elif seccion == "📚 Módulos":
+        st.title("📚 Módulos de Especialización")
         
-        with st.form("registro_agente", clear_on_submit=True):
-            c1, c2 = st.columns(2)
-            with c1:
-                nombre_agente = st.text_input("Nombre Completo del Funcionario")
-            with c2:
-                calificacion = st.number_input("Nota Obtenida", 0, 100)
-            
-            enviar = st.form_submit_button("REGISTRAR EN BASE DE DATOS")
-            
-            if enviar and nombre_agente:
-                # --- LÓGICA DE ESTADO ---
-                estado = "APROBADO" if calificacion >= 70 else "REPROBADO"
-                color_msg = "success" if estado == "APROBADO" else "error"
-                
-                with engine.connect() as conn:
-                    query = text("INSERT INTO calificaciones (funcionario, nota) VALUES (:n, :t)")
-                    conn.execute(query, {"n": nombre_agente, "t": calificacion})
-                    conn.commit()
-                
-                if color_msg == "success":
-                    st.success(f"✅ {nombre_agente} - NOTA: {calificacion}% [{estado}]")
-                    st.balloons()
-                else:
-                    st.error(f"⚠️ {nombre_agente} - NOTA: {calificacion}% [{estado}]")
+        # Diccionario con el contenido de los 6 módulos
+        modulos = {
+            "Módulo 1: Criptografía": ["¿Qué protocolo asegura la confidencialidad?", ["AES", "HTTP", "FTP"], "AES"],
+            "Módulo 2: Redes": ["¿Qué puerto usa PostgreSQL por defecto?", ["80", "5432", "443"], "5432"],
+            "Módulo 3: OSINT": ["¿Qué significa OSINT?", ["Open Source Intelligence", "Operating System Info", "Office Security"], "Open Source Intelligence"],
+            "Módulo 4: Análisis de Riesgos": ["¿Cuál es el primer paso en un análisis?", ["Identificar Activos", "Comprar Servidores", "Formatear PC"], "Identificar Activos"],
+            "Módulo 5: Protocolo TLS": ["¿Qué versión de TLS es la más segura actualmente?", ["TLS 1.0", "TLS 1.2", "TLS 1.3"], "TLS 1.3"],
+            "Módulo 6: Ética": ["¿Cuál es el objetivo del hacking ético?", ["Dañar sistemas", "Mejorar la seguridad", "Robar datos"], "Mejorar la seguridad"]
+        }
 
-        # --- DASHBOARD DE ANÁLISIS ---
-        st.markdown("<h2 style='color: #D4AF37;'>📊 Análisis de Rendimiento Académico</h2>", unsafe_allow_html=True)
+        seleccion = st.selectbox("Seleccione un Módulo:", list(modulos.keys()))
         
-        with engine.connect() as conn:
-            df = pd.read_sql(text("SELECT fecha, funcionario, nota FROM calificaciones ORDER BY fecha DESC"), conn)
+        # Mostrar Contenido y Evaluación
+        st.divider()
+        st.subheader(f"📖 Contenido de {seleccion}")
+        st.info(f"Usted está cursando el {seleccion}. Lea cuidadosamente y responda al final.")
+        
+        pregunta, opciones, correcta = modulos[seleccion]
+        
+        with st.form(key=f"form_{seleccion}"):
+            st.write(f"**Pregunta de Evaluación:** {pregunta}")
+            respuesta_usuario = st.radio("Elija su respuesta:", opciones)
+            btn_evaluar = st.form_submit_button("FINALIZAR Y GUARDAR")
 
+            if btn_evaluar:
+                nota = 100 if respuesta_usuario == correcta else 0
+                try:
+                    with engine.connect() as conn:
+                        query = text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)")
+                        conn.execute(query, {"f": "Agente_DIPOL", "n": nota, "m": seleccion})
+                        conn.commit()
+                    
+                    if nota == 100:
+                        st.success(f"¡Excelente! Aprobado con {nota}%")
+                        st.balloons()
+                    else:
+                        st.error(f"Nota: {nota}%. Le recomendamos repasar el contenido.")
+                except Exception as e:
+                    st.error(f"Error al guardar: {e}")
+
+    elif seccion == "📊 Progreso":
+        st.title("📊 Historial de Capacitación")
+        df = pd.read_sql(text("SELECT fecha, modulo, nota FROM calificaciones ORDER BY fecha DESC"), engine)
         if not df.empty:
-            # Crear columna de Estado dinámicamente para el Dashboard
-            df['Estado'] = df['nota'].apply(lambda x: "🟢 APROBADO" if x >= 70 else "🔴 REPROBADO")
-            
-            m1, m2, m3 = st.columns(3)
-            m1.metric("Total Evaluados", len(df))
-            m2.metric("Promedio General", f"{df['nota'].mean():.1f}%")
-            
-            # Contar aprobados
-            aprobados = len(df[df['nota'] >= 70])
-            m3.metric("Tasa de Aprobación", f"{(aprobados/len(df))*100:.0f}%")
-
-            st.subheader("Tendencia de Resultados")
+            st.dataframe(df, use_container_width=True)
             st.line_chart(df, x="fecha", y="nota")
-            
-            st.subheader("Historial Detallado")
-            # Estilizamos la tabla para que resalte los estados
-            st.dataframe(df[['fecha', 'funcionario', 'nota', 'Estado']], use_container_width=True, hide_index=True)
         else:
-            st.info("Sin datos registrados.")
-
-    except Exception as e:
-        st.error("Error de conexión.")
-        st.exception(e)
+            st.info("No hay registros disponibles.")
