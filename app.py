@@ -61,4 +61,35 @@ with tab_niveles:
     if confirmar_1:
         st.success("🔓 EJERCICIO DESBLOQUEADO")
         pregunta_1 = st.radio("Un plan para capturar a un objetivo MAÑANA es:", 
-                             ["Sele
+                             ["Seleccione...", "Estratégico", "Operacional", "Táctico"])
+        
+        if st.button("Validar Niveles"):
+            if pregunta_1 == "Táctico":
+                st.balloons()
+                st.success("¡Correcto! Es Táctico.")
+            else:
+                st.error("Incorrecto. Revise la definición de inmediatez.")
+    else:
+        st.info("📖 Marque la casilla para habilitar el ejercicio.")
+
+# --- PESTAÑA 2: RECOLECCIÓN ---
+with tab_recoleccion:
+    st.header("Teoría: Fase de Recolección")
+    st.write("Toda información se califica con Fiabilidad (A-F) y Veracidad (1-6).")
+    
+    st.divider()
+    
+    confirmar_2 = st.checkbox("✅ He comprendido la tabla de evaluación.")
+    
+    if confirmar_2:
+        st.success("🔓 EJERCICIO DESBLOQUEADO")
+        st.write("Escenario: Fuente nueva (F) y dato confirmado por GPS (1).")
+        resp_fial = st.selectbox("Calificación:", ["Seleccione...", "F-1", "A-1", "F-6"])
+        if st.button("Validar Recolección"):
+            if resp_fial == "F-1":
+                st.success("¡Excelente!")
+    else:
+        st.info("📖 Lea la teoría para habilitar el desafío.")
+
+# Pie de página
+st.caption(f"Sesión activa: {st.session_state['agente']} | DIPOL Honduras 2026")
