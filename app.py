@@ -168,11 +168,11 @@ else:
                     """, unsafe_allow_html=True)
                     
                     with st.expander("Operaciones Básicas", expanded=True):
-                        st.write("**Reconocimiento:** Concretar datos de propietario, residentes, vehículos, seguridad y entorno.")
-                        st.write("**Verificación:** Establecer veracidad (bases de datos, llamadas, internet).")
-                        st.write("**Vigilancia:** Observación continúa y discreta para establecer rutinas.")
-                        st.write("**Seguimiento:** Control sobre objetivos en movimiento.")
-                        st.write("**Sonsacamiento:** Diálogo donde la fuente no percibe la intención.")
+                        st.write("**Reconocimiento:** Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
+                        st.write("**Verificación:** es un procedimiento dentro de las actividades de inteligencia que pretende establecer la veracidad o desvirtuar una información, a través de la exploración en bases de datos, reconocimientos, la administración de fuentes humanas, vigilancias y seguimientos.).")
+                        st.write("**Vigilancia:** Actividad de inteligencia en el que se despliega una observación continúa y discreta sobre una persona, lugar, vehículo o hecho, con el fin de establecer rutinas y demás situaciones de interés.")
+                        st.write("**Seguimiento:** Actividad de inteligencia mediante la cual se ejerce control sobre un persona o elemento en movimiento..")
+                        st.write("**Sonsacamiento:** Técnica de Inteligencia que permite la obtención de información, mediante el diálogo entre el agente de inteligencia y la fuente, quien no debe percatarse de su explotación, ni de la intención del agente.")
                         
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
