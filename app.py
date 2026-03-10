@@ -333,8 +333,8 @@ else:
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Tratamiento de la Información")
                 
-                # SECCIÓN ACTUALIZADA CON PESTAÑAS
-                tab_cont, tab_tipos = st.tabs(["📌 Fundamentos", "🔍 Tipos y Elementos (EEI)"])
+                # SECCIÓN ACTUALIZADA CON TRES PESTAÑAS
+                tab_cont, tab_tipos, tab_comp = st.tabs(["📌 Fundamentos", "🔍 Tipos y Elementos (EEI)", "🛠️ Componentes y Ejemplos"])
                 
                 with tab_cont:
                     with st.expander("Ver Contenido Completo Módulo 4", expanded=True):
@@ -399,6 +399,50 @@ else:
                     
                     st.info("⚠️ **Nota:** Responder estos elementos permite estructurar un informe de inteligencia completo y evita la ambigüedad en la asesoría al mando.")
 
+                with tab_comp:
+                    st.subheader("⚙️ Componentes del Tratamiento de Información")
+                    
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        st.markdown("""
+                        <div class="lectura-box">
+                            <h4>📂 ORGANIZACIÓN</h4>
+                            <ul>
+                                <li><b>Tipo de información:</b> Determinar si es técnica, humana o abierta.<br><i>Ej: Clasificar un video de vigilancia como fuente técnica.</i></li>
+                                <li><b>Blanco:</b> Identificar el objetivo al que pertenece.<br><i>Ej: Vincular un dato a un Grupo Delictivo Organizado específico.</i></li>
+                                <li><b>Prioridad:</b> Urgencia de la información.<br><i>Ej: Asignar "Prioridad 1" a información sobre un atentado en las próximas 24h.</i></li>
+                            </ul>
+                        </div>
+                        <div class="lectura-box">
+                            <h4>🛡️ CLASIFICACIÓN</h4>
+                            <ul>
+                                <li><b>Origen:</b> De dónde proviene la información.<br><i>Ej: Identificar si proviene de un informante cerrado o de una red social (fuente abierta).</i></li>
+                                <li><b>Estado:</b> Fase actual del procesamiento.<br><i>Ej: Marcar como información "Preliminar" antes de ser confirmada.</i></li>
+                                <li><b>Nivel de Seg.:</b> Restricción según sensibilidad.<br><i>Ej: Etiquetar como "Secreto" un documento que compromete la seguridad nacional.</i></li>
+                            </ul>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with c2:
+                        st.markdown("""
+                        <div class="lectura-box">
+                            <h4>⚖️ VALORACIÓN</h4>
+                            <ul>
+                                <li><b>Oportuna:</b> Si el dato llega en el momento útil.<br><i>Ej: Recibir la ubicación de un prófugo mientras aún se encuentra en el sitio.</i></li>
+                                <li><b>Confiable:</b> Según el historial de la fuente.<br><i>Ej: Una fuente que siempre ha entregado datos veraces es considerada "Altamente Confiable".</i></li>
+                                <li><b>Creíble:</b> Si el contenido tiene lógica y coherencia.<br><i>Ej: Verificar si el dato coincide con la realidad geográfica o técnica conocida.</i></li>
+                            </ul>
+                        </div>
+                        <div class="lectura-box">
+                            <h4>📝 REGISTRO</h4>
+                            <ul>
+                                <li><b>Cronológico:</b> Ordenado por fecha y hora de suceso.<br><i>Ej: Bitácora de movimientos de un objetivo minuto a minuto.</i></li>
+                                <li><b>Detallado:</b> Incluye todos los pormenores sin omitir nada.<br><i>Ej: Describir no solo el vehículo, sino el estado de las llantas, calcomanías y ocupantes.</i></li>
+                                <li><b>Sistemático:</b> Ingreso bajo formatos y protocolos estandarizados.<br><i>Ej: Cargar la información en el sistema centralizado siguiendo la nomenclatura oficial.</i></li>
+                            </ul>
+                        </div>
+                        """, unsafe_allow_html=True)
+
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
                 if nota_p is None:
                     if st.button("🚀 INICIAR EXAMEN M4"):
@@ -410,18 +454,18 @@ else:
                 st.header("📝 Evaluación: Módulo 4")
                 with st.form("exam_m4"):
                     m4_1 = st.radio("1. ¿Qué es el Tratamiento de la Información?", ["Captura de objetivos", "Procedimiento sistemático de organización, clasificación y valoración preliminar", "La difusión de noticias"])
-                    m4_2 = st.radio("2. ¿Cómo se define la información Específica?", ["Información de contexto general", "Información puntual y detallada sobre un blanco o fenómeno", "Rumores de pasillo"])
+                    m4_2 = st.radio("2. El criterio de 'Confiabilidad' dentro de la Valoración se refiere a:", ["Si la información llegó rápido", "El historial y veracidad demostrada de la fuente", "Si el dato está escrito en computadora"])
                     m4_3 = st.radio("3. ¿Cuál es la 'Ecuación de Tratamiento'?", ["Datos + Reportes = Informe", "Información + Conocimiento = Decisión", "Agente + Cámara = Vigilancia"])
-                    m4_4 = st.radio("4. ¿Qué elemento de los EEI responde al 'Modus Operandi'?", ["¿Dónde?", "¿Cómo?", "¿Para qué?"])
-                    m4_5 = st.radio("5. ¿Cuál es el objetivo de los Elementos Esenciales de Información (EEI)?", ["Hacer más larga la entrevista", "Responder preguntas fundamentales para convertir datos en conocimiento", "Confundir al decisor"])
+                    m4_4 = st.radio("4. El registro que se realiza sin omitir pormenores y con descripciones exactas es:", ["Sistemático", "Cronológico", "Detallado"])
+                    m4_5 = st.radio("5. Vincular un dato a un objetivo u organización específica es parte de la Organización bajo el ítem:", ["Tipo de información", "Blanco", "Prioridad"])
 
                     if st.form_submit_button("FINALIZAR EXAMEN"):
                         res_m4 = [
                             m4_1 == "Procedimiento sistemático de organización, clasificación y valoración preliminar",
-                            m4_2 == "Información puntual y detallada sobre un blanco o fenómeno",
+                            m4_2 == "El historial y veracidad demostrada de la fuente",
                             m4_3 == "Información + Conocimiento = Decisión",
-                            m4_4 == "¿Cómo?",
-                            m4_5 == "Responder preguntas fundamentales para convertir datos en conocimiento"
+                            m4_4 == "Detallado",
+                            m4_5 == "Blanco"
                         ]
                         nota_m4 = (sum(res_m4) / 5) * 100
                         with engine.begin() as conn:
