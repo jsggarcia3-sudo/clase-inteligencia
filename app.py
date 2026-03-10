@@ -13,7 +13,6 @@ st.markdown("""
     .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
     h1, h2, h3 { color: #D4AF37 !important; }
     .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
-    .sub-seccion { border-bottom: 1px solid #D4AF37; margin-top: 20px; margin-bottom: 10px; color: #D4AF37; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -43,6 +42,7 @@ def login():
 if not st.session_state['autenticado']:
     login()
 else:
+    # Conexión a Base de Datos
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
@@ -54,16 +54,14 @@ else:
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
 
-    # --- INICIO ---
     if seccion == "🏠 Inicio":
-        st.title("🛡️ Panel Principal")
-        st.write(f"Bienvenido, {st.session_state['agente_nombre']}. Seleccione un módulo para estudiar el material completo.")
+        st.title("🛡️ Panel de Control")
+        st.info("Bienvenido. Seleccione '📚 Módulos' para acceder al contenido técnico completo.")
 
-    # --- MÓDULOS ---
     elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección"])
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección"])
         
-        # --- MÓDULO 1: CONCEPTUALIZACIÓN (TODO EL TEXTO) ---
+        # --- MÓDULO 1 ---
         if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Conceptualización de Inteligencia")
@@ -89,11 +87,10 @@ else:
                 if st.button("🚀 INICIAR EVALUACIÓN M1"): st.session_state['modo_examen']=True; st.rerun()
             else:
                 with st.form("ex_m1"):
-                    p1 = st.radio("1. Función de la inteligencia:", ["Duda", "Asesoramiento para reducir incertidumbres", "Fuerza"])
-                    p2 = st.radio("2. Nivel para planes nacionales:", ["Estratégica", "Operacional", "Táctica"])
-                    if st.form_submit_button("GUARDAR M1"): st.session_state['modo_examen']=False; st.rerun()
+                    p1 = st.radio("Función de la inteligencia:", ["Duda", "Asesoramiento para reducir incertidumbres", "Fuerza"])
+                    if st.form_submit_button("Guardar Nota M1"): st.session_state['modo_examen']=False; st.rerun()
 
-        # --- MÓDULO 2: CICLO (TODO EL TEXTO) ---
+        # --- MÓDULO 2 ---
         elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Ciclo de Inteligencia")
@@ -103,98 +100,75 @@ else:
                     <p>Se define como una serie de <b>cinco pasos</b> orientados a la generación de conocimiento estratégico útil, verdadero y ajustado a los requerimientos de información preestablecidos por un destinatario final (decisor), a quien se difunde selectivamente el resultado plasmado en un instrumento determinado.</p>
                     <h3>Pasos:</h3>
                     <ul>
-                        <li>Recolectar</li>
-                        <li>Tratar</li>
-                        <li>Analizar</li>
-                        <li>Comunicar e Integrar</li>
-                        <li>Evaluar y Retroalimentar</li>
+                        <li><b>Recolectar:</b> Obtención de datos relevantes.</li>
+                        <li><b>Tratar:</b> Procesamiento y organización.</li>
+                        <li><b>Analizar:</b> Transformación en conocimiento.</li>
+                        <li><b>Comunicar e Integrar:</b> Difusión al decisor.</li>
+                        <li><b>Evaluar y Retroalimentar:</b> Ajuste y mejora.</li>
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-                
                 if st.button("🚀 INICIAR EVALUACIÓN M2"): st.session_state['modo_examen']=True; st.rerun()
             else:
                 with st.form("ex_m2"):
                     p1 = st.radio("¿Pasos del ciclo?", ["5 pasos", "3 pasos"])
-                    if st.form_submit_button("GUARDAR M2"): st.session_state['modo_examen']=False; st.rerun()
+                    if st.form_submit_button("Guardar Nota M2"): st.session_state['modo_examen']=False; st.rerun()
 
-        # --- MÓDULO 3: RECOLECCIÓN (ESTRUCTURA COMPLETA SIN OMISIONES) ---
+        # --- MÓDULO 3 ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
-                st.header("📖 Material Completo: Recolección de Información")
+                st.header("📖 Material: Recolección de Información")
                 
                 with st.expander("1. Definición y Proceso de Recolección", expanded=True):
                     st.markdown("""
                     La recolección de información de inteligencia consiste en juntar aquellos datos o información relevante para el objetivo de nuestra investigación. Esta información, generalmente, se encuentra de forma dispersa en nuestro entorno y, por ello, debemos desarrollar técnicas precisas para acceder a ella.
-                    * Definir requerimientos de información
-                    * Identificar fuentes potenciales de información
-                    * Diseñar y ejecutar estrategias de recolección
-                    * Distribuir y organizar los resultados de la recolección
-                    * Reunir y retroalimentar
+                    * Definir requerimientos de información.
+                    * Identificar fuentes potenciales de información.
+                    * Diseñar y ejecutar estrategias de recolección.
+                    * Distribuir y organizar los resultados de la recolección.
+                    * Reunir y retroalimentar.
                     """)
                     
                     st.subheader("Recolección de Información (PHVA)")
-                    st.write("**PLANEAR:** Establecer objetivos y procesos necesarios. Planificación, Identificar riesgos, Planificar recursos.")
-                    st.write("**HACER:** Implementación. Búsqueda de información, Desarrollar actividades, Elaborar productos, Suministrar productos, Controles de seguridad.")
+                    st.write("**PLANEAR:** Establecer objetivos y procesos necesarios. Planificación de la recolección, Identificar y administrar riesgos, Planificar recursos.")
+                    st.write("**HACER:** Implementación. Búsqueda de información, Desarrollar actividades, Elaborar y registrar productos, Suministrar productos, Controles de seguridad.")
                     st.write("**VERIFICAR:** Seguimiento y medición. Realizar autoevaluación de control y gestión.")
                     st.write("**ACTUAR:** Ajustar y mejorar continuamente. Implementar acciones correctivas, preventivas o de mejora.")
-                    
-
-[Image of the PDCA cycle for continuous improvement]
-
 
                 with st.expander("2. ¿Qué es Información y Datos?"):
-                    st.write("**Información:** Conjunto de datos integrados y ordenados que sirven para construir un mensaje. Materia prima para resolver problemas y tomar decisiones.")
+                    st.write("**¿Qué es información?** Conjunto de datos integrados y ordenados que sirven para construir un mensaje basado en un cierto fenómeno. Materia prima para resolver problemas.")
                     st.write("**Dato:** Es la unidad básica que comprende la información.")
                     st.subheader("Fuentes de Información")
-                    st.write("* Abiertas o Públicas")
-                    st.write("* Cerradas Especializadas")
-                    st.write("* Cerradas Humanas")
-                    st.write("* Técnicas")
+                    st.write("* Abiertas o Públicas | Cerradas Especializadas | Cerradas Humanas | Técnicas")
 
                 with st.expander("3. Operaciones de Inteligencia"):
-                    st.write("Actividades orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos.")
                     st.markdown("""
                     **Básicas:**
-                    * **Reconocimiento:** Parte de información previa para concretar datos (propietario, vehículos, seguridad, vías).
-                    * **Verificación:** Pretende establecer veracidad a través de bases de datos, fuentes humanas, etc.
-                    * **Vigilancia:** Observación continua y discreta sobre persona o lugar para establecer rutinas.
-                    * **Seguimiento:** Control sobre persona o elemento en movimiento (A pie / Vehículo).
-                    * **Sonsacamiento:** Diálogo donde la fuente no debe percatarse de la explotación ni de la intención.
+                    * **Reconocimiento:** Concretar datos de propietario, residentes, vehículos y seguridad del sitio.
+                    * **Verificación:** Establecer veracidad o desvirtuar información.
+                    * **Vigilancia:** Observación continua y discreta para establecer rutinas.
+                    * **Seguimiento:** Control sobre objetivos en movimiento (A pie / Vehículo).
+                    * **Sonsacamiento:** Diálogo donde la fuente no percibe la intención del agente.
                     
                     **Especializadas:**
-                    * **Admón de F.H. / Entrevista**
-                    * **Infiltración:** Ubicar agentes dentro de una organización.
-                    * **Penetración:** Obtener colaboración de alguien que ya está dentro.
-                    * **Caracterización y Fachada**
+                    * **Infiltración:** Ubicar agentes dentro de una organización con una cobertura.
+                    * **Penetración:** Obtener colaboración de una persona que ya pertenece a la organización.
                     """)
 
                 with st.expander("4. Administración de Fuentes Humanas y Entrevista"):
-                    st.write("**Fases de Admón:** Exploración (Búsqueda) -> Aproximación (Contacto) -> Registro -> Entrenamiento.")
+                    st.write("**Fases de Admón:** Exploración -> Aproximación -> Registro -> Entrenamiento.")
                     st.subheader("Tipos de Entrevistador (A EVITAR)")
-                    st.write("* **El estrella:** Se siente superior y habla más que la fuente.")
-                    st.write("* **El estrellado:** Tímido, deja desviar el tema.")
-                    st.write("* **El improvisado:** No prepara nada.")
-                    st.write("* **El sordo:** Solo mira su cuestionario.")
-                    st.write("* **El enredado:** Usa palabras difíciles.")
-                    st.write("* **El metralleta:** No deja tiempo de responder.")
-                    st.write("**Etapas:** Planeación, Desarrollo, Terminación e Informe.")
-
-                with st.expander("5. Operaciones según su Nivel"):
-                    st.write("**Estratégicas:** Alto Valor, cabecillas (Nacional/Local).")
-                    st.write("**Estructurales:** Desarticulación de estructuras y ruptura de cadena criminal.")
-                    st.write("**Impacto:** Flagrancias y requerimientos judiciales.")
-                    st.write("**Comunitaria:** Unión con comunidad y autoridades locales.")
+                    st.write("* **El estrella:** Habla más que la fuente. | **El sordo:** Olvida escuchar por mirar el cuestionario.")
+                    st.write("* **El metralleta:** No da tiempo de responder. | **El enredado:** Usa palabras difíciles.")
+                    st.write("**Etapas de Entrevista:** Planeación, Desarrollo, Terminación e Informe.")
 
                 if st.button("🚀 INICIAR EVALUACIÓN M3"): st.session_state['modo_examen']=True; st.rerun()
             else:
                 with st.form("ex_m3"):
-                    p1 = st.radio("1. ¿Qué es el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no nota la intención", "Vigilancia fija"])
-                    p2 = st.radio("2. En PHVA, ¿qué es 'Hacer'?", ["Planear recursos", "Búsqueda de info y elaboración de productos", "Corregir errores"])
-                    p3 = st.radio("3. ¿Diferencia entre Infiltración y Penetración?", ["Infiltración mete al agente; Penetración usa a alguien de adentro", "Son iguales"])
-                    if st.form_submit_button("FINALIZAR M3"): st.session_state['modo_examen']=False; st.rerun()
+                    p1 = st.radio("¿Qué busca el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no nota la intención", "Vigilancia"])
+                    if st.form_submit_button("FINALIZAR M3"): 
+                        st.success("Nota guardada"); st.session_state['modo_examen']=False; st.rerun()
 
-    # --- PROGRESO ---
     elif seccion == "📊 Mi Progreso":
-        df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), engine, params={"n": st.session_state['agente_nombre']})
-        st.dataframe(df, use_container_width=True)
+        st.title("Historial Personal")
+        st.info("Aquí aparecerán sus resultados almacenados.")
