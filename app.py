@@ -54,33 +54,66 @@ else:
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
 # 1. SIDEBAR (Solo para navegación)
-with st.sidebar:
-    st.title("📂 MENÚ")
-    opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
-    
-    # Lógica de redirección dinámica
-    if 'seccion_ir' in st.session_state:
-        indice_defecto = opciones.index(st.session_state['seccion_ir'])
-        del st.session_state['seccion_ir']
-    else:
-        indice_defecto = 0
-
-    seccion = st.radio("Ir a:", opciones, index=indice_defecto)
-
-# --- FUERA DEL SIDEBAR (Cuerpo principal) ---
-
 if seccion == "🏠 Inicio":
-    st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
+    # --- CSS PARA ESTILO AVANZADO ---
+    st.markdown("""
+    <style>
+    .card-container {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        border-radius: 15px;
+        padding: 25px;
+        text-align: center;
+        min-height: 230px;
+        transition: transform 0.3s ease, border 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .card-container:hover {
+        border: 1px solid #D4AF37;
+        transform: translateY(-5px);
+        background: rgba(212, 175, 55, 0.05);
+    }
+    .icon-style {
+        font-size: 3.5em;
+        margin-bottom: 10px;
+        filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+    }
+    .title-style {
+        color: #D4AF37;
+        font-weight: bold;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    .subtitle-style {
+        color: #ffffff;
+        font-size: 0.85em;
+        opacity: 0.7;
+        margin-top: 5px;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # --- ENCABEZADO ---
+    st.markdown("<h1 style='text-align: center; color: #D4AF37; text-shadow: 0 0 15px rgba(212,175,55,0.4);'>🛡️ CORE INTELLIGENCE SYSTEM</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #A0A0A0; font-family: monospace;'>DIRECCIÓN DE INTELIGENCIA POLICIAL (DIPOL)</p>", unsafe_allow_html=True)
     
-    # Tarjeta de bienvenida centrada
+    # Tarjeta de bienvenida con estilo "Neon Profile"
     st.markdown(f"""
-    <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
-        <span style="color: white;">Bienvenido Agente: <b>{st.session_state['agente_nombre']}</b> | Estado: <span style="color: #4CAF50;">● En Línea</span></span>
+    <div style="background: linear-gradient(90deg, rgba(0,33,71,0.8), rgba(0,18,38,0.8)); 
+                border-left: 5px solid #D4AF37; padding: 20px; border-radius: 10px; 
+                margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        <span style="color: #A0A0A0; font-size: 0.9em; text-transform: uppercase;">Operador Actual</span><br>
+        <span style="color: white; font-size: 1.5em; font-weight: bold;">AGENTE: {st.session_state['agente_nombre'].upper()}</span>
+        <span style="float: right; color: #4CAF50; font-weight: bold;">● SISTEMA ACTIVO</span>
     </div>
     """, unsafe_allow_html=True)
 
-    # Definición de Módulos
+    # Definición de Módulos (Misma lógica)
     modulos_home = [
         {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
         {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -91,26 +124,27 @@ if seccion == "🏠 Inicio":
         {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
     ]
 
-    # Grilla de Tarjetas en el área principal
+    # Grilla de Tarjetas
     cols = st.columns(3)
     for i, m in enumerate(modulos_home):
         with cols[i % 3]:
-            # Contenedor visual
+            # Contenedor visual con CSS personalizado
             st.markdown(f"""
-            <div style="background: linear-gradient(145deg, #002147, #001226); 
-                        padding: 20px; border-radius: 15px; border: 1px solid #D4AF37; 
-                        text-align: center; min-height: 200px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                <div style="font-size: 2.5em; margin-bottom: 10px;">{m['icon']}</div>
-                <h4 style="color: #D4AF37; margin: 0;">{m['tit']}</h4>
-                <p style="color: #ccc; font-size: 0.85em;">{m['sub']}</p>
+            <div class="card-container">
+                <div class="icon-style">{m['icon']}</div>
+                <h4 class="title-style">{m['tit']}</h4>
+                <p class="subtitle-style">{m['sub']}</p>
             </div>
             """, unsafe_allow_html=True)
             
-            # El botón de Streamlit se coloca justo debajo de la caja HTML
-            if st.button(f"ABRIR {m['id']}", key=f"btn_h_{m['id']}", use_container_width=True):
+            # El botón de Streamlit se ajusta al diseño
+            if st.button(f"SISTEMA ACCESO {m['id']}", key=f"btn_h_{m['id']}", use_container_width=True):
                 st.session_state['modulo_activo'] = m['full']
                 st.session_state['seccion_ir'] = "📚 Módulos"
                 st.rerun()
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.caption("🔒 Acceso Restringido - Clasificación: SECRETO // PNIP 2026")
 
 elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
