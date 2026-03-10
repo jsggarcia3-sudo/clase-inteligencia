@@ -100,7 +100,8 @@ else:
                     </ul>
                 </div>
                 """, unsafe_allow_html=True)
-                # 
+                
+
         # --- MÓDULO 3 ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state['modo_examen']:
@@ -127,7 +128,8 @@ else:
                         st.write("**HACER:** Implementación y desarrollo. Búsqueda de información, Desarrollar actividades de inteligencia, Elaborar y registrar productos, Suministrar los productos, Ejecutar controles de seguridad.")
                         st.write("**VERIFICAR:** Seguimiento y medición de los procesos. Realizar autoevaluación de control y gestión.")
                         st.write("**ACTUAR:** Tomar acciones para ajustar y mejorar continuamente el desarrollo de los procesos. Implementar acciones correctivas, preventivas o de mejora.")
-                    # 
+                    
+
                 with t2:
                     st.subheader("Operaciones de Inteligencia")
                     with st.expander("Operaciones Básicas", expanded=True):
@@ -198,9 +200,28 @@ else:
 
     elif seccion == "📈 Dashboard General":
         if st.session_state['es_admin']:
-            st.title("Panel Administrativo")
-            df_all = pd.read_sql(text("SELECT * FROM calificaciones"), engine)
-            st.dataframe(df_all)
+            st.title("🛡️ Panel Administrativo")
+            
+            # Carga de datos
+            df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), engine)
+            
+            # Nueva sección: Filtro por Estudiante
+            st.subheader("🔍 Buscar Calificaciones por Estudiante")
+            estudiantes = sorted(df_all['funcionario'].unique())
+            seleccion_estudiante = st.selectbox("Seleccione un funcionario para ver su detalle:", ["-- Ver Todos --"] + list(estudiantes))
+            
+            if seleccion_estudiante != "-- Ver Todos --":
+                df_filtrado = df_all[df_all['funcionario'] == seleccion_estudiante]
+                st.write(f"### Reporte de: {seleccion_estudiante}")
+                st.table(df_filtrado)
+                promedio = df_filtrado['nota'].mean()
+                st.metric(label="Promedio del Estudiante", value=f"{promedio:.2f}%")
+            else:
+                st.write("### Listado General de Calificaciones")
+                st.dataframe(df_all, use_container_width=True)
+            
+            st.divider()
+            st.write("### Rendimiento Promedio por Módulo")
             st.bar_chart(df_all.groupby('modulo')['nota'].mean())
         else:
             st.warning("Acceso restringido.")
