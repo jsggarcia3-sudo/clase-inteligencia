@@ -179,7 +179,7 @@ else:
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
                         st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIJE y CONTROLA,  la fuente humana empleada en el proceso Operacional de Inteligencia.")
                         st.write("**Entrevista:** Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas y la correcta formulación de preguntas por el agente de inteligencia.")
-                        st.write("**Caracterizacion y Fachada:** Obtener colaboración permanente de alguien que ya tiene acceso.")
+                        st.write("**Caracterizacion y Fachada:** la caracterización es la construcción de una identidad falsa (historia, documentos, comportamiento) que adopta un agente para encajar en un entorno, mientras que la fachada es la entidad, empresa o cobertura física real que respalda esa identidad para ocultar la verdadera agenda u operación.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
