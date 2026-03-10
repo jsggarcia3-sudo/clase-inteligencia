@@ -102,7 +102,7 @@ if "identificado" not in st.session_state:
 st.markdown(f"### ⚡ Terminal Activa: Agente {st.session_state['agente']}")
 
 tab_niveles, tab_recoleccion, tab_analisis = st.tabs([
-    "📂 NIVELES", "📡 RECOLECCIÓN", "🧠 ANÁLISIS"
+    "📂 INTELIGENCIA", "📡 RECOLECCIÓN", "🧠 ANÁLISIS"
 ])
 
 # --- PESTAÑA 1 ---
