@@ -665,7 +665,84 @@ else:
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 5"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
+# --- MÓDULO 6: COMUNICAR E INTEGRAR ---
+        elif modulo_selec == "Módulo 6: Comunicación":
+            if not st.session_state['modo_examen']:
+                st.header("📢 Material: Comunicar e Integrar")
+                
+                tab_pasos, tab_ejemplos, tab_seguridad = st.tabs([
+                    "🚀 Pasos para la Difusión", 
+                    "📝 Casos Prácticos", 
+                    "🔐 Seguridad en Entrega"
+                ])
+                
+                with tab_pasos:
+                    st.subheader("Procedimiento Estándar de Difusión")
+                    st.write("La inteligencia no sirve si no llega a quien debe tomar la decisión en el momento oportuno.")
+                    
+                    # Diseño de pasos en cascada
+                    pasos = [
+                        {"n": "1", "t": "Identificar el Receptor", "d": "Nombres, cargo y lugar de recepción pactado con el usuario."},
+                        {"n": "2", "t": "Selección del Canal", "d": "Definir si será Virtual (correo cifrado), Físico o Entrega Exclusiva."},
+                        {"n": "3", "t": "Mecanismos de Seguridad", "d": "Aplicación de clasificación, encriptación, codificación o embalaje."},
+                        {"n": "4", "t": "Difusión del PTI", "d": "Entrega formal al destinatario final según el portafolio de receptores."},
+                        {"n": "5", "t": "Registro en Base de Datos", "d": "Registro digital o planilla física (si es entrega exclusiva)."}
+                    ]
+                    
+                    for p in pasos:
+                        st.markdown(f"""
+                        <div style="background-color: #002147; border-left: 5px solid #D4AF37; padding: 15px; border-radius: 5px; margin-bottom: 10px;">
+                            <span style="color: #D4AF37; font-weight: bold; font-size: 1.2em;">Paso {p['n']}: {p['t']}</span><br>
+                            <span style="color: white; font-size: 0.95em;">{p['d']}</span>
+                        </div>
+                        """, unsafe_allow_html=True)
 
+                with tab_ejemplos:
+                    st.subheader("Ejemplos de Aplicación")
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown("""
+                        <div class="ejemplo-box">
+                            <h4 style="color: #D4AF37;">Ejemplo A: Canal Virtual</h4>
+                            <p style="font-size: 0.9em; color: white;">
+                            <b>Escenario:</b> Envío de reporte diario de criminalidad.<br>
+                            <b>Acción:</b> Se utiliza el e-mail institucional con un archivo PDF protegido por contraseña y cifrado PGP. <br>
+                            <b>Registro:</b> Se guarda el LOG de envío en el sistema centralizado.
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    with col2:
+                        st.markdown("""
+                        <div class="ejemplo-box">
+                            <h4 style="color: #D4AF37;">Ejemplo B: Entrega Exclusiva</h4>
+                            <p style="font-size: 0.9em; color: white;">
+                            <b>Escenario:</b> Orden de captura para blanco de alto valor.<br>
+                            <b>Acción:</b> Entrega en sobre sellado con cinta de seguridad directamente al Director de Inteligencia.<br>
+                            <b>Registro:</b> Firma obligatoria en la planilla de difusión física.
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                with tab_seguridad:
+                    st.subheader("Medidas de Protección del Producto")
+                    
+                    st.markdown("""
+                    <div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
+                        <ul style="color: white;">
+                            <li><b>Clasificación:</b> Marcar claramente como RESERVADO o SECRETO.</li>
+                            <li><b>Encriptación:</b> Uso de algoritmos para proteger datos digitales.</li>
+                            <li><b>Embalaje:</b> Uso de sobres de seguridad que evidencien manipulación.</li>
+                            <li><b>Codificación:</b> Uso de lenguaje convenido para evitar lectura de terceros.</li>
+                        </ul>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                st.divider()
+                if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
     elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
