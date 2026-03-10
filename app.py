@@ -64,23 +64,21 @@ with tab_eval:
                 "Nota": puntos
             }])
             
-            try:
-                # LEER: Especificamos la URL y el nombre de la pestaña exacto
-                df_actual = conn.read(spreadsheet=URL_HOJA, worksheet="Hoja 1", ttl=0)
-                
-                # UNIR
-                df_final = pd.concat([df_actual, nueva_fila], ignore_index=True)
-                
-                # ACTUALIZAR
-                conn.update(spreadsheet=URL_HOJA, worksheet="Hoja 1", data=df_final)
-                
-                st.success(f"✅ ¡REGISTRO EXITOSO! Nota: {puntos}/100")
-                st.balloons()
-            except Exception as e:
-                # Si falla, mostramos el error detallado para diagnosticar
-                st.error(f"Error al guardar. Verifique que la hoja esté en modo 'Editor'.")
-                st.code(f"Detalle técnico: {str(e)}")
-                st.info(f"Su nota fue: {puntos}/100. Tome captura de pantalla.")
+           try:
+                    # Usamos el nombre 'Resultados' que pusiste en la pestaña del Excel
+                    df_actual = conn.read(spreadsheet=URL_HOJA, worksheet="Resultados", ttl=0)
+                    
+                    # Unir la nueva nota
+                    df_final = pd.concat([df_actual, nueva_nota], ignore_index=True)
+                    
+                    # Actualizar la hoja de Google
+                    conn.update(spreadsheet=URL_HOJA, worksheet="Resultados", data=df_final)
+                    
+                    st.success(f"✅ ¡REGISTRO EXITOSO! Nota: {puntos}/100")
+                    st.balloons()
+                except Exception as e:
+                    st.error(f"Error al guardar. Verifique el nombre de la pestaña.")
+                    st.code(f"Detalle técnico: {str(e)}")
 
 with tab_admin:
     st.header("📊 Registro de Calificaciones")
