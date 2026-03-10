@@ -563,6 +563,113 @@ else:
                         st.session_state['modo_examen'] = False
                         st.rerun()
 
+    # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN ---
+        elif modulo_selec == "Módulo 5: Análisis":
+            if not st.session_state['modo_examen']:
+                st.header("🧠 Material: Análisis de la Información")
+                
+                # PESTAÑAS DEL MÓDULO 5
+                tab_estudio, tab_proceso, tab_niveles = st.tabs([
+                    "🔬 Estudio Especializado", 
+                    "🧩 Proceso de Análisis", 
+                    "📈 Resultados y Cursos de Acción"
+                ])
+                
+                with tab_estudio:
+                    st.subheader("Estudio Especializado de la Información")
+                    st.write("El análisis es un proceso cuyo objeto es **generar conocimiento**, con base en la información disponible.")
+                    
+                    # Representación visual de la Primera Imagen (Flujo de flechas)
+                    st.markdown("""
+                    <div style="display: flex; align-items: center; justify-content: center; background-color: #001f3f; padding: 20px; border-radius: 10px; border: 1px solid #D4AF37;">
+                        <div style="background-color: #0056b3; color: white; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; width: 25%;">
+                            ESTUDIO ESPECIALIZADO DE INFORMACIÓN
+                        </div>
+                        <div style="width: 50%; padding: 0 20px;">
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">INTERPRETACIÓN</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">INTEGRACIÓN</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">HIPÓTESIS</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">CONCLUSIONES</div>
+                        </div>
+                        <div style="background-color: #f0f0f0; color: #333; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; width: 25%; border: 2px dashed #0056b3;">
+                            GENERAR CONOCIMIENTO A PARTIR DE LA INFORMACIÓN
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.info("""
+                    **El análisis comprende:**
+                    1. **Interpretación:** Dar sentido a los datos aislados.
+                    2. **Integración:** Unir piezas para ver el cuadro completo.
+                    3. **Hipótesis:** Plantear suposiciones técnicas sobre lo que está ocurriendo.
+                    4. **Conclusiones:** Resultados finales del estudio.
+                    """)
+
+                with tab_proceso:
+                    st.subheader("🧩 El Método Analítico (Segunda Imagen)")
+                    st.write("Para analizar, primero debemos identificar los temas y luego descomponer el problema.")
+                    
+                    # Encabezado de la segunda imagen: Seleccionar e identificar
+                    st.markdown("""
+                    <div style="border: 1px dashed red; padding: 10px; text-align: center; margin-bottom: 20px;">
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Seleccionar</span>
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Clasificar</span>
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Organizar</span><br>
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Identificar</span>
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Temas</span>
+                        <span style="background:#e0e0e0; padding:5px 15px; margin:5px; border:1px solid #999; display:inline-block; color:black;">Ideas</span>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    col_an1, col_an2, col_an3 = st.columns(3)
+                    with col_an1:
+                        st.markdown("""
+                        <div style="text-align:center;">
+                            <p style="color:#d9534f; font-weight:bold;">TENDENCIAS Y PATRONES</p>
+                            <img src="https://img.icons8.com/clouds/100/000000/puzzle.png" style="width:80px;">
+                            <div style="background:#f2dede; color:#a94442; padding:10px; border-radius:5px;">
+                                <b>EL TODO</b><br><small>(Objeto de análisis)</small>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    with col_an2:
+                        st.markdown("""
+                        <div style="text-align:center;">
+                            <p style="color:#d9534f; font-weight:bold;">ELEMENTO QUE MODIFICA EL PATRÓN</p>
+                            <img src="https://img.icons8.com/clouds/100/000000/disconnected.png" style="width:80px;">
+                            <div style="background:#fcf8e3; color:#8a6d3b; padding:10px; border-radius:5px;">
+                                <b>ANALIZAR</b><br><small>(Es descomponer)</small>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with col_an3:
+                        st.markdown("""
+                        <div style="text-align:center;">
+                            <p style="color:#d9534f; font-weight:bold;">INTERP. ELEM. COMUNES Y DIFERENTES</p>
+                            <img src="https://img.icons8.com/clouds/100/000000/connected.png" style="width:80px;">
+                            <div style="background:#d9edf7; color:#31708f; padding:10px; border-radius:5px;">
+                                <b>SINTETIZAR</b><br><small>(Recomponer y sumar partes)</small>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                with tab_niveles:
+                    st.subheader("🎯 Resultados del Análisis")
+                    st.markdown("""
+                    El análisis no termina en la conclusión; debe proyectar el futuro:
+                    * **Posibles Escenarios:** ¿Qué podría pasar basándonos en las tendencias?
+                    * **Cursos de Acción:** Recomendaciones sobre qué hacer ante cada escenario.
+                    * **Prospectiva:** Anticiparse a la evolución de las amenazas.
+                    """)
+                    st.warning("⚠️ Sin síntesis, no hay inteligencia útil para el mando.")
+
+                # EXAMEN M5 (Borrador)
+                if st.button("🚀 INICIAR EXAMEN M5"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
+
     elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
