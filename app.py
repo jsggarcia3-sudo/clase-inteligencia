@@ -247,12 +247,25 @@ else:
                             * **Continuidad sin espacios vacíos.**
                             """)
 
-                    with st.expander("Operaciones Especializadas", expanded=True):
-                        st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
-                        st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
-                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIGE y CONTROLA la fuente humana.")
-                        st.write("**Entrevista:** Procedimiento para la obtención de información mediante intercambio de ideas.")
-                        st.write("**Caracterización y Fachada:** La *caracterización* es la identidad falsa; la *fachada* es la cobertura física real.")
+                    with st.expander("🛡️ Operaciones Especializadas", expanded=True):
+    # Creamos un layout de cuadrícula
+    rows = [st.columns(2), st.columns(2), st.columns(1)]
+    
+    content = [
+        ("Infiltración", "Ubicar agentes dentro de una organización mediante una cobertura.", "👤"),
+        ("Penetración", "Obtener colaboración permanente de alguien con acceso.", "🔑"),
+        ("Admón. de Fuentes", "Proceso de orientación, dirección y control de fuentes.", "🤝"),
+        ("Entrevista", "Obtención de información mediante intercambio de ideas.", "🎙️"),
+    ]
+
+    for i, (title, desc, icon) in enumerate(content):
+        with rows[i // 2][i % 2]:
+            st.subheader(f"{icon} {title}")
+            st.write(desc)
+            st.divider()
+
+    # Nota especial para Caracterización al final
+    st.warning("**🎭 Caracterización vs Fachada:** La *caracterización* es quién dices ser; la *fachada* es el entorno físico que lo respalda.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
