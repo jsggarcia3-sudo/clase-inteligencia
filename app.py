@@ -458,6 +458,7 @@ else:
                         .perc-50 { background-color: #FF9800 !important; font-weight: bold; text-align: center; color: white; width: 60px; }
                         .perc-25 { background-color: #F44336 !important; font-weight: bold; text-align: center; color: white; width: 60px; }
                         .cod-cell { text-align: center; font-weight: bold; background-color: #003366 !important; width: 40px; font-size: 1.1em !important; }
+                        .ejemplo-box { background-color: #0e1117; padding: 15px; border-radius: 5px; border-left: 5px solid #D4AF37; margin-top: 10px; }
                     </style>
                     <table class="t-4x4">
                         <tr>
@@ -494,8 +495,42 @@ else:
                             <td class="perc-25">25</td>
                         </tr>
                     </table>
-                    <br>
                     """, unsafe_allow_html=True)
+
+                    st.divider()
+                    st.subheader("💡 Ejemplos Prácticos de Clasificación")
+                    
+                    col_ex1, col_ex2 = st.columns(2)
+                    
+                    with col_ex1:
+                        st.markdown("""
+                        <div class="ejemplo-box">
+                            <h4 style="color: #4CAF50;">Nivel A-1 (100%)</h4>
+                            <p><b>Escenario:</b> Un agente encubierto con historial impecable entrega un video original de una reunión ilícita grabada hace una hora.</p>
+                            <small><i>La fuente es confiable (A) y la prueba es irrefutable (1).</i></small>
+                        </div>
+                        <div class="ejemplo-box">
+                            <h4 style="color: #FFEB3B;">Nivel B-2 (75%)</h4>
+                            <p><b>Escenario:</b> Un informante que suele dar datos reales reporta que vio personalmente la llegada de un cargamento sospechoso.</p>
+                            <small><i>La fuente es usualmente cierta (B) y lo vio de primera mano (2).</i></small>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with col_ex2:
+                        st.markdown("""
+                        <div class="ejemplo-box">
+                            <h4 style="color: #FF9800;">Nivel C-3 (50%)</h4>
+                            <p><b>Escenario:</b> Una persona con historial de mentiras afirma que escuchó un rumor sobre un bloqueo; el dato coincide con un post en redes.</p>
+                            <small><i>Fuente dudosa (C), información de "oídas" pero corroborable externamente (3).</i></small>
+                        </div>
+                        <div class="ejemplo-box">
+                            <h4 style="color: #F44336;">Nivel D-4 (25%)</h4>
+                            <p><b>Escenario:</b> Una llamada anónima sin antecedentes alerta sobre una amenaza, pero no hay ninguna otra prueba que lo respalde.</p>
+                            <small><i>Fuente desconocida (D) y dato imposible de verificar (4).</i></small>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
+                    st.caption("Nota: El analista debe priorizar siempre la búsqueda de corroboración para elevar los niveles C y D.")
 
                 # --- Lógica de Examen M4 ---
                 nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
