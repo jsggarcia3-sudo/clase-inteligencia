@@ -167,23 +167,36 @@ else:
                     st.subheader("Operaciones de Inteligencia")
                     st.markdown("""
                     <div class="lectura-box">
-                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial. Para toda operacion se Empleo y uso de Medios Técnicos</p>
+                        <p><b>Operaciones de Inteligencia:</b> Son actividades del servicio de policía, orientadas a la obtención de información privilegiada de personas, organizaciones, objetos y hechos que representan interés para el servicio de inteligencia policial. Para toda operación se requiere el <b>Empleo y uso de Medios Técnicos</b>.</p>
                     </div>
                     """, unsafe_allow_html=True)
                     
                     with st.expander("Operaciones Básicas", expanded=True):
-                        st.write("**Reconocimiento:** Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
-                        st.write("**Verificación:** es un procedimiento dentro de las actividades de inteligencia que pretende establecer la veracidad o desvirtuar una información, a través de la exploración en bases de datos, reconocimientos, la administración de fuentes humanas, vigilancias y seguimientos.).")
-                        st.write("**Vigilancia:** Actividad de inteligencia en el que se despliega una observación continúa y discreta sobre una persona, lugar, vehículo o hecho, con el fin de establecer rutinas y demás situaciones de interés.")
-                        st.write("**Seguimiento:** Actividad de inteligencia mediante la cual se ejerce control sobre un persona o elemento en movimiento..")
-                        st.write("**Sonsacamiento:** Técnica de Inteligencia que permite la obtención de información, mediante el diálogo entre el agente de inteligencia y la fuente, quien no debe percatarse de su explotación, ni de la intención del agente.")
-                        
+                        st.write("#### **Reconocimiento**")
+                        st.write("Actividad de inteligencia que parte de una información previamente recolectada, dirigida a concretar y ampliar los datos disponibles.")
+                        st.markdown("""
+                        **Desarrollo del Reconocimiento:**
+                        * Grupo de trabajo y medios logísticos y tecnológicos.
+                        * Actitud natural de acuerdo al entorno.
+                        * Agilidad de ubicación.
+                        * Mantener siempre las medidas de seguridad.
+                        * Realizar registros fílmicos o fotográficos.
+                        * Conocer posibles vías de acceso del objetivo.
+                        * Crear estrategias de individualización e identificación.
+                        * Descripción detallada de inmuebles y personas.
+                        """)
+                        st.divider()
+                        st.write("**Verificación:** Procedimiento que pretende establecer la veracidad o desvirtuar una información, a través de la exploración en bases de datos, reconocimientos, administración de fuentes, vigilancias y seguimientos.")
+                        st.write("**Vigilancia:** Observación continúa y discreta sobre una persona, lugar, vehículo o hecho, con el fin de establecer rutinas.")
+                        st.write("**Seguimiento:** Actividad mediante la cual se ejerce control sobre una persona o elemento en movimiento.")
+                        st.write("**Sonsacamiento:** Técnica que permite la obtención de información mediante el diálogo donde la fuente no debe percatarse de su explotación.")
+
                     with st.expander("Operaciones Especializadas", expanded=True):
                         st.write("**Infiltración:** Ubicar agentes dentro de una organización mediante una cobertura.")
                         st.write("**Penetración:** Obtener colaboración permanente de alguien que ya tiene acceso.")
-                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIJE y CONTROLA,  la fuente humana empleada en el proceso Operacional de Inteligencia.")
-                        st.write("**Entrevista:** Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas y la correcta formulación de preguntas por el agente de inteligencia.")
-                        st.write("**Caracterizacion y Fachada:** la caracterización es la construcción de una identidad falsa (historia, documentos, comportamiento) que adopta un agente para encajar en un entorno, mientras que la fachada es la entidad, empresa o cobertura física real que respalda esa identidad para ocultar la verdadera agenda u operación.")
+                        st.write("**Admon. de Fuentes Humanas:** Proceso por el cual se ORIENTA-DIRIGE y CONTROLA la fuente humana empleada.")
+                        st.write("**Entrevista:** Procedimiento para la obtención de información mediante el intercambio de ideas y formulación de preguntas.")
+                        st.write("**Caracterización y Fachada:** La *caracterización* es la identidad falsa (documentos, comportamiento); la *fachada* es la entidad o cobertura física real que la respalda.")
 
                 with t3:
                     st.subheader("Fuentes de Información")
