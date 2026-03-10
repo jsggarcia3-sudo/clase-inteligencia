@@ -112,7 +112,7 @@ if seccion == "🏠 Inicio":
                 st.session_state['seccion_ir'] = "📚 Módulos"
                 st.rerun()
 
-    elif seccion == "📚 Módulos":
+elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
 
              
