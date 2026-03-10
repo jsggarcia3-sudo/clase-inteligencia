@@ -888,7 +888,7 @@ elif seccion == "📚 Módulos":
                     st.session_state['modo_examen'] = True
                     st.rerun()
                     
-    elif seccion == "📊 Mi Progreso":
+elif seccion == "📊 Mi Progreso":
         st.title("Historial de Calificaciones")
         try:
             with engine.connect() as conn:
