@@ -113,7 +113,7 @@ elif seccion == "📚 Módulos":
     modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"])
         
     # --- MÓDULO 1 ---
-if modulo_selec == "Módulo 1: Conceptualización":
+        if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state['modo_examen']:
                 st.header("📖 Material: Conceptualización de Inteligencia")
                 with st.expander("Ver Contenido Completo Módulo 1", expanded=True):
