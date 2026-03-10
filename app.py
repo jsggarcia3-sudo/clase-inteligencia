@@ -1,31 +1,33 @@
 import streamlit as st
-from sqlalchemy import text
-
-st.set_page_config(page_title="Enlace DIPOL", page_icon="🛡️")
-
-# Botón para limpiar conexión si el puerto cambia
-if st.sidebar.button("🔄 Refrescar Enlace"):
-    st.cache_resource.clear()
-    st.rerun()
+from sqlalchemy import create_engine, text
 
 st.title("🛡️ Validación de Enlace Táctico")
 
-@st.cache_resource(ttl=3600)
-def conectar_db():
-    return st.connection("postgresql", type="sql")
+# Extraemos los datos de secrets manualmente para asegurar que no hay error de lectura
+db_secrets = st.secrets["connections"]["postgresql"]
+
+# Creamos la URL de conexión manualmente
+db_url = f"postgresql://{db_secrets['username']}:{db_secrets['password']}@{db_secrets['host']}:{db_secrets['port']}/{db_secrets['database']}"
 
 try:
-    conn = conectar_db()
-    with conn.session as session:
-        # Consulta rápida para validar que el túnel responde
-        session.execute(text("SELECT 1"))
-    st.success(f"✅ Conexión establecida por el puerto 5843")
+    # Creamos un motor de conexión fresco cada vez (sin caché)
+    engine = create_engine(db_url, pool_pre_ping=True)
     
-    # Mostrar datos para confirmar
-    df = conn.query("SELECT * FROM calificaciones ORDER BY fecha DESC LIMIT 3;")
-    st.dataframe(df)
+    with engine.connect() as connection:
+        # Prueba simple
+        connection.execute(text("SELECT 1"))
+        st.success(f"✅ ¡CONEXIÓN ESTABLECIDA!")
+        st.info(f"Enlace activo por el puerto {db_secrets['port']}")
+        
+        # Intentar leer los datos
+        st.subheader("Datos en PostgreSQL:")
+        query = text("SELECT * FROM calificaciones ORDER BY fecha DESC LIMIT 5")
+        result = connection.execute(query)
+        for row in result:
+            st.write(f"Funcionario: {row.funcionario} - Nota: {row.nota}")
 
 except Exception as e:
-    st.error("❌ Error de Enlace")
-    st.warning("El puerto en la web de Localtonet y en los Secrets de Streamlit debe coincidir.")
-    st.info(f"Puerto actual configurado: 5843")
+    st.error("❌ Error de Enlace Real")
+    st.write("Detalle técnico del error:")
+    st.code(str(e))
+    st.warning("Verifica que PostgreSQL en tu PC permita conexiones externas (archivo pg_hba.conf).")
