@@ -57,71 +57,120 @@ else:
 if 'modulo_activo' not in st.session_state:
     st.session_state['modulo_activo'] = None
 
-# --- 2. SIDEBAR (Aquí se define la variable 'seccion') ---
+# 1. SIDEBAR (Solo para navegación)
+
 with st.sidebar:
+
     st.title("📂 MENÚ")
+
     opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
+
     
-    # Manejo de redirección dinámica
+
+    # Lógica de redirección dinámica
+
     if 'seccion_ir' in st.session_state:
-        # Buscamos el índice de la sección a la que queremos saltar
-        try:
-            indice_defecto = opciones.index(st.session_state['seccion_ir'])
-        except ValueError:
-            indice_defecto = 0
+
+        indice_defecto = opciones.index(st.session_state['seccion_ir'])
+
         del st.session_state['seccion_ir']
+
     else:
+
         indice_defecto = 0
 
-    # DEFINICIÓN CRÍTICA: Aquí nace la variable 'seccion'
+
+
     seccion = st.radio("Ir a:", opciones, index=indice_defecto)
 
-# --- 3. CUERPO PRINCIPAL (Fuera del Sidebar) ---
+
+
+# --- FUERA DEL SIDEBAR (Cuerpo principal) ---
+
+
 
 if seccion == "🏠 Inicio":
-    # --- CSS PARA ESTILO TECNOLÓGICO ---
-    st.markdown("""
-    <style>
-    .card-container {
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(212, 175, 55, 0.3);
-        border-radius: 15px; padding: 25px; text-align: center;
-        transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-        min-height: 220px; display: flex; flex-direction: column; justify-content: center;
-    }
-    .card-container:hover {
-        border: 1px solid #D4AF37; transform: translateY(-5px);
-        background: rgba(212, 175, 55, 0.08);
-    }
-    </style>
+
+    st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
+
+    st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
+
+    
+
+    # Tarjeta de bienvenida centrada
+
+    st.markdown(f"""
+
+    <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
+
+        <span style="color: white;">Bienvenido Agente: <b>{st.session_state['agente_nombre']}</b> | Estado: <span style="color: #4CAF50;">● En Línea</span></span>
+
+    </div>
+
     """, unsafe_allow_html=True)
 
-    st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ CORE INTELLIGENCE SYSTEM</h1>", unsafe_allow_html=True)
-    
+
+
     # Definición de Módulos
+
     modulos_home = [
+
         {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
+
         {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
+
         {"id": "M3", "tit": "Módulo 3", "sub": "Recolección", "icon": "🕵️", "full": "Módulo 3: Recolección"},
+
         {"id": "M4", "tit": "Módulo 4", "sub": "Tratamiento", "icon": "📊", "full": "Módulo 4: Tratamiento"},
+
         {"id": "M5", "tit": "Módulo 5", "sub": "Análisis", "icon": "🧠", "full": "Módulo 5: Análisis"},
+
         {"id": "M6", "tit": "Módulo 6", "sub": "Comunicación", "icon": "📢", "full": "Módulo 6: Comunicación"},
+
         {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
+
     ]
 
+
+
+    # Grilla de Tarjetas en el área principal
+
     cols = st.columns(3)
+
     for i, m in enumerate(modulos_home):
+
         with cols[i % 3]:
+
+            # Contenedor visual
+
             st.markdown(f"""
-            <div class="card-container">
-                <div style="font-size: 3em; margin-bottom: 10px;">{m['icon']}</div>
+
+            <div style="background: linear-gradient(145deg, #002147, #001226); 
+
+                        padding: 20px; border-radius: 15px; border: 1px solid #D4AF37; 
+
+                        text-align: center; min-height: 200px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+
+                <div style="font-size: 2.5em; margin-bottom: 10px;">{m['icon']}</div>
+
                 <h4 style="color: #D4AF37; margin: 0;">{m['tit']}</h4>
-                <p style="color: white; font-size: 0.8em; opacity: 0.7;">{m['sub']}</p>
+
+                <p style="color: #ccc; font-size: 0.85em;">{m['sub']}</p>
+
             </div>
+
             """, unsafe_allow_html=True)
-            if st.button(f"ACCEDER {m['id']}", key=f"btn_h_{m['id']}", use_container_width=True):
+
+            
+
+            # El botón de Streamlit se coloca justo debajo de la caja HTML
+
+            if st.button(f"ABRIR {m['id']}", key=f"btn_h_{m['id']}", use_container_width=True):
+
                 st.session_state['modulo_activo'] = m['full']
+
                 st.session_state['seccion_ir'] = "📚 Módulos"
+
                 st.rerun()
 
 elif seccion == "📚 Módulos":
