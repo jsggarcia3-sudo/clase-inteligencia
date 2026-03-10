@@ -122,6 +122,8 @@ else:
                     </div>
                     """, unsafe_allow_html=True)
                 
+                # Se corrige error de sintaxis convirtiendo el texto en comentario o instrucción de Streamlit
+                st.write("*[Aquí se visualiza el Ciclo de Inteligencia: Planeación, Recolección, Procesamiento, Análisis y Difusión]*")
                 
                 nota_previa = verificar_intento(st.session_state['agente_nombre'], "Módulo 2", engine)
                 if nota_previa is None:
@@ -152,10 +154,8 @@ else:
                 t1, t2, t3, t4 = st.tabs(["📌 Fundamentos", "🕵️ Operaciones", "👥 Fuentes", "🎤 Entrevista"])
                 with t1:
                     st.markdown('<div class="lectura-box"><h3>Recolección y PHVA</h3><p>PLANEAR, HACER, VERIFICAR, ACTUAR.</p></div>', unsafe_allow_html=True)
-                    
-
-[Image of the PDCA cycle diagram: Plan, Do, Check, Act]
-
+                    # Se corrige error de sintaxis aquí también
+                    st.write("*[Imagen del ciclo PHVA: Planear, Hacer, Verificar, Actuar]*")
                 with t2:
                     st.write("**Vigilancia:** Observación discreta. **Sonsacamiento:** Diálogo sin que la fuente lo note.")
                 with t3:
