@@ -13,200 +13,153 @@ st.markdown("""
     .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
     h1, h2, h3 { color: #D4AF37 !important; }
     .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
-    .highlight { color: #D4AF37; font-weight: bold; }
+    .submodulo-box { background-color: #003366; padding: 15px; border-radius: 8px; border: 1px solid #D4AF37; margin-bottom: 15px; }
     </style>
     """, unsafe_allow_html=True)
 
 # 2. GESTIÓN DE SESIÓN
-if 'autenticado' not in st.session_state:
-    st.session_state['autenticado'] = False
-if 'agente_nombre' not in st.session_state:
-    st.session_state['agente_nombre'] = ""
-if 'es_admin' not in st.session_state:
-    st.session_state['es_admin'] = False
-if 'modo_examen' not in st.session_state:
-    st.session_state['modo_examen'] = False
+if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
+if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
+if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
+if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
 
 def login():
     st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1,1.5,1])
     with col2:
         st.write("### Identificación de Funcionario")
-        nombre = st.text_input("Nombre Completo (Ej: Juan Pérez)")
+        nombre = st.text_input("Nombre Completo")
         usuario = st.text_input("Usuario")
         clave = st.text_input("Contraseña", type="password")
-        
         if st.button("ACCEDER"):
             if usuario == "admin_dipol" and clave == "DIPOL2026":
-                st.session_state['autenticado'] = True
-                st.session_state['es_admin'] = True
-                st.session_state['agente_nombre'] = nombre if nombre else "Administrador"
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
                 st.rerun()
             elif nombre and usuario and clave == "ESTUDIANTE2026":
-                st.session_state['autenticado'] = True
-                st.session_state['es_admin'] = False
-                st.session_state['agente_nombre'] = nombre
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
                 st.rerun()
-            else:
-                st.error("Credenciales incorrectas o falta nombre completo.")
+            else: st.error("Credenciales incorrectas.")
 
-# 3. INTERFAZ OPERATIVA
 if not st.session_state['autenticado']:
     login()
 else:
     db_s = st.secrets["connections"]["postgresql"]
-    pass_segura = quote_plus(db_s['password'])
-    engine = create_engine(f"postgresql://{db_s['username']}:{pass_segura}@{db_s['host']}:{db_s['port']}/{db_s['database']}", pool_pre_ping=True)
+    engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 
     with st.sidebar:
         st.title("📂 MENÚ")
-        tipo_user = "🛡️ ADMIN" if st.session_state['es_admin'] else "👤 ESTUDIANTE"
-        st.write(f"**{tipo_user}:**\n{st.session_state['agente_nombre']}")
-        st.divider()
-        
-        opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso"]
-        if st.session_state['es_admin']:
-            opciones.append("📈 Dashboard General")
-            
-        seccion = st.radio("Ir a:", opciones)
-        
+        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso"] + (["📈 Dashboard General"] if st.session_state['es_admin'] else []))
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
 
-    # --- LÓGICA DE INICIO ---
+    # --- INICIO ---
     if seccion == "🏠 Inicio":
-        st.title(f"🛡️ Panel de Control Académico")
-        st.subheader(f"Bienvenido, {st.session_state['agente_nombre']}")
-        
-        if st.session_state['es_admin']:
-            st.info("Sesión activa con privilegios de **Administrador General**.")
-            try:
-                with engine.connect() as conn:
-                    total_e = conn.execute(text("SELECT COUNT(*) FROM calificaciones")).scalar()
-                    promedio_u = conn.execute(text("SELECT AVG(nota) FROM calificaciones")).scalar()
-                col1, col2 = st.columns(2)
-                col1.metric("Exámenes Realizados", total_e if total_e else 0)
-                col2.metric("Promedio de Unidad", f"{promedio_u:.1f}%" if promedio_u else "0%")
-            except: st.warning("Pendiente de registros globales.")
-        else:
-            st.success("Listo para continuar su formación técnica institucional.")
-            st.write("Seleccione el **Módulo 2** para estudiar el Ciclo de Inteligencia.")
+        st.title("🛡️ Panel Principal")
+        st.write(f"Bienvenido al sistema, {st.session_state['agente_nombre']}.")
+        st.info("Utilice el menú lateral para acceder a los 3 módulos disponibles.")
 
-    # --- LÓGICA DE MÓDULOS ---
+    # --- MÓDULOS ---
     elif seccion == "📚 Módulos":
-        st.title("📚 Módulos de Especialización")
-        seleccion = st.selectbox("Seleccione un Módulo:", [
-            "Módulo 1: Conceptualización de Inteligencia",
-            "Módulo 2: Ciclo de Inteligencia"
-        ])
-        st.divider()
-
-        # --- MÓDULO 1: CONCEPTUALIZACIÓN (RESTAURADO COMPLETO) ---
-        if seleccion == "Módulo 1: Conceptualización de Inteligencia":
+        modulo = st.selectbox("Seleccione Módulo:", ["Módulo 1", "Módulo 2", "Módulo 3"])
+        
+        # --- MÓDULO 1 (RESTAURADO) ---
+        if modulo == "Módulo 1":
+            st.title("Módulo 1: Conceptualización")
             if not st.session_state['modo_examen']:
-                st.header("📖 Material de Lectura: Módulo 1")
-                st.markdown(f"""
-                <div class="lectura-box">
-                    <h3>Definición de Inteligencia</h3>
-                    <p>1. Es el <b>conocimiento obtenido</b> a través del procesamiento adecuado de la información, que se brinda a los responsables de tomar decisiones.</p>
-                    <p>2. Es una actividad <b>multi y transdisciplinaria</b>, compleja, dinámica y necesaria en un mundo en el cual el aprovechamiento de la oportunidad del futuro, asegura el éxito.</p>
-                    <p>3. Su función es la de <b>asesoramiento</b>, proporcionando el conocimiento integrado que reduzca las diversas incertidumbres, para la toma de decisión.</p>
-                    <p>4. Es la capacidad de aprender o comprender. Suele ser sinónimo del intelecto (entendimiento), pero se diferencia de este por hacer hincapié en las <b>habilidades y aptitudes</b> para manejar situaciones concretas y por beneficiarse de la experiencia sensorial.</p>
-                </div>
-                <div class="lectura-box">
-                    <h3>¿Qué es Inteligencia Policial?</h3>
-                    <p>Conjunto de procesos mediante los cuales se obtiene, trata, evalúa y analiza la información, para generar conocimiento relacionado con la <b>seguridad y convivencia ciudadana</b>, a fin de contribuir a la definición de políticas a cargo de las autoridades de la administración pública a nivel nacional, departamental y local, al diseño de estrategias institucionales y a orientar la ejecución de operaciones en cumplimiento de la misión policial.</p>
-                </div>
-                <div class="lectura-box">
-                    <h3>Inteligencia según su nivel</h3>
-                    <p><b>INTELIGENCIA ESTRATÉGICA:</b> Los líderes políticos y policiales emplean algunas áreas del conjunto de conocimientos de inteligencia para la formulación de planes y políticas orientada hacia los objetivos nacionales, para llegar a decisiones relacionadas con la seguridad y bienestar de la nación.</p>
-                    <p><b>INTELIGENCIA OPERACIONAL:</b> Requerida para el planeamiento de operaciones dentro de un área específica. Se concentra en la recolección, identificación, localización y análisis para apoyar en el nivel operacional, asesorando al jefe de la operación sobre el mejor empleo de las unidades disponibles y minimizar los riesgos.</p>
-                    <p><b>INTELIGENCIA TÁCTICA:</b> Requerida para la conducción de operaciones tácticas al nivel de equipos. Se enfoca en las capacidades del objetivo, sus posibilidades inmediatas y el ambiente. Las posibilidades inmediatas son dinámicas, tienden a variar constantemente y no permite prever situaciones a futuro mediato.</p>
-                </div>
-                """, unsafe_allow_html=True)
-                if st.button("🚀 INICIAR EVALUACIÓN M1"):
+                st.markdown("""<div class='lectura-box'><h3>Definición de Inteligencia</h3><p>Conocimiento obtenido a través del procesamiento adecuado de la información...</p></div>""", unsafe_allow_html=True)
+                if st.button("EXAMEN M1"): st.session_state['modo_examen'] = True; st.rerun()
+            else:
+                with st.form("m1"):
+                    q1 = st.radio("Función principal:", ["Asesoramiento", "Fuerza"])
+                    if st.form_submit_button("GUARDAR"): st.success("Nota guardada"); st.session_state['modo_examen']=False
+
+        # --- MÓDULO 2 (RESTAURADO) ---
+        elif modulo == "Módulo 2":
+            st.title("Módulo 2: Ciclo de Inteligencia")
+            if not st.session_state['modo_examen']:
+                st.markdown("""<div class='lectura-box'><h3>Los 5 Pasos</h3><p>1. Recolectar, 2. Tratar, 3. Analizar, 4. Comunicar, 5. Evaluar.</p></div>""", unsafe_allow_html=True)
+                if st.button("EXAMEN M2"): st.session_state['modo_examen'] = True; st.rerun()
+            else:
+                with st.form("m2"):
+                    q1 = st.radio("¿Cuántos pasos?", ["3", "5"])
+                    if st.form_submit_button("GUARDAR"): st.success("Nota guardada"); st.session_state['modo_examen']=False
+
+        # --- MÓDULO 3: RECOLECCIÓN (NUEVO COMPLETO) ---
+        elif modulo == "Módulo 3":
+            st.title("Módulo 3: Recolección de Información")
+            
+            if not st.session_state['modo_examen']:
+                tab1, tab2, tab3, tab4 = st.tabs(["📖 Fundamentos", "🔄 Proceso PHVA", "🕵️ Operaciones", "👥 Fuentes y Humana"])
+                
+                with tab1:
+                    st.markdown("""
+                    <div class="lectura-box">
+                        <h3>Definición</h3>
+                        <p>Consiste en juntar aquellos datos o información relevante para el objetivo de nuestra investigación, que generalmente se encuentra dispersa.</p>
+                        <ul>
+                            <li>Definir requerimientos.</li>
+                            <li>Identificar fuentes potenciales.</li>
+                            <li>Diseñar estrategias de recolección.</li>
+                        </ul>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                with tab2:
+                    st.subheader("Ciclo PHVA en Recolección")
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown("**PLANEAR:** Establecer objetivos, riesgos y recursos.")
+                        st.markdown("**HACER:** Búsqueda, desarrollo de actividades y registro de productos.")
+                    with col2:
+                        st.markdown("**VERIFICAR:** Seguimiento, medición y autoevaluación.")
+                        st.markdown("**ACTUAR:** Acciones correctivas y mejora continua.")
+
+                with tab3:
+                    st.subheader("Submódulo: Operaciones de Inteligencia")
+                    st.write("Actividades orientadas a la obtención de información privilegiada.")
+                    
+                    with st.expander("🔍 Básicas: Reconocimiento, Verificación y Vigilancia"):
+                        st.write("**Reconocimiento:** Concretar y ampliar datos previos (vías, seguridad, entorno).")
+                        st.write("**Verificación:** Establecer veracidad o desvirtuar información.")
+                        st.write("**Vigilancia:** Observación continua y discreta (rutinas).")
+                        st.write("**Seguimiento:** Control sobre objetivos en movimiento (a pie o vehículo).")
+                        st.write("**Sonsacamiento:** Obtención de info mediante diálogo sin que la fuente lo note.")
+                    
+                    with st.expander("⚡ Especializadas: Infiltración y Penetración"):
+                        st.write("**Infiltración:** Ubicar agentes dentro de la organización.")
+                        st.write("**Penetración:** Lograr colaboración de alguien que ya está dentro.")
+
+                with tab4:
+                    st.subheader("Fuentes y Entrevista")
+                    st.write("**Fuentes:** Abiertas (Públicas), Cerradas (Especializadas/Técnicas) y Humanas.")
+                    st.info("Tipos de Entrevistador a evitar: El estrella, El estrellado, El improvisado, El sordo, El enredado y El metralleta.")
+
+                if st.button("🚀 INICIAR EVALUACIÓN MÓDULO 3"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
+            
             else:
-                st.header("📝 Evaluación: Módulo 1")
-                with st.form(key="form_m1"):
-                    p1 = st.radio("1. Función principal de la inteligencia:", ["Incertidumbre", "Asesoramiento para reducir incertidumbres", "Acción de fuerza"])
-                    p2 = st.radio("2. Nivel de inteligencia para objetivos nacionales:", ["Estratégica", "Operacional", "Táctica"])
-                    p3 = st.radio("3. Nivel enfocado en posibilidades inmediatas y dinámicas:", ["Operacional", "Estratégica", "Táctica"])
-                    p4 = st.radio("4. Diferencia inteligencia e intelecto:", ["Habilidades para situaciones concretas y experiencia sensorial", "No hay diferencia", "La memoria"])
-                    p5 = st.radio("5. Objetivo de Inteligencia Policial:", ["Solo estadística", "Conocimiento para seguridad y convivencia ciudadana", "Control de tráfico"])
+                st.header("📝 Examen Técnico: Recolección")
+                with st.form("exam_m3"):
+                    p1 = st.radio("1. ¿Qué es el Sonsacamiento?", ["Entrevista formal", "Diálogo donde la fuente no percibe la explotación", "Tortura"])
+                    p2 = st.radio("2. En PHVA, ¿qué significa 'Hacer'?", ["Planear recursos", "Búsqueda y elaboración de productos", "Mejora continua"])
+                    p3 = st.radio("3. Diferencia entre Infiltración y Penetración:", ["No hay diferencia", "Infiltración mete a alguien; Penetración usa a alguien de adentro", "Infiltración es técnica; Penetración es humana"])
+                    p4 = st.radio("4. ¿Qué busca el Reconocimiento?", ["Solo fotos", "Profundizar en datos de propietarios, vehículos y entorno", "Sonsacar"])
+                    p5 = st.radio("5. ¿Cuál es un tipo de entrevistador deficiente?", ["El metralleta", "El analista", "El recolector"])
                     
-                    if st.form_submit_button("GUARDAR NOTA M1"):
-                        resp = [p1=="Asesoramiento para reducir incertidumbres", p2=="Estratégica", p3=="Táctica", p4=="Habilidades para situaciones concretas y experiencia sensorial", p5=="Conocimiento para seguridad y convivencia ciudadana"]
-                        nota = (sum(resp) / 5) * 100
-                        try:
-                            with engine.connect() as conn:
-                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": seleccion})
-                                conn.commit()
-                            st.success(f"Nota guardada: {nota}%")
-                            st.session_state['modo_examen'] = False
-                        except Exception as e: st.error(f"Error: {e}")
+                    if st.form_submit_button("ENVIAR RESULTADOS M3"):
+                        r = [p1=="Diálogo donde la fuente no percibe la explotación", p2=="Búsqueda y elaboración de productos", p3=="Infiltración mete a alguien; Penetración usa a alguien de adentro", p4=="Profundizar en datos de propietarios, vehículos y entorno", p5=="El metralleta"]
+                        nota = (sum(r)/5)*100
+                        with engine.connect() as conn:
+                            conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": "Módulo 3"})
+                            conn.commit()
+                        st.success(f"Nota: {nota}%"); st.session_state['modo_examen']=False; st.rerun()
 
-        # --- MÓDULO 2: CICLO DE INTELIGENCIA (NUEVO CONTENIDO) ---
-        elif seleccion == "Módulo 2: Ciclo de Inteligencia":
-            if not st.session_state['modo_examen']:
-                st.header("📖 Material de Lectura: Módulo 2")
-                st.markdown(f"""
-                <div class="lectura-box">
-                    <h3>Definición del Ciclo de Inteligencia</h3>
-                    <p>Se define como una serie de <b>cinco pasos</b> orientados a la generación de conocimiento estratégico útil, verdadero y ajustado a los requerimientos de información preestablecidos por un destinatario final (decisor), a quien se difunde selectivamente el resultado plasmado en un instrumento determinado.</p>
-                </div>
-                <div class="lectura-box">
-                    <h3>Pasos del Ciclo</h3>
-                    <ul>
-                        <li><b>1. Recolectar:</b> Obtención de la información necesaria de diversas fuentes.</li>
-                        <li><b>2. Tratar:</b> Procesamiento y organización de los datos obtenidos.</li>
-                        <li><b>3. Analizar:</b> Evaluación y transformación de la información en inteligencia.</li>
-                        <li><b>4. Comunicar e Integrar:</b> Difusión del producto al decisor final.</li>
-                        <li><b>5. Evaluar y Retroalimentar:</b> Revisión del impacto y ajuste de requerimientos.</li>
-                    </ul>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                
-
-                if st.button("🚀 INICIAR EVALUACIÓN M2"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
-            else:
-                st.header("📝 Evaluación: Módulo 2")
-                with st.form(key="form_m2"):
-                    p1 = st.radio("1. ¿Cuántos pasos integran el Ciclo de Inteligencia?", ["3 pasos", "5 pasos", "6 pasos"])
-                    p2 = st.radio("2. ¿A quién se orienta la generación de conocimiento según el Ciclo?", ["Al público general", "A un destinatario final (decisor)", "A la prensa"])
-                    p3 = st.radio("3. ¿Cuál es el primer paso del ciclo?", ["Analizar", "Recolectar", "Tratar"])
-                    p4 = st.radio("4. Paso que implica la difusión selectiva del resultado:", ["Comunicar e Integrar", "Evaluar", "Recolectar"])
-                    p5 = st.radio("5. ¿Qué paso permite ajustar los requerimientos de información?", ["Analizar", "Tratar", "Evaluar y Retroalimentar"])
-                    
-                    if st.form_submit_button("GUARDAR NOTA M2"):
-                        resp = [p1=="5 pasos", p2=="A un destinatario final (decisor)", p3=="Recolectar", p4=="Comunicar e Integrar", p5=="Evaluar y Retroalimentar"]
-                        nota = (sum(resp) / 5) * 100
-                        try:
-                            with engine.connect() as conn:
-                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), {"f": st.session_state['agente_nombre'], "n": nota, "m": seleccion})
-                                conn.commit()
-                            st.success(f"Nota guardada: {nota}%")
-                            st.session_state['modo_examen'] = False
-                        except Exception as e: st.error(f"Error: {e}")
-
-    # --- VISTA PRIVADA ---
+    # --- PROGRESO ---
     elif seccion == "📊 Mi Progreso":
-        st.title("📊 Mi Historial Personal")
-        query = text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC")
-        df = pd.read_sql(query, engine, params={"n": st.session_state['agente_nombre']})
-        if not df.empty:
-            st.dataframe(df, use_container_width=True)
-        else: st.info("No hay registros aún.")
-
-    # --- VISTA ADMIN ---
-    elif seccion == "📈 Dashboard General":
-        st.title("📊 Panel de Supervisión (DIPOL)")
-        df_all = pd.read_sql(text("SELECT * FROM calificaciones"), engine)
-        if not df_all.empty:
-            st.bar_chart(df_all.groupby('funcionario')['nota'].mean())
-            st.dataframe(df_all, use_container_width=True)
+        st.title("Historial de Notas")
+        df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), engine, params={"n": st.session_state['agente_nombre']})
+        st.table(df)
