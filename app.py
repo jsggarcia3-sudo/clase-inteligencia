@@ -1,4 +1,3 @@
-# ... (Viene de la configuración de la barra lateral)
 import streamlit as st
 from sqlalchemy import create_engine, text
 import pandas as pd
@@ -108,7 +107,7 @@ else:
 
     # --- SIGUIENTE SECCIÓN: MÓDULOS ---
     elif seccion == "📚 Módulos":
-        # Aquí continúa tu lógica de selectbox y contenidos...
+    # Aquí continúa tu lógica de selectbox y contenidos...
     
     elif seccion == "📚 Módulos":
         st.session_state['nav_index'] = 1
