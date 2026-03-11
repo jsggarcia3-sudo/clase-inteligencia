@@ -1056,7 +1056,7 @@ else:
             
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
-            # Título único con estilo institucional y profesional (DIPOL)
+            # Título consolidado con estilo institucional profesional
             st.markdown("""
                 <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-bottom: 4px solid #D4AF37; margin-bottom: 25px;">
                     <h1 style="color: white; margin: 0;">🛡️ Centro de Inteligencia Analítica</h1>
@@ -1070,19 +1070,19 @@ else:
                     df_raw = pd.read_sql(query, conn)
                 
                 if not df_raw.empty:
-                    # --- PROCESAMIENTO DE DATOS (Limpieza de duplicados) ---
+                    # --- PROCESAMIENTO DE DATOS ---
                     df_raw['fecha'] = pd.to_datetime(df_raw['fecha'])
-                    # Mantiene solo el último intento realizado por cada agente en cada módulo
+                    # Filtro para mantener solo el último intento por agente/módulo
                     df_all = df_raw.sort_values('fecha').drop_duplicates(subset=['funcionario', 'modulo'], keep='last')
                     df_all['fecha_display'] = df_all['fecha'].dt.strftime('%Y-%m-%d %H:%M')
                     
-                    # --- CÁLCULO DE MÉTRICAS KPI ---
+                    # --- CÁLCULO DE MÉTRICAS ---
                     promedio = df_all['nota'].mean()
                     total_eval = len(df_all)
                     aprobados = len(df_all[df_all['nota'] >= 70])
                     porcentaje_exito = (aprobados / total_eval) * 100
 
-                    # --- DISEÑO DE TARJETAS (CSS) ---
+                    # --- ESTILOS CSS PARA TARJETAS KPI ---
                     st.markdown("""
                         <style>
                         .metric-card {
@@ -1112,7 +1112,7 @@ else:
                         </style>
                     """, unsafe_allow_html=True)
 
-                    # --- FILA DE MÉTRICAS ---
+                    # --- RENDERIZADO DE MÉTRICAS ---
                     m1, m2, m3, m4 = st.columns(4)
                     with m1:
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Evaluaciones</p><p class="metric-value">{total_eval}</p></div>', unsafe_allow_html=True)
@@ -1135,7 +1135,7 @@ else:
                             st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37", use_container_width=True)
                         
                         with c2:
-                            st.subheader("Distribución de Calificaciones")
+                            st.subheader("Distribución de Niveles")
                             bins = [0, 69, 89, 100]
                             labels = ['Insuficiente (0-69)', 'Satisfactorio (70-89)', 'Sobresaliente (90-100)']
                             df_all['Nivel'] = pd.cut(df_all['nota'], bins=bins, labels=labels)
@@ -1148,7 +1148,7 @@ else:
                             search = st.text_input("🔍 Buscar funcionario...", placeholder="Ingrese nombre para filtrar")
                         with col_descarga:
                             csv = df_all.to_csv(index=False).encode('utf-8')
-                            st.download_button("Descargar CSV", data=csv, file_name='reporte_dipol.csv', use_container_width=True)
+                            st.download_button("Descargar Reporte CSV", data=csv, file_name='reporte_analitico_dipol.csv', use_container_width=True)
 
                         display_df = df_all.copy()
                         if search:
@@ -1158,21 +1158,21 @@ else:
                             display_df.sort_values(by='fecha', ascending=False),
                             column_config={
                                 "nota": st.column_config.ProgressColumn("Calificación", format="%d%%", min_value=0, max_value=100),
-                                "fecha_display": "Fecha",
+                                "fecha_display": "Fecha Registro",
                                 "funcionario": "Agente",
-                                "modulo": "Módulo"
+                                "modulo": "Módulo Evaluado"
                             },
                             column_order=("funcionario", "modulo", "nota", "fecha_display"),
                             use_container_width=True,
                             hide_index=True
                         )
 
-                    # --- ALERTAS DE SEGUIMIENTO ---
+                    # --- SECCIÓN DE ALERTAS ---
                     st.divider()
                     low_performers = df_all[df_all['nota'] < 70]
                     if not low_performers.empty:
                         with st.expander("⚠️ Alerta: Personal con necesidad de refuerzo"):
-                            st.warning(f"Se identificaron {len(low_performers)} agentes que no alcanzaron la nota mínima.")
+                            st.warning(f"Se detectaron {len(low_performers)} agentes con rendimiento por debajo del 70% en su última evaluación.")
                             st.table(low_performers[['funcionario', 'modulo', 'nota']])
 
                 else:
