@@ -129,6 +129,102 @@ else:
             st.header("📖 Módulo 1: Conceptualización")
             st.markdown("### Fundamentos de Inteligencia\nContenido en desarrollo...")
 
+        # --- MÓDULO 2: CICLO DE INTELIGENCIA ---
+        elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
+            if not st.session_state.get('modo_examen', False):
+                st.header("📖 Material: Ciclo de Inteligencia")
+                
+                st.markdown("""
+                    <div class="lectura-box" style="border-left: 5px solid #D4AF37; margin-bottom: 20px;">
+                        <h3 style="color: #D4AF37; margin-top: 0;">Definición Estratégica</h3>
+                        <p style="color: white;">Es un proceso sistemático de <b>cinco pasos</b> orientado a la generación de conocimiento útil y veraz para un decisor final. Su objetivo es transformar datos brutos en inteligencia estratégica.</p>
+                    </div>
+                """, unsafe_allow_html=True)
+
+                st.subheader("🔄 Las 5 Fases del Ciclo")
+                
+                
+                # Diseño de flujo de proceso con tarjetas
+                col_c1, col_c2 = st.columns(2)
+
+                with col_c1:
+                    st.markdown("""
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #3498db; margin-bottom: 15px;">
+                        <h4 style="color: #3498db; margin: 0;">1. Recolectar</h4>
+                        <p style="color: #ecf0f1; font-size: 0.9em;">Obtención de la <b>información bruta</b> necesaria. Es la fase de búsqueda activa en el campo y bases de datos.</p>
+                    </div>
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #9b59b6; margin-bottom: 15px;">
+                        <h4 style="color: #9b59b6; margin: 0;">2. Tratar</h4>
+                        <p style="color: #ecf0f1; font-size: 0.9em;">Procesamiento, registro y organización de los datos. Se traduce o decodifica la información para que sea legible.</p>
+                    </div>
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #f1c40f; margin-bottom: 15px;">
+                        <h4 style="color: #f1c40f; margin: 0;">3. Analizar</h4>
+                        <p style="color: #ecf0f1; font-size: 0.9em;"><b>Fase crítica:</b> Transformación de datos en inteligencia mediante la valoración, integración e interpretación.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                with col_c2:
+                    st.markdown("""
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #2ecc71; margin-bottom: 15px;">
+                        <h4 style="color: #2ecc71; margin: 0;">4. Comunicar e Integrar</h4>
+                        <p style="color: #ecf0f1; font-size: 0.9em;">Difusión selectiva de los resultados al decisor mediante instrumentos formales (Informes de Inteligencia).</p>
+                    </div>
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c; margin-bottom: 15px;">
+                        <h4 style="color: #e74c3c; margin: 0;">5. Evaluar y Retroalimentar</h4>
+                        <p style="color: #ecf0f1; font-size: 0.9em;">Revisión constante para asegurar que el producto cumple con los requerimientos originales del destinatario.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.info("**Importante:** El ciclo es dinámico. Un fallo en la fase de 'Tratar' puede invalidar todo el análisis posterior.")
+
+                st.divider()
+                
+                # Sistema de evaluación
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 2", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN M2"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
+            
+            else:
+                st.header("📝 Evaluación: Módulo 2")
+                with st.form("exam_m2"):
+                    m2_q1 = st.radio("1. ¿Cuál es el objetivo final del Ciclo de Inteligencia?", 
+                        ["Solo recolectar datos", "Generar conocimiento útil para un decisor", "Realizar capturas"])
+                    m2_q2 = st.radio("2. Fase donde la información bruta se transforma en inteligencia:", 
+                        ["Recolectar", "Analizar", "Comunicar"])
+                    m2_q3 = st.radio("3. ¿En qué consiste la fase de 'Tratar'?", 
+                        ["Difundir el informe", "Procesamiento y organización de los datos", "Retroalimentar al jefe"])
+                    m2_q4 = st.radio("4. ¿Cuál es el último paso del ciclo según el material?", 
+                        ["Comunicar e Integrar", "Evaluar y Retroalimentar", "Tratar"])
+                    m2_q5 = st.radio("5. ¿A quién se le difunde el resultado del ciclo?", 
+                        ["Al público general", "Al destinatario final (Decisor)", "A todas las unidades"])
+
+                    if st.form_submit_button("FINALIZAR EXAMEN"):
+                        res_m2 = [
+                            m2_q1 == "Generar conocimiento útil para un decisor",
+                            m2_q2 == "Analizar",
+                            m2_q3 == "Procesamiento y organización de los datos",
+                            m2_q4 == "Evaluar y Retroalimentar",
+                            m2_q5 == "Al destinatario final (Decisor)"
+                        ]
+                        nota_m2 = (sum(res_m2) / len(res_m2)) * 100
+                        try:
+                            with engine.begin() as conn:
+                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
+                                           {"f": st.session_state['agente_nombre'], "n": nota_m2, "m": "Módulo 2"})
+                        except:
+                            st.error("Error al guardar nota en DB")
+                        
+                        st.session_state['modo_examen'] = False
+                        st.rerun()
+                        
         # --- MÓDULO 3: RECOLECCIÓN DE INFORMACIÓN ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state.get('modo_examen', False):
