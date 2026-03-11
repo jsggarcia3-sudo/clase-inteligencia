@@ -144,3 +144,19 @@ else:
         try:
             query = text("SELECT modulo, nota FROM calificaciones WHERE funcionario = :f")
             with engine.connect() as conn:
+                df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), conn, params={"n": st.session_state['agente_nombre']})
+            if not df.empty:
+                st.dataframe(df, use_container_width=True)
+            else: st.info("No hay registros aún.")
+        except: st.info("No hay registros aún.")
+
+elif seccion == "📈 Dashboard General":
+        if st.session_state['es_admin']:
+            st.title("🛡️ Panel Administrativo")
+            with engine.connect() as conn:
+                df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
+            st.dataframe(df_all, use_container_width=True)
+            st.divider()
+            if not df_all.empty:
+                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
+        else: st.warning("Acceso restringido a administradores.")
