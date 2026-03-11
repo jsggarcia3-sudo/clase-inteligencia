@@ -43,6 +43,27 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
+# 2. AGREGA AQUÍ EL CÓDIGO DE LA MARCA DE AGUA
+agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
+
+st.markdown(f"""
+    <style>
+    .watermark {{
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-45deg);
+        font-size: 80px;
+        color: rgba(212, 175, 55, 0.05); /* Muy sutil para no estorbar la lectura */
+        z-index: 9999;
+        pointer-events: none;
+        white-space: nowrap;
+        user-select: none;
+    }}
+    </style>
+    <div class="watermark">{agente_actual}</div>
+""", unsafe_allow_html=True)
+
 # 2. GESTIÓN DE SESIÓN
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
