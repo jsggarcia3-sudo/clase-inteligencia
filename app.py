@@ -133,16 +133,22 @@ else:
 
     # --- RESTO DE SECCIONES (Manteniendo el estándar profesional) ---
     elif seccion == "📚 Módulos":
-        st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📚 Centro de Documentación</h2>", unsafe_allow_html=True)
+        st.session_state['nav_index'] = 1
         lista_modulos = [
             "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
             "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
             "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
         ]
         
-        modulo_selec = st.selectbox("Seleccione la unidad temática a visualizar:", lista_modulos)
+        try:
+            idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
+        except ValueError:
+            idx_mod = 0
+            
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
+        st.session_state['modulo_activo'] = modulo_selec
+
         st.divider()
-        st.info(f"Cargando material académico para: {modulo_selec}")
 
     elif seccion == "📊 Mi Progreso":
         st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📊 Expediente de Calificaciones</h2>", unsafe_allow_html=True)
