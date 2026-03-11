@@ -905,8 +905,7 @@ else:
                     st.session_state['modo_examen'] = False
                     st.rerun()
                     
-        # --- MÓDULO 6: COMUNICAR E INTEGRAR (CONTENIDO COMPLETO) ---
-        # --- MÓDULO 6: COMUNICACIÓN ---
+        # --- MÓDULO 6: COMUNICAR E INTEGRAR ---
         elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state.get('modo_examen', False):
                 st.header("📢 Material: Comunicar e Integrar")
@@ -922,6 +921,8 @@ else:
                 
                 with tab_pasos:
                     st.subheader("Procedimiento Estándar de Difusión")
+                    
+                    # Diseño de pasos en cascada
                     pasos = [
                         {"n": "1", "t": "Identificar el Receptor", "d": "Nombres, cargo y lugar de recepción pactado con el usuario."},
                         {"n": "2", "t": "Selección del Canal", "d": "Definir si será Virtual (correo cifrado), Físico o Entrega Exclusiva."},
@@ -929,6 +930,7 @@ else:
                         {"n": "4", "t": "Difusión del PTI", "d": "Entrega formal al destinatario final según el portafolio de receptores."},
                         {"n": "5", "t": "Registro en Base de Datos", "d": "Registro digital o planilla física (si es entrega exclusiva)."}
                     ]
+                    
                     for p in pasos:
                         st.markdown(f"""
                         <div style="background-color: #002147; border-left: 5px solid #D4AF37; padding: 15px; border-radius: 5px; margin-bottom: 10px;">
@@ -939,25 +941,45 @@ else:
 
                 with tab_ejemplos:
                     st.subheader("Ejemplos de Aplicación")
+                    
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""
+                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo A: Canal Virtual</h4>
-                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Envío de reporte diario.<br><b>Acción:</b> Email con PDF cifrado PGP.</p></div>""", unsafe_allow_html=True)
+                            <p style="font-size: 0.9em; color: white;">
+                            <b>Escenario:</b> Envío de reporte diario de criminalidad.<br><br>
+                            <b>Acción:</b> Se utiliza el e-mail institucional con un archivo PDF protegido por contraseña y cifrado PGP. <br><br>
+                            <b>Registro:</b> Se guarda el LOG de envío en el sistema centralizado.
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
+                    
                     with col2:
-                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""
+                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo B: Entrega Exclusiva</h4>
-                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Orden de captura.<br><b>Acción:</b> Sobre sellado y firma en planilla.</p></div>""", unsafe_allow_html=True)
+                            <p style="font-size: 0.9em; color: white;">
+                            <b>Escenario:</b> Orden de captura para blanco de alto valor.<br><br>
+                            <b>Acción:</b> Entrega en sobre sellado con cinta de seguridad directamente al Director de Inteligencia.<br><br>
+                            <b>Registro:</b> Firma obligatoria en la planilla de difusión física.
+                            </p>
+                        </div>
+                        """, unsafe_allow_html=True)
 
                 with tab_seguridad:
                     st.subheader("Medidas de Protección del Producto")
-                    st.markdown("""<div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
+                    
+                    st.markdown("""
+                    <div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
                         <ul style="color: white; line-height: 1.8;">
-                            <li><b>Clasificación:</b> RESERVADO o SECRETO.</li>
-                            <li><b>Encriptación:</b> Algoritmos digitales.</li>
-                            <li><b>Embalaje:</b> Sobres de seguridad.</li>
-                            <li><b>Codificación:</b> Uso de alias.</li>
-                        </ul></div>""", unsafe_allow_html=True)
+                            <li><b>Clasificación:</b> Marcar claramente como <b>RESERVADO</b> o <b>SECRETO</b> según la ley.</li>
+                            <li><b>Encriptación:</b> Uso de algoritmos para proteger datos digitales (Cifrado de disco o archivos).</li>
+                            <li><b>Embalaje:</b> Uso de sobres de seguridad que evidencien manipulación física.</li>
+                            <li><b>Codificación:</b> Uso de lenguaje convenido o alias para evitar lectura de terceros no autorizados.</li>
+                        </ul>
+                    </div>
+                    """, unsafe_allow_html=True)
 
                 st.divider()
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
@@ -965,21 +987,29 @@ else:
                     st.rerun()
 
             else:
-                # --- EXAMEN MÓDULO 6 (Correctamente indentado) ---
-                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: M6</h2>", unsafe_allow_html=True)
+                # --- BLOQUE DE EXAMEN M6 (CORREGIDO) ---
+                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: MÓDULO 6</h2>", unsafe_allow_html=True)
+                st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
+
                 with st.form("examen_m6"):
-                    q1 = st.radio("1. ¿Premisa fundamental?", ["A", "Llegue en momento oportuno", "C"], index=None)
-                    q2 = st.selectbox("2. Primer paso:", [None, "Seleccionar canal", "Identificar receptor"])
+                    q1 = st.radio("1. ¿Cuál es la premisa fundamental de la comunicación en inteligencia?",
+                        ["Almacenar información indefinidamente", "Que llegue al decisor en el momento oportuno", "Publicar resultados en medios abiertos"], index=None)
+                    
+                    q2 = st.selectbox("2. ¿Primer paso antes de realizar la difusión?",
+                        [None, "Seleccionar el canal", "Identificar al receptor (nombre/cargo)", "Aplicar encriptación"])
+                    
+                    q3 = st.radio("3. ¿Qué medida garantiza físicamente que el contenido no fue manipulado?",
+                        ["Email institucional", "Embalaje en sobres de seguridad con cinta de evidencia", "Uso de alias"], index=None)
+
                     enviar_m6 = st.form_submit_button("REGISTRAR RESULTADOS")
 
-                    if enviar_m6:
-                        st.success("Nota registrada correctamente.")
+                if enviar_m6:
+                    # Lógica de guardado simplificada para este ejemplo
+                    st.success("Nota registrada en la base de datos de DIPOL.")
                 
                 if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
-
-        # --- SIGUIENTE MÓDULO (Ahora sí puede ir aquí) ---
         elif modulo_selec == "Módulo 7: Evaluación":
              st.write("Contenido del Módulo 7...")
 ¿Quieres que te ayude a redactar las preguntas reales para el Módulo 7 ahora que la estructura está fija?
