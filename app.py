@@ -106,7 +106,6 @@ else:
                     st.rerun()
 
     # --- SIGUIENTE SECCIÓN: MÓDULOS ---
-    # --- SIGUIENTE SECCIÓN: MÓDULOS ---
     elif seccion == "📚 Módulos":
         st.session_state['nav_index'] = 1
         lista_modulos = [
@@ -134,6 +133,115 @@ else:
             st.header("📊 Módulo 4: Tratamiento de Datos")
             st.image("image_3fdba2.png", caption="Matriz de Evaluación de Inteligencia")
 
+        # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
+        elif modulo_selec == "Módulo 5: Análisis":
+            if not st.session_state.get('modo_examen', False):
+                st.header("🧠 Material: Análisis de la Información")
+                
+                # PESTAÑAS DEL MÓDULO 5
+                tab_estudio, tab_proceso, tab_lca, tab_sintesis = st.tabs([
+                    "🔬 Estudio Especializado", 
+                    "🧩 Proceso de Análisis", 
+                    "⏳ Línea LCA",
+                    "💡 Síntesis y Resultados"
+                ])
+                
+                with tab_estudio:
+                    st.subheader("Estudio Especializado de la Información")
+                    st.write("El análisis es un proceso cuyo objeto es **generar conocimiento**, con base en la información disponible.")
+                    
+                    # Representación visual del flujo
+                    st.markdown("""
+                    <div style="display: flex; align-items: center; justify-content: center; background-color: #001f3f; padding: 20px; border-radius: 10px; border: 1px solid #D4AF37;">
+                        <div style="background-color: #0056b3; color: white; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; width: 25%;">
+                            ESTUDIO ESPECIALIZADO DE INFORMACIÓN
+                        </div>
+                        <div style="width: 50%; padding: 0 20px;">
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">INTERPRETACIÓN</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">INTEGRACIÓN</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">HIPÓTESIS</div>
+                            <div style="background-color: #a9a9a9; color: #1a1a1a; margin: 5px; padding: 8px; border-radius: 3px; text-align: center; font-weight: bold; clip-path: polygon(0% 0%, 90% 0%, 100% 50%, 90% 100%, 0% 100%);">CONCLUSIONES</div>
+                        </div>
+                        <div style="background-color: #f0f0f0; color: #333; padding: 20px; border-radius: 5px; text-align: center; font-weight: bold; width: 25%; border: 2px dashed #0056b3;">
+                            GENERAR CONOCIMIENTO A PARTIR DE LA INFORMACIÓN
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    
+                    st.info("""
+                    **Fases del Análisis:**
+                    1. **Interpretación:** Dar sentido a los datos aislados.
+                    2. **Integración:** Unir piezas para ver el cuadro completo.
+                    3. **Hipótesis:** Plantear suposiciones técnicas fundamentadas.
+                    4. **Conclusiones:** Resultados finales derivados del razonamiento.
+                    """)
+
+                with tab_proceso:
+                    st.subheader("🧩 El Proceso Analítico (Descomposición)")
+                    
+                    # Panel Superior de Actividades
+                    st.markdown("""
+                    <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                        <div style="display: flex; justify-content: center; gap: 15px;">
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Seleccionar</div>
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Clasificar</div>
+                            <div style="background: white; border: 1px solid #999; padding: 5px 15px; color: #002b55; font-weight: bold;">Organizar</div>
+                        </div>
+                        <div style="display: flex; justify-content: center; gap: 15px; margin-top: 10px;">
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Identificar</div>
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Temas</div>
+                            <div style="background: #e9ecef; border: 1px solid #999; padding: 5px 15px; color: #333;">Ideas</div>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                    col_f1, col_f2, col_f3 = st.columns(3)
+                    with col_f1:
+                        st.markdown('<div style="text-align:center; background:#f2dede; padding:15px; border-radius:10px; min-height:180px; color:#a94442;">'
+                                    '<h3>EL TODO</h3>🧩<br><small>Objeto de análisis completo. Búsqueda de tendencias y patrones generales.</small></div>', unsafe_allow_html=True)
+                    with col_f2:
+                        st.markdown('<div style="text-align:center; background:#fcf8e3; padding:15px; border-radius:10px; min-height:180px; color:#8a6d3b;">'
+                                    '<h3>ANALIZAR</h3>🔍<br><small>Descomponer. Identificar cada elemento individual que modifica el patrón.</small></div>', unsafe_allow_html=True)
+                    with col_f3:
+                        st.markdown('<div style="text-align:center; background:#d9edf7; padding:15px; border-radius:10px; min-height:180px; color:#31708f;">'
+                                    '<h3>SINTETIZAR</h3>💡<br><small>Recomponer. Entender el nuevo significado de las partes sumadas.</small></div>', unsafe_allow_html=True)
+                    st.caption("Analizar es descomponer el todo; sintetizar es recomponer para entender el significado final.")
+
+                with tab_lca:
+                    st.subheader("⏳ LCA: Línea del Conocimiento Analítico")
+                    
+                    st.markdown("""
+                    <div style="display: flex; justify-content: space-around; align-items: center; background: linear-gradient(90deg, #2c5d63, #c0392b, #f39c12); padding: 30px; border-radius: 15px; color: white; font-weight: bold; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                        <div style="text-align: center;">PASADO<br><span style="font-weight:normal; font-size:0.8em;">Antecedentes<br>Memoria Histórica</span></div>
+                        <div style="font-size: 2em;">➔</div>
+                        <div style="text-align: center; background: rgba(255,255,255,0.2); padding: 10px; border-radius: 10px;">PRESENTE<br><span style="font-weight:normal; font-size:0.8em;">Situación Actual<br>Interpretación</span></div>
+                        <div style="font-size: 2em;">➔</div>
+                        <div style="text-align: center;">FUTURO<br><span style="font-weight:normal; font-size:0.8em;">Proyección<br>Prospectiva</span></div>
+                    </div>
+                    """, unsafe_allow_html=True)
+                    st.info("La LCA permite transformar la memoria histórica en proyecciones mediante la interpretación técnica del presente.")
+
+                with tab_sintesis:
+                    st.subheader("🎯 Resultados y Cursos de Acción")
+                    st.markdown("""
+                    El análisis genera conocimiento estratégico para:
+                    * **Formular Hipótesis:** Suposiciones basadas en datos técnicos y evidencia recolectada.
+                    * **Definir Escenarios:** Identificar las posibles evoluciones de un fenómeno criminal o social.
+                    * **Cursos de Acción:** Recomendaciones específicas para que el mando tome decisiones acertadas.
+                    """)
+                    st.warning("⚠️ Sin una síntesis clara que oriente la acción, la inteligencia pierde su valor operativo.")
+
+                st.divider()
+                if st.button("🚀 INICIAR EXAMEN MÓDULO 5"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
+            else:
+                st.subheader("📝 Examen de Conocimientos - M5")
+                # Espacio para el formulario de examen
+                if st.button("⬅️ Volver al Material"):
+                    st.session_state['modo_examen'] = False
+                    st.rerun()
+                    
         # --- MÓDULO 6: COMUNICAR E INTEGRAR (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state.get('modo_examen', False):
