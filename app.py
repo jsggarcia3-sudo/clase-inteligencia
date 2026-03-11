@@ -30,82 +30,70 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
-# 4. ESTILOS VISUALES
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL
+st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
+
 st.markdown("""
     <style>
     .stApp { background-color: #001226; }
-    h1, h2, h3 { color: #D4AF37 !important; font-family: 'Segoe UI', sans-serif; }
-    .stMetric { background-color: #002147; border: 1px solid #30363d; padding: 20px; border-radius: 12px; }
-    [data-testid="stMetricValue"] { color: #D4AF37 !important; font-size: 3rem !important; font-weight: 800; }
-    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; border: none; }
-    .stButton>button:hover { background-color: #ffffff; color: #001226; }
+    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; }
+    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
+    h1, h2, h3, h4 { color: #D4AF37 !important; }
+    .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
-# 5. GESTIÓN DE SESIÓN
+# 2. GESTIÓN DE SESIÓN
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
 if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
+if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
 
 def login():
-    st.markdown("<h1 style='text-align: center; font-size: 3em;'>🛡️ SISTEMA DIPOL</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1,1.5,1])
     with col2:
-        with st.form("login_form"):
-            st.write("### Identificación de Funcionario")
-            nombre = st.text_input("Nombre Completo")
-            usuario = st.text_input("Usuario")
-            clave = st.text_input("Contraseña", type="password")
-            submit = st.form_submit_button("ACCEDER AL SISTEMA")
-            
-            if submit:
-                if usuario == "admin_dipol" and clave == "DIPOL2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Administrador"})
-                    st.rerun()
-                elif nombre and usuario and clave == "ESTUDIANTE2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                    st.rerun()
-                else:
-                    st.error("Credenciales incorrectas o campos vacíos.")
+        st.write("### Identificación de Funcionario")
+        nombre = st.text_input("Nombre Completo")
+        usuario = st.text_input("Usuario")
+        clave = st.text_input("Contraseña", type="password")
+        if st.button("ACCEDER"):
+            if usuario == "admin_dipol" and clave == "DIPOL2026":
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                st.rerun()
+            elif nombre and usuario and clave == "ESTUDIANTE2026":
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                st.rerun()
+            else: st.error("Credenciales incorrectas.")
 
-# 6. LÓGICA DE NAVEGACIÓN
+def verificar_intento(nombre, modulo, engine):
+    try:
+        query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
+        with engine.connect() as conn:
+            result = conn.execute(query, {"f": nombre, "m": modulo}).fetchone()
+        return result[0] if result else None
+    except: return None
+
 if not st.session_state['autenticado']:
     login()
 else:
-    # BARRA LATERAL (Sidebar con diseño Institucional)
+    db_s = st.secrets["connections"]["postgresql"]
+    engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
+
     with st.sidebar:
-        st.markdown(f"""
-            <div style="text-align: center; padding: 10px; border-bottom: 2px solid #D4AF37; margin-bottom: 20px;">
-                <h2 style="color: white; margin:0;">🛡️ DIPOL</h2>
-                <p style="color: #D4AF37; font-size: 0.8em; letter-spacing: 2px;">CENTRO DE INTELIGENCIA</p>
-            </div>
-        """, unsafe_allow_html=True)
-        
-        # Sincronización de navegación
-        opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
-        seccion = st.radio("MENÚ PRINCIPAL", opciones, index=st.session_state.get('nav_index', 0))
-        
-        st.markdown("---")
-        st.write(f"**Usuario:** {st.session_state['agente_nombre']}")
-        
+        st.title("📂 MENÚ")
+        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
-            st.rerun()     
-
-    # --- CONTENIDO DE LAS SECCIONES ---
+            st.rerun()
+            
     if seccion == "🏠 Inicio":
-        st.session_state['nav_index'] = 0
-        
-        # Encabezado de Bienvenida (Diseño Elevado)
-        st.markdown(f"""
-        <div style="background: linear-gradient(90deg, #001226 0%, #002147 100%); 
-                    padding: 30px; border-radius: 15px; border-left: 5px solid #D4AF37; 
-                    text-align: center; margin-bottom: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-            <h1 style="color: white !important; margin: 0; font-size: 2.2em;">Panel de Capacitación Estratégica</h1>
-            <p style="color: #D4AF37; font-size: 1.1em; opacity: 0.9;">Agente: <b>{st.session_state['agente_nombre']}</b> | <span style="color: #4CAF50;">● Conexión Asegurada</span></p>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
+        st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
+        st.divider()
 
+        # Definición de los 7 módulos con sus iconos y descripciones cortas
         modulos_home = [
             {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
             {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -116,76 +104,43 @@ else:
             {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
         ]
 
-        # Grilla de Tarjetas Profesionales
-        cols = st.columns(3)
+        # Creación de la Grilla Tecnológica (Cards)
+        cols = st.columns(3) # Organizado en 3 columnas
+
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
-                # Estilo Glassmorphism para las tarjetas
                 st.markdown(f"""
-                <div style="background: rgba(255, 255, 255, 0.03); 
-                            padding: 25px; border-radius: 20px; border: 1px solid rgba(212, 175, 55, 0.3); 
-                            text-align: center; margin-bottom: 10px; box-shadow: 0 8px 32px rgba(0,0,0,0.3); 
-                            min-height: 200px; backdrop-filter: blur(4px);">
-                    <div style="font-size: 3.5em; margin-bottom: 10px; filter: drop-shadow(0 0 5px #D4AF37);">{m['icon']}</div>
-                    <h3 style="color: #D4AF37 !important; margin: 0; text-transform: uppercase; letter-spacing: 1px;">{m['tit']}</h3>
-                    <p style="color: #ffffff; font-size: 0.9em; opacity: 0.7;">{m['sub']}</p>
+                <div style="background: linear-gradient(145deg, #002147, #001226); 
+                            padding: 25px; 
+                            border-radius: 15px; 
+                            border: 1px solid #D4AF37; 
+                            text-align: center; 
+                            margin-bottom: 20px;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                            min-height: 220px;">
+                    <div style="font-size: 3em; margin-bottom: 10px;">{m['icon']}</div>
+                    <h3 style="color: #D4AF37; margin: 0;">{m['tit']}</h3>
+                    <p style="color: #ffffff; font-size: 0.9em; opacity: 0.8;">{m['sub']}</p>
                 </div>
                 """, unsafe_allow_html=True)
                 
-                if st.button(f"ACCEDER AL {m['id']}", key=f"btn_home_{m['id']}"):
+                if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
                     st.session_state['modulo_activo'] = m['full']
-                    st.session_state['nav_index'] = 1 
-                    st.rerun()
+                    st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
 
+        st.markdown("---")
+        st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
+        
     elif seccion == "📚 Módulos":
-        st.session_state['nav_index'] = 1
-        st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📚 Centro de Documentación</h2>", unsafe_allow_html=True)
-        
-        lista_modulos = [
-            "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
-            "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
-            "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
-        ]
-        
-        try:
-            idx_mod = lista_modulos.index(st.session_state.get('modulo_activo', lista_modulos[0]))
-        except ValueError:
-            idx_mod = 0
-            
-        modulo_selec = st.selectbox("Seleccione Unidad Temática:", lista_modulos, index=idx_mod)
-        st.session_state['modulo_activo'] = modulo_selec
-        st.divider()
-        
-        # Espacio para el contenido del módulo
-        st.subheader(f"Contenido: {modulo_selec}")
-        st.info("Visualizando material oficial de la Dirección de Inteligencia Policial.")
-
-    elif seccion == "📊 Mi Progreso":
-        st.session_state['nav_index'] = 2
-        st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📊 Mi Expediente</h2>", unsafe_allow_html=True)
-        df = cargar_datos_agente(st.session_state['agente_nombre'])
-        if not df.empty:
-            c1, c2 = st.columns(2)
-            c1.metric("PROMEDIO ACUMULADO", f"{df['nota'].mean():.1f}%")
-            c2.metric("EVALUACIONES REALIZADAS", len(df))
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        else:
-            st.info("No se registran datos académicos en este expediente.")
-
-    elif seccion == "📈 Dashboard General":
-        st.session_state['nav_index'] = 3
-        if st.session_state['es_admin']:
-            st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📈 Inteligencia de Negocios</h2>", unsafe_allow_html=True)
-            df_all = cargar_todo_admin()
-            if not df_all.empty:
-                m1, m2, m3 = st.columns(3)
-                m1.metric("AGENTES ACTIVOS", df_all['funcionario'].nunique())
-                m2.metric("RENDIMIENTO GLOBAL", f"{df_all['nota'].mean():.1f}%")
-                m3.metric("TOTAL REGISTROS", len(df_all))
-                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
-        else:
-            st.error("🚫 Acceso restringido a personal administrativo.")
-        
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", [
+            "Módulo 1: Conceptualización", 
+            "Módulo 2: Ciclo de Inteligencia", 
+            "Módulo 3: Recolección", 
+            "Módulo 4: Tratamiento", 
+            "Módulo 5: Análisis", 
+            "Módulo 6: Comunicación", 
+            "Módulo 7: Evaluación"
+                
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state.get('modo_examen', False):
