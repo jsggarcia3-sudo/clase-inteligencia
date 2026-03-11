@@ -985,9 +985,9 @@ else:
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
-           else:
-                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: COMUNICACIÓN E INTEGRACIÓN</h2>", unsafe_allow_html=True)
-                st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
+               else:
+                    st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: COMUNICACIÓN E INTEGRACIÓN</h2>", unsafe_allow_html=True)
+                    st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
 
                 with st.form("examen_m6"):
                     # Pregunta 1: El propósito de la comunicación
