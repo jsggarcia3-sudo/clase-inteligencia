@@ -961,7 +961,6 @@ else:
                     st.rerun()
 
     elif seccion == "📊 Mi Progreso":
-        # Banner Superior Estilizado
         st.markdown(f"""
             <div style="background: linear-gradient(90deg, #001f3f 0%, #003366 100%); padding: 20px; border-radius: 15px; border-left: 8px solid #D4AF37; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                 <h1 style="color: white; margin: 0; font-family: sans-serif;">📊 Mi Expediente Académico</h1>
@@ -970,61 +969,45 @@ else:
         """, unsafe_allow_html=True)
 
         try:
-            # Llamamos a la función con caché (Carga instantánea)
+            # Intentar cargar datos
             df = cargar_datos_agente(st.session_state['agente_nombre'])
             
             if not df.empty:
-                # --- MÉTRICAS PRO (Grandes y Llamativas) ---
                 promedio = df['nota'].mean()
-                total_examenes = len(df)
                 
-                # CSS para que los números se vean grandes como en el Dashboard
+                # --- ESTILOS DE MÉTRICAS GRANDES ---
                 st.markdown("""
                     <style>
+                    [data-testid="stMetricValue"] { color: #D4AF37 !important; font-size: 3.5rem !important; font-weight: 900 !important; }
                     .stMetric { background-color: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 12px; }
-                    [data-testid="stMetricValue"] { color: #D4AF37; font-size: 3rem !important; font-weight: 800; }
                     </style>
                 """, unsafe_allow_html=True)
 
-                c1, c2, c3 = st.columns(3)
-                with c1:
+                col1, col2 = st.columns(2)
+                with col1:
                     st.metric("Mi Promedio", f"{promedio:.1f}%")
-                with c2:
-                    st.metric("Módulos", total_examenes)
-                with c3:
-                    # Cálculo de estado dinámico
-                    estado = "APROBADO" if promedio >= 70 else "REPASO"
-                    color_estado = "#2ecc71" if estado == "APROBADO" else "#e74c3c"
-                    st.markdown(f"""
-                        <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 12px; text-align: center;">
-                            <p style="color: #8b949e; margin: 0; font-size: 0.8em; font-weight: bold;">ESTADO FINAL</p>
-                            <h2 style="color: {color_estado}; margin: 5px 0 0 0; font-size: 1.8em;">{estado}</h2>
-                        </div>
-                    """, unsafe_allow_html=True)
+                with col2:
+                    st.metric("Evaluaciones", len(df))
 
                 st.write("---")
-
-                # --- TABLA CON BARRA DE PROGRESO ---
-                st.subheader("📜 Historial de Calificaciones")
                 
-                # Limpieza de fecha para que se vea pro
-                df['fecha'] = pd.to_datetime(df['fecha']).dt.strftime('%d/%m/%Y %H:%M')
-                
+                # Tabla Pro con Progress Bar
                 st.dataframe(
                     df,
                     column_config={
-                        "nota": st.column_config.ProgressColumn("Resultado", format="%d%%", min_value=0, max_value=100),
-                        "modulo": "Módulo de Inteligencia",
-                        "fecha": "Fecha de Examen"
+                        "nota": st.column_config.ProgressColumn("Nota Final", format="%d%%", min_value=0, max_value=100),
+                        "modulo": "Módulo",
+                        "fecha": "Fecha"
                     },
-                    use_container_width=True,
-                    hide_index=True
+                    use_container_width=True, hide_index=True
                 )
-            else: 
-                st.info("Aún no tienes registros. Completa tu primera evaluación en la sección de módulos.")
-                
-        except Exception as e: 
-            st.error("No se pudo conectar con el servidor de inteligencia.")
+            else:
+                st.info("Aún no hay evaluaciones registradas para este agente.")
+
+        except Exception as e:
+            # Esto te dirá el error real si vuelve a fallar
+            st.error(f"Error técnico de conexión: {e}")
+            st.warning("Asegúrate de que la variable 'engine' esté definida al inicio del script.")
             
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
