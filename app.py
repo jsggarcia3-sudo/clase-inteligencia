@@ -48,23 +48,6 @@ agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
 
 st.markdown(f"""
     <style>
-    .sidebar .stRadio > label {
-        font-weight: 600;
-        color: #D4AF37;
-    }
-    .sidebar {
-        background: linear-gradient(180deg, #0A0F24, #1C1F33);
-        color: white;
-    }
-    .sidebar .stButton>button {
-        background-color: #D4AF37;
-        color: black;
-        font-weight: bold;
-        border-radius: 8px;
-    }
-</style>
-
-    <style>
     .watermark {{
         position: fixed;
         top: 50%;
