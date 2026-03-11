@@ -987,18 +987,54 @@ else:
                     porcentaje_exito = (aprobados / total_eval) * 100
 
                     # CSS para personalizar las métricas (Cards)
+                    # --- DISEÑO DE TARJETAS PRO ---
                     st.markdown("""
                         <style>
-                        [data-testid="stMetric"] { background-color: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 15px; }
-                        [data-testid="stMetricValue"] { color: #D4AF37; }
+                        .metric-card {
+                            background: linear-gradient(145deg, #161b22, #0d1117);
+                            border: 1px solid #30363d;
+                            border-top: 3px solid #D4AF37;
+                            border-radius: 12px;
+                            padding: 20px;
+                            text-align: center;
+                            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                            transition: transform 0.3s ease;
+                        }
+                        .metric-card:hover {
+                            transform: translateY(-5px);
+                            border-top: 3px solid #ffffff;
+                            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+                        }
+                        .metric-title {
+                            color: #8b949e;
+                            font-size: 0.8em;
+                            font-weight: bold;
+                            text-transform: uppercase;
+                            letter-spacing: 1px;
+                            margin-bottom: 10px;
+                        }
+                        .metric-value {
+                            color: #D4AF37;
+                            font-size: 2.2em;
+                            font-weight: 800;
+                            margin: 0;
+                            font-family: 'Courier New', Courier, monospace;
+                        }
                         </style>
                     """, unsafe_allow_html=True)
 
-                    k1, k2, k3, k4 = st.columns(4)
-                    k1.metric("Evaluaciones", total_eval)
-                    k2.metric("Promedio General", f"{promedio:.1f}%")
-                    k3.metric("Tasa de Éxito", f"{porcentaje_exito:.1f}%")
-                    k4.metric("Agentes", df_all['funcionario'].nunique())
+                    m1, m2, m3, m4 = st.columns(4)
+
+                    with m1:
+                        st.markdown(f'<div class="metric-card"><p class="metric-title">Evaluaciones</p><p class="metric-value">{total_eval}</p></div>', unsafe_allow_html=True)
+                    with m2:
+                        st.markdown(f'<div class="metric-card"><p class="metric-title">Promedio</p><p class="metric-value">{promedio:.1f}%</p></div>', unsafe_allow_html=True)
+                    with m3:
+                        # Color dinámico para la tasa de éxito (Verde si es buena, Dorado si es regular)
+                        color_tasa = "#2ecc71" if porcentaje_exito >= 80 else "#D4AF37"
+                        st.markdown(f'<div class="metric-card"><p class="metric-title">Tasa Éxito</p><p class="metric-value" style="color: {color_tasa};">{porcentaje_exito:.1f}%</p></div>', unsafe_allow_html=True)
+                    with m4:
+                        st.markdown(f'<div class="metric-card"><p class="metric-title">Agentes</p><p class="metric-value">{df_all["funcionario"].nunique()}</p></div>', unsafe_allow_html=True)
 
                     st.write("") # Espaciador
 
