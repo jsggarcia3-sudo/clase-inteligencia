@@ -263,17 +263,52 @@ else:
                     st.divider()
 
                 with t4:
-                    st.subheader("La Entrevista de Inteligencia")
+                    st.subheader("🎤 La Entrevista de Inteligencia")
+                    
                     st.markdown("""
-                    **Etapas Críticas:**
-                    1. **Planeación:** Definir qué queremos saber.
-                    2. **Desarrollo:** Mantener armonía (**Rapport**) sin perder el control.
-                    3. **Terminación:** Al agotar la exploración.
-                    4. **Informe:** Documentar y procesar para la administración.
-                    """)
-                    st.error("**EVITAR:** Ser un entrevistador 'Sordo' (solo mira el papel) o 'Metralleta' (preguntas sin parar).")
+                        <div class="lectura-box" style="border-left: 5px solid #e74c3c;">
+                            <h4 style="color: #e74c3c; margin-top: 0;">Tipos de Entrevistador a EVITAR</h4>
+                            <p style="color: white;">Para una recolección efectiva, el entrevistador debe mantener el equilibrio y el control. Evite caer en los siguientes perfiles:</p>
+                        </div>
+                    """, unsafe_allow_html=True)
 
-                st.divider()
+                    # Diseño en rejilla para los perfiles
+                    col_e1, col_e2 = st.columns(2)
+
+                    with col_e1:
+                        st.markdown("""
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">🌟 El Estrella</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">Se siente superior a la fuente, habla más que él, lo interrumpe, hace largas preguntas y utiliza un lenguaje rebuscado.</p>
+                        </div>
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">🏃 El Improvisado</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">Hace su trabajo desordenado y a la carrera. No prepara nada, pues confía ciegamente en su capacidad de improvisar.</p>
+                        </div>
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">🌀 El Enredado</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">Le da muchas vueltas a un tema, usa palabras difíciles y complejas que confunden la comunicación.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with col_e2:
+                        st.markdown("""
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">📉 El Estrellado</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">Se siente menos que la fuente, es tímido, de voz baja, permite hablar largo rato sin orientar y deja desviar el tema.</p>
+                        </div>
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">🔇 El Sordo</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">Se preocupa demasiado por su cuestionario o por el entorno y olvida lo esencial: escuchar a la fuente.</p>
+                        </div>
+                        <div style="background-color: #262626; padding: 15px; border-radius: 10px; margin-bottom: 15px; border-right: 4px solid #D4AF37;">
+                            <h5 style="color: #D4AF37; margin: 0;">🔫 El Metralleta</h5>
+                            <p style="color: #ecf0f1; font-size: 0.85em;">La fuente no tiene tiempo de responder porque el entrevistador ya le está sugiriendo la siguiente pregunta.</p>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    st.info("**Nota Técnica:** El éxito de la entrevista radica en el **Rapport** (establecimiento de sintonía) y la escucha activa.")
+                    st.divider()
                 # Verifica si la función verificar_intento existe en tu código base
                 try:
                     nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 3", engine)
