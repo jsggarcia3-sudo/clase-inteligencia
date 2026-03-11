@@ -1010,8 +1010,8 @@ else:
                     st.session_state['modo_examen'] = False
                     st.rerun()
 
+        # --- MÓDULO 7: EVALUACIÓN Y RETROALIMENTACIÓN ---
         elif modulo_selec == "Módulo 7: Evaluación":
-            # Aquí va todo tu contenido del Módulo 7 que pasaste antes
             if not st.session_state.get('modo_examen', False):
                 st.header("🔄 Material: Evaluar y Retroalimentar")
                 
@@ -1067,8 +1067,58 @@ else:
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 7"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
+            
             else:
-                st.subheader("📝 Examen Módulo 7 en curso...")
+                # --- EXAMEN MÓDULO 7 ---
+                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: MÓDULO 7</h2>", unsafe_allow_html=True)
+                
+                with st.form("examen_m7"):
+                    q1 = st.radio("1. ¿Cuál es el objetivo principal de la fase de Evaluación?",
+                        ["Almacenar reportes antiguos", "Identificar oportunidades de mejoramiento del servicio", "Sancionar al personal"], index=None)
+                    
+                    q2 = st.selectbox("2. ¿En qué sistema se realiza la trazabilidad de acciones y planes?",
+                        [None, "Excel Local", "Sistema SINAI", "WhatsApp Institucional"])
+                    
+                    q3 = st.radio("3. ¿A qué criterio nos referimos cuando evaluamos si el producto llegó a tiempo?",
+                        ["Exactitud", "Pertinencia", "Oportunidad"], index=None)
+                    
+                    q4 = st.radio("4. ¿Cómo se mide el Impacto Decisional?",
+                        ["Por el número de páginas", "Si generó una acción concreta (captura, cambio de política)", "Por el uso de colores en gráficas"], index=None)
+                    
+                    q5 = st.radio("5. ¿Qué paso sigue tras realizar la trazabilidad general en SINAI?",
+                        ["Finalizar el ciclo", "Seleccionar productos específicos para rastreo detallado", "Borrar los datos para liberar espacio"], index=None)
+
+                    enviar_m7 = st.form_submit_button("REGISTRAR RESULTADOS FINALES")
+
+                if enviar_m7:
+                    puntos = 0
+                    if q1 == "Identificar oportunidades de mejoramiento del servicio": puntos += 20
+                    if q2 == "Sistema SINAI": puntos += 20
+                    if q3 == "Oportunidad": puntos += 20
+                    if q4 == "Si generó una acción concreta (captura, cambio de política)": puntos += 20
+                    if q5 == "Seleccionar productos específicos para rastreo detallado": puntos += 20
+                    
+                    try:
+                        from datetime import datetime
+                        from sqlalchemy import text
+                        with engine.connect() as conn:
+                            query = text("INSERT INTO calificaciones (funcionario, modulo, nota, fecha) VALUES (:f, :m, :n, :d)")
+                            conn.execute(query, {
+                                "f": st.session_state.get('agente_nombre', 'Agente DIPOL'),
+                                "m": "Módulo 7",
+                                "n": puntos,
+                                "d": datetime.now()
+                            })
+                            conn.commit()
+                        
+                        if puntos >= 70:
+                            st.balloons()
+                            st.success(f"🏆 ¡Módulo 7 Aprobado! Nota: {puntos}%")
+                        else:
+                            st.error(f"Nota: {puntos}%. Se requiere un mínimo de 70% para aprobar.")
+                    except Exception as e:
+                        st.error(f"Error al registrar nota: {e}")
+
                 if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
