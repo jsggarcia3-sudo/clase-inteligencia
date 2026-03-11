@@ -3,7 +3,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 
 # 1. Primero defines el engine (asegúrate de usar tus credenciales reales)
-engine = create_engine("tu_url_de_base_de_datos_aqui") 
+engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}") 
 
 # 2. Luego la función de caché que utiliza ese engine
 @st.cache_data(ttl=60)
