@@ -129,6 +129,104 @@ else:
             st.header("📖 Módulo 1: Conceptualización")
             st.markdown("### Fundamentos de Inteligencia\nContenido en desarrollo...")
 
+        # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
+        if modulo_selec == "Módulo 1: Conceptualización":
+            if not st.session_state.get('modo_examen', False):
+                st.header("📖 Material: Conceptualización de Inteligencia")
+                
+                # Definición General con diseño destacado
+                st.markdown("""
+                    <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; margin-bottom: 20px;">
+                        <h3 style="color: #D4AF37; margin-top: 0;">¿Qué es Inteligencia?</h3>
+                        <p style="color: white; font-size: 1.05em;">Es el <b>conocimiento obtenido</b> mediante el procesamiento de información para reducir la incertidumbre en la toma de decisiones.</p>
+                        <ul style="color: #ecf0f1; font-size: 0.95em;">
+                            <li>Es una actividad <b>multi y transdisciplinaria</b>.</li>
+                            <li>Su función principal es el <b>asesoramiento</b> técnico.</li>
+                            <li>Se diferencia del intelecto por enfocarse en <b>habilidades y aptitudes</b> ante situaciones concretas.</li>
+                        </ul>
+                    </div>
+                """, unsafe_allow_html=True)
+
+                # Sección de Inteligencia Policial
+                st.subheader("🛡️ Inteligencia Policial")
+                st.info("""Conjunto de procesos para generar conocimiento relacionado con la **seguridad y convivencia ciudadana**, contribuyendo al diseño de estrategias institucionales y operaciones de la misión policial.""")
+
+                # Inteligencia según su nivel (Diseño de tarjetas profesionales)
+                st.markdown("### 📊 Niveles de Inteligencia")
+                c1, c2, c3 = st.columns(3)
+
+                with c1:
+                    st.markdown("""
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #3498db; height: 260px;">
+                        <h4 style="color: #3498db; text-align: center;">Estratégica</h4>
+                        <p style="color: white; font-size: 0.85em;">Utilizada por líderes políticos y policiales para formular <b>planes y políticas</b> nacionales a largo plazo.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                with c2:
+                    st.markdown("""
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #f1c40f; height: 260px;">
+                        <h4 style="color: #f1c40f; text-align: center;">Operacional</h4>
+                        <p style="color: white; font-size: 0.85em;">Planeamiento de operaciones en <b>áreas específicas</b>. Se concentra en localización y análisis de objetivos.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                with c3:
+                    st.markdown("""
+                    <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #2ecc71; height: 260px;">
+                        <h4 style="color: #2ecc71; text-align: center;">Táctica</h4>
+                        <p style="color: white; font-size: 0.85em;">Requerida para la <b>conducción de equipos</b> en el terreno durante operaciones inmediatas.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                st.divider()
+
+                # Gestión de intentos
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 1", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN M1"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación: {nota_p}%")
+
+            else:
+                st.header("📝 Evaluación: Módulo 1")
+                with st.form("exam_m1"):
+                    q1 = st.radio("1. ¿Cuál es la función principal de la inteligencia?", 
+                        ["Asesoramiento para la toma de decisiones", "Realizar capturas físicas", "Publicar noticias"])
+                    q2 = st.radio("2. La inteligencia se diferencia del intelecto porque hace hincapié en:", 
+                        ["La memoria", "Habilidades y aptitudes para manejar situaciones concretas", "La velocidad de lectura"])
+                    q3 = st.radio("3. ¿Sobre qué áreas genera conocimiento la Inteligencia Policial?", 
+                        ["Solo temas financieros", "Seguridad y convivencia ciudadana", "Trámites administrativos"])
+                    q4 = st.radio("4. Nivel de inteligencia que ayuda a formular planes y políticas nacionales:", 
+                        ["Táctica", "Estratégica", "Operacional"])
+                    q5 = st.radio("5. La inteligencia táctica es requerida para:", 
+                        ["Leyes nacionales", "Conducción de operaciones a nivel de equipos", "Planificar el presupuesto anual"])
+
+                    if st.form_submit_button("FINALIZAR EXAMEN"):
+                        respuestas = [
+                            q1 == "Asesoramiento para la toma de decisiones",
+                            q2 == "Habilidades y aptitudes para manejar situaciones concretas",
+                            q3 == "Seguridad y convivencia ciudadana",
+                            q4 == "Estratégica",
+                            q5 == "Conducción de operaciones a nivel de equipos"
+                        ]
+                        nota_m1 = (sum(respuestas) / len(respuestas)) * 100
+                        try:
+                            with engine.begin() as conn:
+                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
+                                           {"f": st.session_state['agente_nombre'], "n": nota_m1, "m": "Módulo 1"})
+                        except:
+                            st.error("Error al guardar en base de datos")
+                        
+                        st.session_state['modo_examen'] = False
+                        st.rerun()
+                        
         # --- MÓDULO 2: CICLO DE INTELIGENCIA ---
         elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
             if not st.session_state.get('modo_examen', False):
