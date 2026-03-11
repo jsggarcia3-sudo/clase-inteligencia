@@ -921,8 +921,6 @@ else:
                 
                 with tab_pasos:
                     st.subheader("Procedimiento Estándar de Difusión")
-                    
-                    # Diseño de pasos en cascada
                     pasos = [
                         {"n": "1", "t": "Identificar el Receptor", "d": "Nombres, cargo y lugar de recepción pactado con el usuario."},
                         {"n": "2", "t": "Selección del Canal", "d": "Definir si será Virtual (correo cifrado), Físico o Entrega Exclusiva."},
@@ -941,45 +939,25 @@ else:
 
                 with tab_ejemplos:
                     st.subheader("Ejemplos de Aplicación")
-                    
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.markdown("""
-                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo A: Canal Virtual</h4>
-                            <p style="font-size: 0.9em; color: white;">
-                            <b>Escenario:</b> Envío de reporte diario de criminalidad.<br><br>
-                            <b>Acción:</b> Se utiliza el e-mail institucional con un archivo PDF protegido por contraseña y cifrado PGP. <br><br>
-                            <b>Registro:</b> Se guarda el LOG de envío en el sistema centralizado.
-                            </p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    
+                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Envío de reporte diario.<br><b>Acción:</b> Email con PDF cifrado PGP.</p></div>""", unsafe_allow_html=True)
                     with col2:
-                        st.markdown("""
-                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo B: Entrega Exclusiva</h4>
-                            <p style="font-size: 0.9em; color: white;">
-                            <b>Escenario:</b> Orden de captura para blanco de alto valor.<br><br>
-                            <b>Acción:</b> Entrega en sobre sellado con cinta de seguridad directamente al Director de Inteligencia.<br><br>
-                            <b>Registro:</b> Firma obligatoria en la planilla de difusión física.
-                            </p>
-                        </div>
-                        """, unsafe_allow_html=True)
+                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Orden de captura.<br><b>Acción:</b> Sobre sellado y firma en planilla.</p></div>""", unsafe_allow_html=True)
 
                 with tab_seguridad:
                     st.subheader("Medidas de Protección del Producto")
-                    
-                    st.markdown("""
-                    <div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
+                    st.markdown("""<div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
                         <ul style="color: white; line-height: 1.8;">
-                            <li><b>Clasificación:</b> Marcar claramente como <b>RESERVADO</b> o <b>SECRETO</b> según la ley.</li>
-                            <li><b>Encriptación:</b> Uso de algoritmos para proteger datos digitales (Cifrado de disco o archivos).</li>
-                            <li><b>Embalaje:</b> Uso de sobres de seguridad que evidencien manipulación física.</li>
-                            <li><b>Codificación:</b> Uso de lenguaje convenido o alias para evitar lectura de terceros no autorizados.</li>
-                        </ul>
-                    </div>
-                    """, unsafe_allow_html=True)
+                            <li><b>Clasificación:</b> Marcar claramente como <b>RESERVADO</b> o <b>SECRETO</b>.</li>
+                            <li><b>Encriptación:</b> Uso de algoritmos para proteger datos digitales.</li>
+                            <li><b>Embalaje:</b> Uso de sobres de seguridad físicos.</li>
+                            <li><b>Codificación:</b> Uso de lenguaje convenido o alias.</li>
+                        </ul></div>""", unsafe_allow_html=True)
 
                 st.divider()
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
@@ -987,26 +965,47 @@ else:
                     st.rerun()
 
             else:
-                # --- BLOQUE DE EXAMEN M6 (CORREGIDO) ---
                 st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: MÓDULO 6</h2>", unsafe_allow_html=True)
-                st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
-
+                
                 with st.form("examen_m6"):
                     q1 = st.radio("1. ¿Cuál es la premisa fundamental de la comunicación en inteligencia?",
-                        ["Almacenar información indefinidamente", "Que llegue al decisor en el momento oportuno", "Publicar resultados en medios abiertos"], index=None)
+                        ["Almacenar información indefinidamente", "Que la inteligencia llegue al decisor en el momento oportuno", "Publicar resultados en redes"], index=None)
                     
-                    q2 = st.selectbox("2. ¿Primer paso antes de realizar la difusión?",
-                        [None, "Seleccionar el canal", "Identificar al receptor (nombre/cargo)", "Aplicar encriptación"])
+                    q2 = st.selectbox("2. ¿Cuál es el primer paso antes de realizar la difusión?",
+                        [None, "Seleccionar el canal", "Identificar al receptor (nombre, cargo y lugar)", "Registrar en DB"])
                     
-                    q3 = st.radio("3. ¿Qué medida garantiza físicamente que el contenido no fue manipulado?",
-                        ["Email institucional", "Embalaje en sobres de seguridad con cinta de evidencia", "Uso de alias"], index=None)
+                    q3 = st.radio("3. ¿Qué medida garantiza físicamente que el producto no fue manipulado?",
+                        ["Encriptación de disco", "Embalaje en sobres de seguridad con cinta de evidencia", "Uso de correos personales"], index=None)
+                    
+                    # --- NUEVAS PREGUNTAS ---
+                    q4 = st.radio("4. Al utilizar el Canal Virtual, ¿qué combinación de seguridad es la correcta?",
+                        ["Archivo Excel abierto", "PDF protegido por contraseña y cifrado PGP", "Captura de pantalla por WhatsApp"], index=None)
+                    
+                    q5 = st.radio("5. ¿Qué acción es obligatoria tras realizar una 'Entrega Exclusiva' física?",
+                        ["Destruir el documento original", "Firma obligatoria en la planilla de difusión física", "Notificar a los medios de comunicación"], index=None)
 
                     enviar_m6 = st.form_submit_button("REGISTRAR RESULTADOS")
 
                 if enviar_m6:
-                    # Lógica de guardado simplificada para este ejemplo
-                    st.success("Nota registrada en la base de datos de DIPOL.")
-                
+                    puntos = 0
+                    if q1 == "Que la inteligencia llegue al decisor en el momento oportuno": puntos += 20
+                    if q2 == "Identificar al receptor (nombre, cargo y lugar)": puntos += 20
+                    if q3 == "Embalaje en sobres de seguridad con cinta de evidencia": puntos += 20
+                    if q4 == "PDF protegido por contraseña y cifrado PGP": puntos += 20
+                    if q5 == "Firma obligatoria en la planilla de difusión física": puntos += 20
+                    
+                    # Registro en DB (Asegúrate de tener definida la variable 'engine')
+                    try:
+                        from datetime import datetime
+                        from sqlalchemy import text
+                        with engine.connect() as conn:
+                            query = text("INSERT INTO calificaciones (funcionario, modulo, nota, fecha) VALUES (:f, :m, :n, :d)")
+                            conn.execute(query, {"f": st.session_state.get('agente_nombre', 'Anonimo'), "m": "Módulo 6", "n": puntos, "d": datetime.now()})
+                            conn.commit()
+                        st.success(f"Nota registrada: {puntos}%")
+                    except:
+                        st.warning("Nota calculada pero no se pudo conectar a la base de datos.")
+
                 if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
