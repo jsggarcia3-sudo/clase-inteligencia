@@ -106,7 +106,7 @@ else:
                     st.rerun()
 
     # --- SIGUIENTE SECCIÓN: MÓDULOS ---
-        elif seccion == "📚 Módulos":
+    elif seccion == "📚 Módulos":
         st.session_state['nav_index'] = 1
         lista_modulos = [
             "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
