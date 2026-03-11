@@ -124,10 +124,7 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
                 
-                if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
-                    st.session_state['modulo_activo'] = m['full']
-                    st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
-
+                
         st.markdown("---")
         st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
         
