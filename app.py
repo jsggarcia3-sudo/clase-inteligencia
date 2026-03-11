@@ -196,4 +196,34 @@ else:
             st.subheader("📝 Examen de Conocimientos - M7")
 
     elif seccion == "📊 Mi Progreso":
-        # ... (continúa con el resto de tu código)
+        st.header("📊 Mi Progreso")
+        try:
+            with engine.connect() as conn:
+                df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), conn, params={"n": st.session_state['agente_nombre']})
+            if not df.empty:
+                st.dataframe(df, use_container_width=True)
+            else: 
+                st.info("No hay registros aún.")
+        except Exception as e: 
+            st.info("No hay registros aún o hubo un problema de conexión.")
+
+    elif seccion == "📈 Dashboard General":
+        if st.session_state['es_admin']:
+            st.title("🛡️ Panel Administrativo")
+            try:
+                with engine.connect() as conn:
+                    df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
+                
+                if not df_all.empty:
+                    st.dataframe(df_all, use_container_width=True)
+                    st.divider()
+                    st.subheader("Promedio por Módulo")
+                    # Agrupamos y graficamos el promedio de notas
+                    chart_data = df_all.groupby('modulo')['nota'].mean()
+                    st.bar_chart(chart_data)
+                else: 
+                    st.info("No hay datos globales registrados.")
+            except Exception as e:
+                st.error("Error al acceder a la base de datos administrativa.")
+        else: 
+            st.warning("Acceso restringido a administradores.")
