@@ -69,50 +69,41 @@ def login():
                     st.error("Credenciales incorrectas o campos vacíos.")
 
 # 6. LÓGICA DE NAVEGACIÓN
+# 6. LÓGICA DE NAVEGACIÓN
 if not st.session_state['autenticado']:
     login()
 else:
+    # Definimos las opciones del menú
+    opciones_menu = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
+    
+    # Inicializamos el nav_index si no existe
+    if 'nav_index' not in st.session_state:
+        st.session_state['nav_index'] = 0
+    if 'modulo_activo' not in st.session_state:
+        st.session_state['modulo_activo'] = "Módulo 1: Conceptualización"
+
     # BARRA LATERAL
     with st.sidebar:
         st.title("📂 MENÚ")
         st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
-        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
+        
+        # CLAVE: El radio button ahora usa el index de session_state
+        seccion = st.radio(
+            "Ir a:", 
+            opciones_menu, 
+            index=st.session_state['nav_index'], # Vincular al estado
+            key="menu_radio"
+        )
+        
+        # Sincronizamos el nav_index por si el usuario hace clic directamente en el menú lateral
+        st.session_state['nav_index'] = opciones_menu.index(seccion)
+
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()     
 
     # --- CONTENIDO DE LAS SECCIONES ---
     if seccion == "🏠 Inicio":
-        st.title("Bienvenido al Centro de Capacitación")
-        st.info(f"Hola {st.session_state['agente_nombre']}, selecciona un módulo para comenzar.")
-
-    elif seccion == "📊 Mi Progreso":
-        st.markdown("<h1>📊 Mi Expediente</h1>", unsafe_allow_html=True)
-        df = cargar_datos_agente(st.session_state['agente_nombre'])
-        if not df.empty:
-            c1, c2 = st.columns(2)
-            c1.metric("Promedio", f"{df['nota'].mean():.1f}%")
-            c2.metric("Evaluaciones", len(df))
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        else:
-            st.info("No hay registros aún.")
-
-    elif seccion == "📈 Dashboard General":
-        if st.session_state['es_admin']:
-            st.title("📈 Dashboard Estratégico")
-            df_all = cargar_todo_admin()
-            if not df_all.empty:
-                m1, m2, m3 = st.columns(3)
-                m1.metric("Total Agentes", df_all['funcionario'].nunique())
-                m2.metric("Promedio Global", f"{df_all['nota'].mean():.1f}%")
-                m3.metric("Exámenes Realizados", len(df_all))
-                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
-        else:
-            st.error("Área restringida.")
-            
-    if seccion == "🏠 Inicio":
-        st.session_state['nav_index'] = 0
-        
         # Encabezado de Bienvenida
         st.markdown(f"""
         <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
@@ -120,7 +111,6 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-        # Definición de la estructura de Módulos para la Home
         modulos_home = [
             {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
             {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -131,11 +121,9 @@ else:
             {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
         ]
 
-        # Creación de la Grilla (3 columnas)
         cols = st.columns(3)
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
-                # Diseño visual de la tarjeta
                 st.markdown(f"""
                 <div style="background: linear-gradient(145deg, #002147, #001226); 
                             padding: 25px; border-radius: 15px; border: 1px solid #D4AF37; 
@@ -147,15 +135,13 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
                 
-                # Botón funcional de ingreso
+                # BOTÓN CORREGIDO
                 if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
                     st.session_state['modulo_activo'] = m['full']
-                    st.session_state['nav_index'] = 1  # Forzamos el cambio de pestaña a "Módulos"
+                    st.session_state['nav_index'] = 1  # 1 corresponde a "📚 Módulos"
                     st.rerun()
 
-    # --- SIGUIENTE SECCIÓN: MÓDULOS ---
     elif seccion == "📚 Módulos":
-        st.session_state['nav_index'] = 1
         lista_modulos = [
             "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
             "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
@@ -163,14 +149,16 @@ else:
         ]
         
         try:
-            idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
+            # Sincronizamos el selectbox con lo que venga del botón de Inicio
+            default_idx = lista_modulos.index(st.session_state.get('modulo_activo', lista_modulos[0]))
         except ValueError:
-            idx_mod = 0
+            default_idx = 0
             
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=default_idx)
         st.session_state['modulo_activo'] = modulo_selec
-
+        
         st.divider()
+        st.subheader(f"Contenido: {modulo_selec}")
 
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
