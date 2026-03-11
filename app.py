@@ -157,33 +157,42 @@ else:
                     st.subheader("🕵️ Operaciones de Inteligencia Policial")
                     
                     st.markdown("""
-                    <div style="background-color: #002b55; padding: 15px; border-radius: 10px; border-left: 5px solid #D4AF37; margin-bottom: 20px;">
-                        <p style="color: white; margin: 0;">Para la ejecución de las siguientes operaciones es indispensable el <b>Empleo y uso de Medios Técnicos</b>.</p>
-                    </div>
+                        <div class="lectura-box" style="margin-bottom: 25px;">
+                            <h4 style="color: #D4AF37; margin-top: 0;">Fines Operacionales</h4>
+                            <p style="color: white; margin: 0;">Son actividades del servicio policial orientadas a la obtención de información privilegiada. Para toda operación se requiere el <b>Empleo y uso de Medios Técnicos</b>.</p>
+                        </div>
                     """, unsafe_allow_html=True)
 
-                    col_op1, col_op2 = st.columns(2)
+                    with st.expander("🛠️ CLASIFICACIÓN OPERATIVA", expanded=True):
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.markdown("""
+                            <div class="ejemplo-box" style="border-left: 5px solid #4CAF50;">
+                                <h3 style="color: #4CAF50;">Básicas</h3>
+                                <ul style="color: white; font-size: 0.9em; line-height: 1.6;">
+                                    <li><b>🔍 Reconocimiento:</b> Concretar y ampliar datos previos.</li>
+                                    <li><b>✅ Verificación:</b> Establecer veracidad o desvirtuar.</li>
+                                    <li><b>🔭 Vigilancia:</b> Observación continua y discreta (rutinas).</li>
+                                    <li><b>🚗 Seguimiento:</b> Control sobre personas o elementos en movimiento.</li>
+                                    <li><b>🗣️ Sonsacamiento:</b> Diálogo sutil e invisible.</li>
+                                </ul>
+                            </div>
+                            """, unsafe_allow_html=True)
 
-                    with col_op1:
-                        st.markdown("### 🛠️ Operaciones Básicas")
-                        st.markdown("""
-                        * **Reconocimiento:** Concretar y ampliar datos previos sobre el entorno y objetivos.
-                        * **Verificación:** Establecer la veracidad de los datos o desvirtuar información.
-                        * **Vigilancia:** Observación continua y discreta (fija/móvil) para establecer rutinas.
-                        * **Seguimiento:** Control sobre personas o elementos en movimiento.
-                        * **Sonsacamiento:** Obtención de información mediante diálogo sutil e invisible.
-                        """)
-
-                    with col_op2:
-                        st.markdown("### 🛡️ Operaciones Especializadas")
-                        st.markdown("""
-                        * **Admón. de Fuentes Humanas:** Dirección y control de personas que cooperan.
-                        * **Entrevista:** Intercambio de ideas para obtener información específica.
-                        * **Infiltración:** Ubicar agentes dentro de una organización con cobertura.
-                        * **Penetración:** Lograr la colaboración de alguien que ya pertenece a la organización.
-                        * **Caracterización y Fachada:** El "quién eres" (rol) y el entorno que lo respalda (entorno físico).
-                        """)
-
+                        with col2:
+                            st.markdown("""
+                            <div class="ejemplo-box" style="border-left: 5px solid #ef6c00;">
+                                <h3 style="color: #ef6c00;">Especializadas</h3>
+                                <ul style="color: white; font-size: 0.9em; line-height: 1.6;">
+                                    <li><b>👤 Admón. de F.H.:</b> Dirección y control de fuentes humanas cooperantes.</li>
+                                    <li><b>🎙️ Entrevista:</b> Intercambio de ideas para obtener información específica.</li>
+                                    <li><b>👥 Infiltración:</b> Ubicar agentes dentro de una organización mediante una cobertura.</li>
+                                    <li><b>🔑 Penetración:</b> Obtener colaboración permanente de alguien con acceso.</li>
+                                    <li><b>🎭 Caracterización y Fachada:</b> El rol y el entorno que lo respalda.</li>
+                                </ul>
+                            </div>
+                            """, unsafe_allow_html=True)
+                    
                     st.divider()
 
                 with t3:
