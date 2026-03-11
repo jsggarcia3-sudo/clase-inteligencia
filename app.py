@@ -964,8 +964,13 @@ else:
 
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
-            st.markdown('<h1 style="color: #D4AF37;">🛡️ Centro de Mando Analítico</h1>', unsafe_allow_html=True)
-            st.caption("Visualización avanzada del rendimiento académico de la unidad")
+            # Título con estilo institucional y profesional
+            st.markdown("""
+                <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-bottom: 4px solid #D4AF37; margin-bottom: 25px;">
+                    <h1 style="color: white; margin: 0;">🛡️ Centro de Inteligencia Analítica</h1>
+                    <p style="color: #D4AF37; margin: 0; font-weight: bold;">Panel de Control y Rendimiento Académico - DIPOL</p>
+                </div>
+            """, unsafe_allow_html=True)
             
             try:
                 with engine.begin() as conn:
@@ -973,76 +978,90 @@ else:
                     df_all = pd.read_sql(query, conn)
                 
                 if not df_all.empty:
-                    # Formatear fecha para visualización
                     df_all['fecha'] = pd.to_datetime(df_all['fecha']).dt.strftime('%Y-%m-%d %H:%M')
                     
-                    # --- KPI CARDS (Métricas Pro) ---
-                    total_eval = len(df_all)
+                    # --- MÉTRICAS KPI (Key Performance Indicators) ---
                     promedio = df_all['nota'].mean()
-                    agentes_unicos = df_all['funcionario'].nunique()
+                    total_eval = len(df_all)
+                    aprobados = len(df_all[df_all['nota'] >= 70])
+                    porcentaje_exito = (aprobados / total_eval) * 100
 
+                    # CSS para personalizar las métricas (Cards)
                     st.markdown("""
                         <style>
-                        [data-testid="stMetricValue"] { font-size: 32px; color: #D4AF37; }
-                        div[data-testid="stMetric"] { background-color: #0e1117; padding: 15px; border-radius: 10px; border: 1px solid #31333F; }
+                        [data-testid="stMetric"] { background-color: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 15px; }
+                        [data-testid="stMetricValue"] { color: #D4AF37; }
                         </style>
                     """, unsafe_allow_html=True)
 
-                    m1, m2, m3, m4 = st.columns(4)
-                    m1.metric("Evaluaciones", total_eval, help="Total de exámenes realizados")
-                    m2.metric("Promedio Global", f"{promedio:.1f}%", delta=f"{promedio-70:.1f}% vs Meta")
-                    m3.metric("Personal", agentes_unicos, help="Agentes únicos evaluados")
-                    
-                    # Filtro rápido en la cuarta columna
-                    with m4:
-                        st.write("📥 **Reportes**")
-                        csv = df_all.to_csv(index=False).encode('utf-8')
-                        st.download_button(
-                            label="Descargar CSV",
-                            data=csv,
-                            file_name='reporte_calificaciones_dipol.csv',
-                            mime='text/csv',
-                        )
+                    k1, k2, k3, k4 = st.columns(4)
+                    k1.metric("Evaluaciones", total_eval)
+                    k2.metric("Promedio General", f"{promedio:.1f}%")
+                    k3.metric("Tasa de Éxito", f"{porcentaje_exito:.1f}%")
+                    k4.metric("Agentes", df_all['funcionario'].nunique())
 
-                    st.write("---")
+                    st.write("") # Espaciador
 
-                    # --- GRÁFICOS Y TABLAS ---
-                    col_left, col_right = st.columns([1.2, 0.8])
+                    # --- PESTAÑAS DE ANÁLISIS ---
+                    tab_rend, tab_detalles = st.tabs(["📊 Análisis de Rendimiento", "🔍 Detalle por Agente"])
 
-                    with col_left:
-                        st.subheader("📊 Análisis por Componente")
-                        chart_data = df_all.groupby('modulo')['nota'].mean().reset_index()
-                        # Diseño de gráfico de barras horizontal para mejor lectura de nombres largos
-                        st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37")
+                    with tab_rend:
+                        c1, c2 = st.columns([1.2, 0.8])
                         
-                        # Pequeño insight debajo del gráfico
-                        min_mod = chart_data.loc[chart_data['nota'].idxmin()]
-                        st.warning(f"⚠️ Punto Crítico: El **{min_mod['modulo']}** presenta el promedio más bajo ({min_mod['nota']:.1f}%).")
+                        with c1:
+                            st.subheader("Promedio por Componente Educativo")
+                            chart_data = df_all.groupby('modulo')['nota'].mean().reset_index()
+                            # Gráfico de barras con color institucional
+                            st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37", use_container_width=True)
+                        
+                        with c2:
+                            st.subheader("Distribución de Calificaciones")
+                            # Clasificación de desempeño
+                            bins = [0, 69, 89, 100]
+                            labels = ['Insuficiente (0-69)', 'Satisfactorio (70-89)', 'Sobresaliente (90-100)']
+                            df_all['Nivel'] = pd.cut(df_all['nota'], bins=bins, labels=labels)
+                            dist_data = df_all['Nivel'].value_counts()
+                            st.bar_chart(dist_data, color="#2ecc71")
 
-                    with col_right:
-                        st.subheader("📋 Últimos Resultados")
-                        # Tabla estilizada con los 10 registros más recientes
-                        recent_df = df_all.sort_values(by='fecha', ascending=False).head(10)
+                    with tab_detalles:
+                        col_filtro, col_descarga = st.columns([3, 1])
+                        with col_filtro:
+                            search = st.text_input("🔍 Buscar funcionario...", placeholder="Ingrese nombre para filtrar")
+                        with col_descarga:
+                            st.write("📄 **Reportes**")
+                            csv = df_all.to_csv(index=False).encode('utf-8')
+                            st.download_button("Descargar CSV", data=csv, file_name='reporte_dipol.csv', use_container_width=True)
+
+                        # Aplicar filtro de búsqueda si existe
+                        display_df = df_all.copy()
+                        if search:
+                            display_df = display_df[display_df['funcionario'].str.contains(search, case=False)]
+                        
+                        # Tabla con barras de progreso para las notas
                         st.dataframe(
-                            recent_df[['funcionario', 'nota', 'modulo']], 
+                            display_df.sort_values(by='fecha', ascending=False),
+                            column_config={
+                                "nota": st.column_config.ProgressColumn("Calificación", format="%d%%", min_value=0, max_value=100),
+                                "fecha": "Fecha",
+                                "funcionario": "Agente",
+                                "modulo": "Módulo"
+                            },
                             use_container_width=True,
                             hide_index=True
                         )
-                        
-                    # --- SECCIÓN DE BÚSQUEDA ---
-                    with st.expander("🔍 Buscador Avanzado de Agentes"):
-                        search_user = st.text_input("Ingrese nombre del funcionario:")
-                        if search_user:
-                            user_data = df_all[df_all['funcionario'].str.contains(search_user, case=False)]
-                            st.table(user_data)
 
-                else: 
-                    st.info("💡 La base de datos está vacía. Los resultados aparecerán aquí una vez que los agentes completen los módulos.")
-                    
+                    # --- ALERTAS DE SEGUIMIENTO ---
+                    st.divider()
+                    low_performers = df_all[df_all['nota'] < 70]
+                    if not low_performers.empty:
+                        with st.expander("⚠️ Alerta: Personal con necesidad de refuerzo"):
+                            st.warning(f"Se identificaron {len(low_performers)} intentos fallidos. Se recomienda capacitación adicional para estos funcionarios.")
+                            st.table(low_performers[['funcionario', 'modulo', 'nota']])
+
+                else:
+                    st.info("ℹ️ No hay registros en la base de datos para generar el análisis.")
+
             except Exception as e:
-                st.error("🚨 Error de Conexión Crítico")
-                with st.expander("Ver detalle técnico del error"):
-                    st.code(e)
-        else: 
-            st.error("🚫 ACCESO DENEGADO")
-            st.info("Esta sección es de uso exclusivo para el personal administrativo de DIPOL.")
+                st.error(f"❌ Error crítico en el Dashboard: {e}")
+        else:
+            st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
