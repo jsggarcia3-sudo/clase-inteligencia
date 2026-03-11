@@ -140,7 +140,8 @@ else:
             "Módulo 5: Análisis", 
             "Módulo 6: Comunicación", 
             "Módulo 7: Evaluación"
-                
+         ])
+        
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state.get('modo_examen', False):
