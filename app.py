@@ -956,75 +956,71 @@ else:
                     st.rerun()
 
     elif seccion == "📊 Mi Progreso":
+        # Banner Superior Estilizado
         st.markdown(f"""
-            <div style="background: linear-gradient(90deg, #001f3f 0%, #003366 100%); padding: 20px; border-radius: 15px; border-left: 5px solid #D4AF37; margin-bottom: 25px;">
-                <h1 style="color: white; margin: 0;">📊 Mi Progreso Académico</h1>
-                <p style="color: #D4AF37; margin: 0; font-weight: bold;">Funcionario: {st.session_state['agente_nombre']}</p>
+            <div style="background: linear-gradient(90deg, #001f3f 0%, #003366 100%); padding: 20px; border-radius: 15px; border-left: 8px solid #D4AF37; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                <h1 style="color: white; margin: 0; font-family: sans-serif;">📊 Mi Expediente Académico</h1>
+                <p style="color: #D4AF37; margin: 5px 0 0 0; font-weight: bold; font-size: 1.1em;">Agente: {st.session_state['agente_nombre']}</p>
             </div>
         """, unsafe_allow_html=True)
 
         try:
-            with engine.begin() as conn:
-                query = text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC")
-                df = pd.read_sql(query, conn, params={"n": st.session_state['agente_nombre']})
+            # Llamamos a la función con caché (Carga instantánea)
+            df = cargar_datos_agente(st.session_state['agente_nombre'])
             
             if not df.empty:
-                # --- RESUMEN DE LOGROS ---
-                promedio_personal = df['nota'].mean()
-                modulos_completados = df['modulo'].nunique()
+                # --- MÉTRICAS PRO (Grandes y Llamativas) ---
+                promedio = df['nota'].mean()
+                total_examenes = len(df)
                 
+                # CSS para que los números se vean grandes como en el Dashboard
+                st.markdown("""
+                    <style>
+                    .stMetric { background-color: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 12px; }
+                    [data-testid="stMetricValue"] { color: #D4AF37; font-size: 3rem !important; font-weight: 800; }
+                    </style>
+                """, unsafe_allow_html=True)
+
                 c1, c2, c3 = st.columns(3)
-                
-                # Estilo de mini-tarjetas
-                card_style = """
-                    <div style="background-color: #161b22; border: 1px solid #30363d; padding: 20px; border-radius: 12px; text-align: center;">
-                        <p style="color: #8b949e; margin: 0; font-size: 0.8em; font-weight: bold; text-transform: uppercase;">{title}</p>
-                        <h2 style="color: {color}; margin: 10px 0 0 0; font-size: 2.2em;">{value}</h2>
-                    </div>
-                """
-                
                 with c1:
-                    st.markdown(card_style.format(title="Promedio General", value=f"{promedio_personal:.1f}%", color="#D4AF37"), unsafe_allow_html=True)
+                    st.metric("Mi Promedio", f"{promedio:.1f}%")
                 with c2:
-                    st.markdown(card_style.format(title="Módulos Listos", value=modulos_completados, color="#2ecc71"), unsafe_allow_html=True)
+                    st.metric("Módulos", total_examenes)
                 with c3:
-                    estado = "APROBADO" if promedio_personal >= 70 else "EN CURSO"
+                    # Cálculo de estado dinámico
+                    estado = "APROBADO" if promedio >= 70 else "REPASO"
                     color_estado = "#2ecc71" if estado == "APROBADO" else "#e74c3c"
-                    st.markdown(card_style.format(title="Estado Global", value=estado, color=color_estado), unsafe_allow_html=True)
+                    st.markdown(f"""
+                        <div style="background-color: #161b22; border: 1px solid #30363d; padding: 15px; border-radius: 12px; text-align: center;">
+                            <p style="color: #8b949e; margin: 0; font-size: 0.8em; font-weight: bold;">ESTADO FINAL</p>
+                            <h2 style="color: {color_estado}; margin: 5px 0 0 0; font-size: 1.8em;">{estado}</h2>
+                        </div>
+                    """, unsafe_allow_html=True)
 
                 st.write("---")
 
-                # --- DETALLE DE EVALUACIONES ---
-                st.subheader("📜 Historial de Evaluaciones")
+                # --- TABLA CON BARRA DE PROGRESO ---
+                st.subheader("📜 Historial de Calificaciones")
                 
-                # Formateamos la tabla para que sea más legible
+                # Limpieza de fecha para que se vea pro
                 df['fecha'] = pd.to_datetime(df['fecha']).dt.strftime('%d/%m/%Y %H:%M')
                 
                 st.dataframe(
                     df,
                     column_config={
                         "nota": st.column_config.ProgressColumn("Resultado", format="%d%%", min_value=0, max_value=100),
-                        "modulo": "Módulo Evaluado",
-                        "fecha": "Fecha de Realización"
+                        "modulo": "Módulo de Inteligencia",
+                        "fecha": "Fecha de Examen"
                     },
                     use_container_width=True,
                     hide_index=True
                 )
-
-                # Mensaje de motivación
-                if promedio_personal >= 90:
-                    st.balloons()
-                    st.success("🌟 **¡Excelente desempeño!** Mantienes un estándar de honor en tus evaluaciones.")
-                elif promedio_personal >= 70:
-                    st.info("👍 **Buen trabajo.** Has cumplido con los requisitos mínimos de aprobación.")
-                else:
-                    st.warning("⚠️ **Nota:** Tu promedio actual está por debajo del límite sugerido. Te recomendamos repasar los materiales.")
-
             else: 
-                st.info("Aún no has realizado ninguna evaluación. ¡Inicia con el Módulo 1!")
+                st.info("Aún no tienes registros. Completa tu primera evaluación en la sección de módulos.")
                 
         except Exception as e: 
-            st.error("Error al cargar tu expediente. Por favor, intenta de nuevo.")
+            st.error("No se pudo conectar con el servidor de inteligencia.")
+            
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
             # Título con estilo institucional y profesional
