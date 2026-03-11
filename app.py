@@ -1,3 +1,8 @@
+@st.cache_data(ttl=60)  # Los datos se guardan en memoria por 60 segundos
+def get_data(query_text, params=None):
+    with engine.begin() as conn:
+        return pd.read_sql(text(query_text), conn, params=params)
+        
 import streamlit as st
 from sqlalchemy import create_engine, text
 import pandas as pd
