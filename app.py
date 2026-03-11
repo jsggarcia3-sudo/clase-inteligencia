@@ -268,7 +268,7 @@ else:
                     st.markdown("""
                         <div class="lectura-box" style="border-left: 5px solid #e74c3c;">
                             <h4 style="color: #e74c3c; margin-top: 0;">Tipos de Entrevistador a EVITAR</h4>
-                            <p style="color: white;">Para una recolección efectiva, el entrevistador debe mantener el equilibrio y el control. Evite caer en los siguientes perfiles:</p>
+                            <p style="color: white;">Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas y la correcta formulación de preguntas por el agente de inteligencia. Para una recolección efectiva, el entrevistador debe mantener el equilibrio y el control. Evite caer en los siguientes perfiles:</p>
                         </div>
                     """, unsafe_allow_html=True)
 
