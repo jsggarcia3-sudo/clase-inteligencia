@@ -106,6 +106,7 @@ else:
                     st.rerun()
 
     # --- SIGUIENTE SECCIÓN: MÓDULOS ---
+    # --- SIGUIENTE SECCIÓN: MÓDULOS ---
     elif seccion == "📚 Módulos":
         st.session_state['nav_index'] = 1
         lista_modulos = [
@@ -114,7 +115,6 @@ else:
             "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
         ]
         
-        # Sincronización con la selección de Inicio
         try:
             idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
         except ValueError:
@@ -125,75 +125,24 @@ else:
 
         st.divider()
 
-        # =========================================================
-        # ESTRUCTURA DE CONTENIDO POR MÓDULO
-        # =========================================================
-
-        # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
+        # --- CONTENIDO POR MÓDULO (IDENTACIÓN CORREGIDA) ---
         if modulo_selec == "Módulo 1: Conceptualización":
             st.header("📖 Módulo 1: Conceptualización")
-            with st.container():
-                st.markdown("""
-                ### Fundamentos de Inteligencia
-                [AQUÍ: Insertar texto de lectura, definiciones y leyes]
-                """)
-                # st.image("diagrama_m1.png") # [AQUÍ: Insertar imágenes del Módulo 1]
-            
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M1")
-            # [AQUÍ: Insertar st.form() con las preguntas del examen 1]
+            st.markdown("### Fundamentos de Inteligencia\nContenido en desarrollo...")
 
-        # --- MÓDULO 2: CICLO DE INTELIGENCIA ---
-        elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
-            st.header("🔄 Módulo 2: Ciclo de Inteligencia")
-            st.markdown("[AQUÍ: Insertar las fases del ciclo (Planeación, Búsqueda, etc.)]")
-            # st.image("ciclo_inteligencia.png") # [AQUÍ: Insertar diagrama del ciclo]
-
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M2")
-            # [AQUÍ: Insertar st.form() con las preguntas del examen 2]
-
-        # --- MÓDULO 3: RECOLECCIÓN ---
-        elif modulo_selec == "Módulo 3: Recolección":
-            st.header("🕵️ Módulo 3: Recolección de Información")
-            st.markdown("[AQUÍ: Contenido sobre fuentes abiertas, cerradas y humanas]")
-
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M3")
-
-        # --- MÓDULO 4: TRATAMIENTO ---
         elif modulo_selec == "Módulo 4: Tratamiento":
             st.header("📊 Módulo 4: Tratamiento de Datos")
-            # [AQUÍ: Insertar la matriz de evaluación de fuente y contenido]
             st.image("image_3fdba2.png", caption="Matriz de Evaluación de Inteligencia")
 
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M4")
-
-        # --- MÓDULO 5: ANÁLISIS ---
         elif modulo_selec == "Módulo 5: Análisis":
             st.header("🧠 Módulo 5: Análisis de Inteligencia")
-            # [AQUÍ: Insertar la "Línea del Conocimiento Analítico"]
             st.image("image_3fd75e.png", caption="Línea del Conocimiento Analítico")
-            
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M5")
 
-        # --- MÓDULO 6: COMUNICACIÓN ---
-        elif modulo_selec == "Módulo 6: Comunicación":
-            st.header("📢 Módulo 6: Comunicación e Integración")
-            st.markdown("[AQUÍ: Contenido sobre Difusión y documentos de inteligencia]")
-
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M6")
-
-        # --- MÓDULO 7: EVALUACIÓN ---
-        # --- CONTENIDO MÓDULO 7 (VERIFICADO: COMPLETO) ---
-        if modulo_selec == "Módulo 7: Evaluación":
-            if not st.session_state['modo_examen']:
+        elif modulo_selec == "Módulo 7: Evaluación":
+            # Aquí va todo tu contenido del Módulo 7 que pasaste antes
+            if not st.session_state.get('modo_examen', False):
                 st.header("🔄 Material: Evaluar y Retroalimentar")
                 
-                # 1. OBJETIVO (Tu texto sobre PNIP y mejoramiento del servicio)
                 st.markdown("""
                 <div style="background: linear-gradient(90deg, #002147 0%, #003366 100%); padding: 25px; border-radius: 15px; border-right: 5px solid #D4AF37; margin-bottom: 25px;">
                     <h3 style="color: #D4AF37; margin-top: 0;">🎯 Objetivo de la Fase</h3>
@@ -204,12 +153,10 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
 
-                # 2. LAS 3 PESTAÑAS (Actividades, SINAI, Ejemplos)
                 tab_act, tab_sinai, tab_ejemplos = st.tabs(["⚙️ Actividades Clave", "📊 Trazabilidad y Análisis", "📝 Casos de Evaluación"])
 
                 with tab_act:
                     st.subheader("Ruta Crítica de Evaluación")
-                    # Las 5 actividades fundamentales que enviaste
                     actividades = [
                         "1. Planificar y programar la evaluación.",
                         "2. Realizar trazabilidad en SINAI.",
@@ -225,15 +172,12 @@ else:
                     st.info("La trazabilidad no es solo archivo; es el rastreo de acciones y decisiones tomadas basadas en nuestra inteligencia.")
                     col1, col2 = st.columns(2)
                     with col1:
-                        # Pertinencia, Oportunidad, Exactitud
                         st.markdown('<div class="lectura-box"><h4 style="color: #D4AF37;">¿Qué evaluamos?</h4><ul><li><b>Pertinencia:</b> ¿Respondió al requerimiento?</li><li><b>Oportunidad:</b> ¿Llegó a tiempo?</li><li><b>Exactitud:</b> ¿Fue veraz?</li></ul></div>', unsafe_allow_html=True)
                     with col2:
-                        # Impacto Decisional
                         st.markdown('<div class="lectura-box"><h4 style="color: #D4AF37;">Impacto Decisional</h4><p>Se mide si el producto generó una acción concreta: una captura, una desarticulación, o un cambio en la política de seguridad regional.</p></div>', unsafe_allow_html=True)
 
                 with tab_ejemplos:
                     st.subheader("Ejemplos de Retroalimentación")
-                    # Los cuadros Verde (Positiva) y Rojo (Mejora)
                     st.markdown("""
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                         <div class="ejemplo-box" style="border-left: 4px solid #4CAF50;">
@@ -250,6 +194,11 @@ else:
                 st.divider()
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 7"):
                     st.session_state['modo_examen'] = True
+                    st.rerun()
+            else:
+                st.subheader("📝 Examen Módulo 7 en curso...")
+                if st.button("⬅️ Volver al Material"):
+                    st.session_state['modo_examen'] = False
                     st.rerun()
 
     elif seccion == "📊 Mi Progreso":
