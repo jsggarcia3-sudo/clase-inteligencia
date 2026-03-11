@@ -69,109 +69,105 @@ def login():
                     st.error("Credenciales incorrectas o campos vacíos.")
 
 # 6. LÓGICA DE NAVEGACIÓN
-# 6. LÓGICA DE NAVEGACIÓN
 if not st.session_state['autenticado']:
     login()
 else:
-    # BARRA LATERAL
+    # Definimos las opciones para mantener coherencia
+    opciones_menu = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
+    
+    # BARRA LATERAL (Sidebar Profesional)
     with st.sidebar:
-        st.title("📂 MENÚ")
-        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
-        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
-        if st.button("Cerrar Sesión"):
+        st.markdown(f"""
+            <div style="text-align: center; padding: 10px; border-bottom: 1px solid #D4AF37; margin-bottom: 20px;">
+                <h2 style="margin:0;">DIPOL</h2>
+                <p style="color: #D4AF37; font-size: 0.8em; letter-spacing: 2px;">INTELIGENCIA POLICIAL</p>
+            </div>
+        """, unsafe_allow_html=True)
+        
+        seccion = st.radio("NAVEGACIÓN PRINCIPAL", opciones_menu)
+        
+        st.divider()
+        st.write(f"**Usuario:** {st.session_state['agente_nombre']}")
+        if st.button("SALIR DEL SISTEMA"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()     
 
-    # --- CONTENIDO DE LAS SECCIONES ---
+    # --- DISEÑO ELEGANTE DE INICIO ---
     if seccion == "🏠 Inicio":
-        st.title("Bienvenido al Centro de Capacitación")
-        st.info(f"Hola {st.session_state['agente_nombre']}, selecciona un módulo para comenzar.")
-
-    elif seccion == "📊 Mi Progreso":
-        st.markdown("<h1>📊 Mi Expediente</h1>", unsafe_allow_html=True)
-        df = cargar_datos_agente(st.session_state['agente_nombre'])
-        if not df.empty:
-            c1, c2 = st.columns(2)
-            c1.metric("Promedio", f"{df['nota'].mean():.1f}%")
-            c2.metric("Evaluaciones", len(df))
-            st.dataframe(df, use_container_width=True, hide_index=True)
-        else:
-            st.info("No hay registros aún.")
-
-    elif seccion == "📈 Dashboard General":
-        if st.session_state['es_admin']:
-            st.title("📈 Dashboard Estratégico")
-            df_all = cargar_todo_admin()
-            if not df_all.empty:
-                m1, m2, m3 = st.columns(3)
-                m1.metric("Total Agentes", df_all['funcionario'].nunique())
-                m2.metric("Promedio Global", f"{df_all['nota'].mean():.1f}%")
-                m3.metric("Exámenes Realizados", len(df_all))
-                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
-        else:
-            st.error("Área restringida.")
-            
-    if seccion == "🏠 Inicio":
-        st.session_state['nav_index'] = 0
-        
-        # Encabezado de Bienvenida
+        # Banner Superior Elegante
         st.markdown(f"""
-        <div style="background: rgba(212, 175, 55, 0.1); border: 1px solid #D4AF37; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 30px;">
-            <span style="color: white;">Bienvenido Agente: <b>{st.session_state['agente_nombre']}</b> | Estado: <span style="color: #4CAF50;">● En Línea</span></span>
-        </div>
+            <div style="background: linear-gradient(90deg, #001226 0%, #002147 100%); 
+                        padding: 40px; border-radius: 15px; border-left: 5px solid #D4AF37; 
+                        margin-bottom: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <h1 style="margin: 0; font-size: 2.5em; color: white !important;">Panel de Capacitación Estratégica</h1>
+                <p style="color: #D4AF37; font-size: 1.2em; opacity: 0.9;">Bienvenido, Agente {st.session_state['agente_nombre']}. Explore los componentes del ciclo de inteligencia.</p>
+            </div>
         """, unsafe_allow_html=True)
 
-        # Definición de la estructura de Módulos para la Home
         modulos_home = [
-            {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
-            {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
-            {"id": "M3", "tit": "Módulo 3", "sub": "Recolección", "icon": "🕵️", "full": "Módulo 3: Recolección"},
-            {"id": "M4", "tit": "Módulo 4", "sub": "Tratamiento", "icon": "📊", "full": "Módulo 4: Tratamiento"},
-            {"id": "M5", "tit": "Módulo 5", "sub": "Análisis", "icon": "🧠", "full": "Módulo 5: Análisis"},
-            {"id": "M6", "tit": "Módulo 6", "sub": "Comunicación", "icon": "📢", "full": "Módulo 6: Comunicación"},
-            {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
+            {"tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖"},
+            {"tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄"},
+            {"tit": "Módulo 3", "sub": "Recolección", "icon": "🕵️"},
+            {"tit": "Módulo 4", "sub": "Tratamiento", "icon": "📊"},
+            {"tit": "Módulo 5", "sub": "Análisis", "icon": "🧠"},
+            {"tit": "Módulo 6", "sub": "Comunicación", "icon": "📢"},
+            {"tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄"}
         ]
 
-        # Creación de la Grilla (3 columnas)
+        # Grilla de Tarjetas Profesionales (Sin Botones)
         cols = st.columns(3)
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
-                # Diseño visual de la tarjeta
                 st.markdown(f"""
-                <div style="background: linear-gradient(145deg, #002147, #001226); 
-                            padding: 25px; border-radius: 15px; border: 1px solid #D4AF37; 
-                            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-                            min-height: 220px;">
-                    <div style="font-size: 3em; margin-bottom: 10px;">{m['icon']}</div>
-                    <h3 style="color: #D4AF37; margin: 0;">{m['tit']}</h3>
-                    <p style="color: #ffffff; font-size: 0.9em; opacity: 0.8;">{m['sub']}</p>
+                <div style="background: rgba(255, 255, 255, 0.03); 
+                            backdrop-filter: blur(10px);
+                            padding: 30px; border-radius: 20px; 
+                            border: 1px solid rgba(212, 175, 55, 0.3); 
+                            text-align: center; margin-bottom: 25px;
+                            transition: transform 0.3s ease;">
+                    <div style="font-size: 3.5em; margin-bottom: 15px; filter: drop-shadow(0 0 10px #D4AF37);">{m['icon']}</div>
+                    <h4 style="color: #D4AF37; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">{m['tit']}</h4>
+                    <p style="color: #ffffff; font-size: 1em; font-weight: 300; opacity: 0.7;">{m['sub']}</p>
                 </div>
                 """, unsafe_allow_html=True)
-                
-                # Botón funcional de ingreso
-                if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
-                    st.session_state['modulo_activo'] = m['full']
-                    st.session_state['nav_index'] = 1  # Forzamos el cambio de pestaña a "Módulos"
-                    st.rerun()
 
-    # --- SIGUIENTE SECCIÓN: MÓDULOS ---
+    # --- RESTO DE SECCIONES (Manteniendo el estándar profesional) ---
     elif seccion == "📚 Módulos":
-        st.session_state['nav_index'] = 1
+        st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📚 Centro de Documentación</h2>", unsafe_allow_html=True)
         lista_modulos = [
             "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
             "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
             "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
         ]
         
-        try:
-            idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
-        except ValueError:
-            idx_mod = 0
-            
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
-        st.session_state['modulo_activo'] = modulo_selec
-
+        modulo_selec = st.selectbox("Seleccione la unidad temática a visualizar:", lista_modulos)
         st.divider()
+        st.info(f"Cargando material académico para: {modulo_selec}")
+
+    elif seccion == "📊 Mi Progreso":
+        st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📊 Expediente de Calificaciones</h2>", unsafe_allow_html=True)
+        df = cargar_datos_agente(st.session_state['agente_nombre'])
+        if not df.empty:
+            c1, c2, c3 = st.columns(3)
+            with c1: st.metric("PROMEDIO ACUMULADO", f"{df['nota'].mean():.1f}%")
+            with c2: st.metric("MÓDULOS COMPLETADOS", len(df))
+            with c3: st.metric("ESTADO", "ACTIVO", delta="Aprobado")
+            st.dataframe(df, use_container_width=True, hide_index=True)
+        else:
+            st.info("No se registran evaluaciones en su expediente actual.")
+
+    elif seccion == "📈 Dashboard General":
+        if st.session_state['es_admin']:
+            st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📈 Analítica de Rendimiento Institucional</h2>", unsafe_allow_html=True)
+            df_all = cargar_todo_admin()
+            if not df_all.empty:
+                m1, m2, m3 = st.columns(3)
+                m1.metric("TOTAL AGENTES", df_all['funcionario'].nunique())
+                m2.metric("NOTAS (MEDIA)", f"{df_all['nota'].mean():.1f}%")
+                m3.metric("TOTAL EVALUACIONES", len(df_all))
+                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
+        else:
+            st.error("Acceso restringido. Solo personal de administración (DIPOL).")
         
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
