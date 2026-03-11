@@ -963,22 +963,48 @@ else:
             st.info("No hay registros aún o hubo un problema de conexión.")
 
     elif seccion == "📈 Dashboard General":
-        if st.session_state['es_admin']:
+        if st.session_state.get('es_admin', False):
             st.title("🛡️ Panel Administrativo")
+            
             try:
-                with engine.connect() as conn:
-                    df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
+                # Usamos una forma más robusta de conexión para evitar el Error
+                with engine.begin() as conn:
+                    query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
+                    df_all = pd.read_sql(query, conn)
                 
                 if not df_all.empty:
-                    st.dataframe(df_all, use_container_width=True)
+                    # --- MÉTRICAS PRINCIPALES ---
+                    m1, m2, m3 = st.columns(3)
+                    with m1:
+                        st.metric("Total Evaluaciones", len(df_all))
+                    with m2:
+                        st.metric("Promedio Global", f"{df_all['nota'].mean():.1f}%")
+                    with m3:
+                        st.metric("Agentes Evaluados", df_all['funcionario'].nunique())
+                    
                     st.divider()
-                    st.subheader("Promedio por Módulo")
-                    # Agrupamos y graficamos el promedio de notas
-                    chart_data = df_all.groupby('modulo')['nota'].mean()
-                    st.bar_chart(chart_data)
+
+                    # --- VISUALIZACIÓN ---
+                    c1, c2 = st.columns([1, 1])
+                    
+                    with c1:
+                        st.subheader("📋 Registro de Calificaciones")
+                        st.dataframe(df_all.sort_values(by='fecha', ascending=False), use_container_width=True)
+                    
+                    with c2:
+                        st.subheader("📊 Rendimiento por Módulo")
+                        # Preparamos los datos para el gráfico
+                        chart_data = df_all.groupby('modulo')['nota'].mean().reset_index()
+                        # Usamos bar_chart indicando X e Y para evitar errores de índice
+                        st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37")
+
                 else: 
-                    st.info("No hay datos globales registrados.")
+                    st.info("No hay datos globales registrados todavía.")
+                    
             except Exception as e:
-                st.error("Error al acceder a la base de datos administrativa.")
+                # Imprimimos el error real en la consola para que tú lo veas
+                print(f"DEBUG ERROR: {e}")
+                st.error(f"Error técnico: {e}")
+                st.info("💡 Verifica que la tabla 'calificaciones' exista en tu base de datos y que las columnas coincidan.")
         else: 
-            st.warning("Acceso restringido a administradores.")
+            st.warning("Acceso restringido. Por favor, inicie sesión como administrador.")
