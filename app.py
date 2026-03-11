@@ -1056,7 +1056,7 @@ else:
             
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
-            # Título con estilo institucional y profesional
+            # Título único con estilo institucional y profesional (DIPOL)
             st.markdown("""
                 <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-bottom: 4px solid #D4AF37; margin-bottom: 25px;">
                     <h1 style="color: white; margin: 0;">🛡️ Centro de Inteligencia Analítica</h1>
@@ -1070,21 +1070,19 @@ else:
                     df_raw = pd.read_sql(query, conn)
                 
                 if not df_raw.empty:
-                    # --- CORRECCIÓN DE DUPLICADOS ---
-                    # Convertimos a datetime y ordenamos para quedarnos con el registro más reciente por agente y módulo
+                    # --- PROCESAMIENTO DE DATOS (Limpieza de duplicados) ---
                     df_raw['fecha'] = pd.to_datetime(df_raw['fecha'])
+                    # Mantiene solo el último intento realizado por cada agente en cada módulo
                     df_all = df_raw.sort_values('fecha').drop_duplicates(subset=['funcionario', 'modulo'], keep='last')
-                    
-                    # Formateamos la fecha para mostrar en la tabla
                     df_all['fecha_display'] = df_all['fecha'].dt.strftime('%Y-%m-%d %H:%M')
                     
-                    # --- MÉTRICAS KPI (Usando datos limpios) ---
+                    # --- CÁLCULO DE MÉTRICAS KPI ---
                     promedio = df_all['nota'].mean()
-                    total_eval = len(df_all) # Ahora cuenta evaluaciones únicas por módulo/agente
+                    total_eval = len(df_all)
                     aprobados = len(df_all[df_all['nota'] >= 70])
                     porcentaje_exito = (aprobados / total_eval) * 100
 
-                    # --- DISEÑO DE TARJETAS PRO ---
+                    # --- DISEÑO DE TARJETAS (CSS) ---
                     st.markdown("""
                         <style>
                         .metric-card {
@@ -1098,24 +1096,24 @@ else:
                         }
                         .metric-title {
                             color: #8b949e;
-                            font-size: 1rem;
+                            font-size: 0.9rem;
                             font-weight: bold;
                             text-transform: uppercase;
-                            letter-spacing: 1.5px;
-                            margin-bottom: 15px;
+                            letter-spacing: 1.2px;
+                            margin-bottom: 10px;
                         }
                         .metric-value {
                             color: #D4AF37;
-                            font-size: 3.5rem;
+                            font-size: 3rem;
                             font-weight: 900;
                             margin: 0;
-                            font-family: 'Arial Black', Gadget, sans-serif;
+                            font-family: 'Arial Black', sans-serif;
                         }
                         </style>
                     """, unsafe_allow_html=True)
 
+                    # --- FILA DE MÉTRICAS ---
                     m1, m2, m3, m4 = st.columns(4)
-
                     with m1:
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Evaluaciones</p><p class="metric-value">{total_eval}</p></div>', unsafe_allow_html=True)
                     with m2:
@@ -1149,7 +1147,6 @@ else:
                         with col_filtro:
                             search = st.text_input("🔍 Buscar funcionario...", placeholder="Ingrese nombre para filtrar")
                         with col_descarga:
-                            st.write("📄 **Reportes**")
                             csv = df_all.to_csv(index=False).encode('utf-8')
                             st.download_button("Descargar CSV", data=csv, file_name='reporte_dipol.csv', use_container_width=True)
 
@@ -1175,7 +1172,7 @@ else:
                     low_performers = df_all[df_all['nota'] < 70]
                     if not low_performers.empty:
                         with st.expander("⚠️ Alerta: Personal con necesidad de refuerzo"):
-                            st.warning(f"Se identificaron {len(low_performers)} agentes que no alcanzaron la nota mínima en su último intento.")
+                            st.warning(f"Se identificaron {len(low_performers)} agentes que no alcanzaron la nota mínima.")
                             st.table(low_performers[['funcionario', 'modulo', 'nota']])
 
                 else:
