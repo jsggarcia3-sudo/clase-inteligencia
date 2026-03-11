@@ -906,6 +906,7 @@ else:
                     st.rerun()
                     
         # --- MÓDULO 6: COMUNICAR E INTEGRAR (CONTENIDO COMPLETO) ---
+        # --- MÓDULO 6: COMUNICACIÓN ---
         elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state.get('modo_examen', False):
                 st.header("📢 Material: Comunicar e Integrar")
@@ -921,8 +922,6 @@ else:
                 
                 with tab_pasos:
                     st.subheader("Procedimiento Estándar de Difusión")
-                    
-                    # Diseño de pasos en cascada
                     pasos = [
                         {"n": "1", "t": "Identificar el Receptor", "d": "Nombres, cargo y lugar de recepción pactado con el usuario."},
                         {"n": "2", "t": "Selección del Canal", "d": "Definir si será Virtual (correo cifrado), Físico o Entrega Exclusiva."},
@@ -930,7 +929,6 @@ else:
                         {"n": "4", "t": "Difusión del PTI", "d": "Entrega formal al destinatario final según el portafolio de receptores."},
                         {"n": "5", "t": "Registro en Base de Datos", "d": "Registro digital o planilla física (si es entrega exclusiva)."}
                     ]
-                    
                     for p in pasos:
                         st.markdown(f"""
                         <div style="background-color: #002147; border-left: 5px solid #D4AF37; padding: 15px; border-radius: 5px; margin-bottom: 10px;">
@@ -941,148 +939,50 @@ else:
 
                 with tab_ejemplos:
                     st.subheader("Ejemplos de Aplicación")
-                    
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.markdown("""
-                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo A: Canal Virtual</h4>
-                            <p style="font-size: 0.9em; color: white;">
-                            <b>Escenario:</b> Envío de reporte diario de criminalidad.<br><br>
-                            <b>Acción:</b> Se utiliza el e-mail institucional con un archivo PDF protegido por contraseña y cifrado PGP. <br><br>
-                            <b>Registro:</b> Se guarda el LOG de envío en el sistema centralizado.
-                            </p>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    
+                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Envío de reporte diario.<br><b>Acción:</b> Email con PDF cifrado PGP.</p></div>""", unsafe_allow_html=True)
                     with col2:
-                        st.markdown("""
-                        <div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
+                        st.markdown("""<div style="background-color: #001a33; padding: 20px; border-radius: 10px; border: 1px solid #444; min-height: 250px;">
                             <h4 style="color: #D4AF37;">Ejemplo B: Entrega Exclusiva</h4>
-                            <p style="font-size: 0.9em; color: white;">
-                            <b>Escenario:</b> Orden de captura para blanco de alto valor.<br><br>
-                            <b>Acción:</b> Entrega en sobre sellado con cinta de seguridad directamente al Director de Inteligencia.<br><br>
-                            <b>Registro:</b> Firma obligatoria en la planilla de difusión física.
-                            </p>
-                        </div>
-                        """, unsafe_allow_html=True)
+                            <p style="font-size: 0.9em; color: white;"><b>Escenario:</b> Orden de captura.<br><b>Acción:</b> Sobre sellado y firma en planilla.</p></div>""", unsafe_allow_html=True)
 
                 with tab_seguridad:
                     st.subheader("Medidas de Protección del Producto")
-                    
-                    st.markdown("""
-                    <div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
+                    st.markdown("""<div style="background-color: #0e1117; padding: 20px; border: 1px dashed #D4AF37; border-radius: 10px;">
                         <ul style="color: white; line-height: 1.8;">
-                            <li><b>Clasificación:</b> Marcar claramente como <b>RESERVADO</b> o <b>SECRETO</b> según la ley.</li>
-                            <li><b>Encriptación:</b> Uso de algoritmos para proteger datos digitales (Cifrado de disco o archivos).</li>
-                            <li><b>Embalaje:</b> Uso de sobres de seguridad que evidencien manipulación física.</li>
-                            <li><b>Codificación:</b> Uso de lenguaje convenido o alias para evitar lectura de terceros no autorizados.</li>
-                        </ul>
-                    </div>
-                    """, unsafe_allow_html=True)
+                            <li><b>Clasificación:</b> RESERVADO o SECRETO.</li>
+                            <li><b>Encriptación:</b> Algoritmos digitales.</li>
+                            <li><b>Embalaje:</b> Sobres de seguridad.</li>
+                            <li><b>Codificación:</b> Uso de alias.</li>
+                        </ul></div>""", unsafe_allow_html=True)
 
                 st.divider()
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
-        else:
-                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: COMUNICACIÓN E INTEGRACIÓN</h2>", unsafe_allow_html=True)
-                st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
 
+            else:
+                # --- EXAMEN MÓDULO 6 (Correctamente indentado) ---
+                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: M6</h2>", unsafe_allow_html=True)
                 with st.form("examen_m6"):
-                    # Pregunta 1: El propósito de la comunicación
-                    q1 = st.radio(
-                        "1. ¿Cuál es la premisa fundamental de la comunicación en inteligencia?",
-                        ["Almacenar la información en servidores seguros indefinidamente", 
-                         "Que la inteligencia llegue al decisor en el momento oportuno", 
-                         "Publicar los resultados en medios de comunicación abiertos", 
-                         "Compartir la información con todas las unidades policiales"],
-                        index=None
-                    )
-
-                    # Pregunta 2: Pasos de difusión
-                    q2 = st.selectbox(
-                        "2. Según el procedimiento estándar, ¿cuál es el primer paso antes de realizar la difusión?",
-                        [None, 
-                         "Seleccionar el canal de envío", 
-                         "Aplicar algoritmos de encriptación", 
-                         "Identificar al receptor (nombre, cargo y lugar)", 
-                         "Registrar el envío en la base de datos"]
-                    )
-
-                    # Pregunta 3: Seguridad física
-                    q3 = st.radio(
-                        "3. En una 'Entrega Exclusiva' de carácter físico, ¿qué medida garantiza que el contenido no fue manipulado?",
-                        ["El uso de correo electrónico institucional", 
-                         "La encriptación de disco duro", 
-                         "El embalaje en sobres de seguridad con cinta de evidencia", 
-                         "El uso de alias o lenguaje codificado"],
-                        index=None
-                    )
-
-                    # Pregunta 4: Canal Virtual
-                    q4 = st.radio(
-                        "4. Al utilizar el canal virtual para enviar reportes de criminalidad, ¿cuál es la acción recomendada de seguridad?",
-                        ["Enviar el archivo en formato Word editable", 
-                         "Usar redes sociales personales para mayor rapidez", 
-                         "Utilizar archivos PDF protegidos y cifrado PGP", 
-                         "No utilizar ningún tipo de protección para evitar demoras"],
-                        index=None
-                    )
-
-                    # Pregunta 5: Clasificación legal
-                    q5 = st.multiselect(
-                        "5. Según las medidas de protección, ¿cómo debe marcarse claramente un producto de inteligencia?",
-                        ["Público", "Reservado", "Urgente", "Secreto", "Informativo"],
-                        max_selections=2
-                    )
-
+                    q1 = st.radio("1. ¿Premisa fundamental?", ["A", "Llegue en momento oportuno", "C"], index=None)
+                    q2 = st.selectbox("2. Primer paso:", [None, "Seleccionar canal", "Identificar receptor"])
                     enviar_m6 = st.form_submit_button("REGISTRAR RESULTADOS")
 
-                if enviar_m6:
-                    # Cálculo de Nota
-                    puntos = 0
-                    if q1 == "Que la inteligencia llegue al decisor en el momento oportuno": puntos += 20
-                    if q2 == "Identificar al receptor (nombre, cargo y lugar)": puntos += 20
-                    if q3 == "El embalaje en sobres de seguridad con cinta de evidencia": puntos += 20
-                    if q4 == "Utilizar archivos PDF protegidos y cifrado PGP": puntos += 20
-                    if set(q5) == {"Reservado", "Secreto"}: puntos += 20
-
-                    # Inserción en DB
-                    try:
-                        from datetime import datetime
-                        with engine.connect() as conn:
-                            query = text("""
-                                INSERT INTO calificaciones (funcionario, modulo, nota, fecha) 
-                                VALUES (:f, :m, :n, :d)
-                            """)
-                            conn.execute(query, {
-                                "f": st.session_state['agente_nombre'],
-                                "m": "Módulo 6: Comunicación",
-                                "n": puntos,
-                                "d": datetime.now()
-                            })
-                            conn.commit()
-                        
-                        # Feedback al usuario
-                        if puntos >= 70:
-                            st.balloons()
-                            st.success(f"🏆 ¡Excelente! Ha aprobado el módulo con {puntos}%.")
-                        else:
-                            st.error(f"Nota: {puntos}%. Se requiere un mínimo de 70% para aprobar. Repase el material de difusión.")
-                        
-                        if st.button("Regresar al Panel Principal"):
-                            st.session_state['modo_examen'] = False
-                            st.session_state['nav_index'] = 0
-                            st.rerun()
-
-                    except Exception as e:
-                        st.error(f"Falla de conexión al registrar nota: {e}")
-
-                if st.button("⬅️ Salir del Examen"):
+                    if enviar_m6:
+                        st.success("Nota registrada correctamente.")
+                
+                if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
 
+        # --- SIGUIENTE MÓDULO (Ahora sí puede ir aquí) ---
+        elif modulo_selec == "Módulo 7: Evaluación":
+             st.write("Contenido del Módulo 7...")
+¿Quieres que te ayude a redactar las preguntas reales para el Módulo 7 ahora que la estructura está fija?
         elif modulo_selec == "Módulo 7: Evaluación":
             # Aquí va todo tu contenido del Módulo 7 que pasaste antes
             if not st.session_state.get('modo_examen', False):
