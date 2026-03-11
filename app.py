@@ -133,22 +133,33 @@ else:
 
     # --- RESTO DE SECCIONES (Manteniendo el estándar profesional) ---
     elif seccion == "📚 Módulos":
-        st.session_state['nav_index'] = 1
+        st.markdown("""
+            <div style="border-bottom: 2px solid #D4AF37; padding-bottom: 10px; margin-bottom: 25px;">
+                <h2 style="margin:0;">📚 Centro de Documentación y Estudio</h2>
+                <p style="color: #8b949e; margin:0;">Seleccione una unidad temática para visualizar el material oficial.</p>
+            </div>
+        """, unsafe_allow_html=True)
+
         lista_modulos = [
             "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
             "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
             "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
         ]
         
+        # Recuperamos el último módulo visto o el primero por defecto
+        if 'modulo_activo' not in st.session_state:
+            st.session_state['modulo_activo'] = lista_modulos[0]
+
         try:
-            idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
+            default_idx = lista_modulos.index(st.session_state['modulo_activo'])
         except ValueError:
-            idx_mod = 0
+            default_idx = 0
             
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
+        # Selector con diseño limpio
+        modulo_selec = st.selectbox("Unidad Temática Activa:", lista_modulos, index=default_idx)
         st.session_state['modulo_activo'] = modulo_selec
 
-        st.divider()
+        st.markdown("---")
 
     elif seccion == "📊 Mi Progreso":
         st.markdown("<h2 style='border-bottom: 2px solid #D4AF37; padding-bottom: 10px;'>📊 Expediente de Calificaciones</h2>", unsafe_allow_html=True)
