@@ -1,12 +1,17 @@
 import streamlit as st
-from sqlalchemy import create_engine, text
 import pandas as pd
-from urllib.parse import quote_plus
+from sqlalchemy import create_engine, text
 
-@st.cache_data(ttl=60)  # Los datos se guardan en memoria por 60 segundos
-def get_data(query_text, params=None):
-    with engine.begin() as conn:
-        return pd.read_sql(text(query_text), conn, params=params)
+# 1. Primero defines el engine (asegúrate de usar tus credenciales reales)
+engine = create_engine("tu_url_de_base_de_datos_aqui") 
+
+# 2. Luego la función de caché que utiliza ese engine
+@st.cache_data(ttl=60)
+def cargar_datos_agente(nombre_agente):
+    # Usamos engine directamente aquí
+    with engine.connect() as conn:
+        query = text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC")
+        return pd.read_sql(query, conn, params={"n": nombre_agente})
 
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
 st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
