@@ -196,16 +196,71 @@ else:
                     st.divider()
 
                 with t3:
-                    st.subheader("Fuentes de Información")
-                    st.markdown("""
-                    * **Abiertas:** Medios de comunicación, redes sociales, registros públicos.
-                    * **Cerradas Especializadas:** Bases de datos restringidas, archivos técnicos.
-                    * **Cerradas Humanas:** Personas que brindan información.
-                    * **Técnicas:** Obtenidas por medios tecnológicos (sensores, cámaras).
-                    """)
+                    st.subheader("👥 Administración de Fuentes Humanas")
                     
-                    st.markdown("### Fases de Administración de Fuentes")
-                    st.success("1. Exploración | 2. Aproximación | 3. Registro | 4. Entrenamiento")
+                    st.markdown("""
+                        <div class="lectura-box">
+                            <h4 style="color: #D4AF37; margin-top: 0;">Fases del Proceso Operativo</h4>
+                            <p style="color: white;">La administración de fuentes requiere un seguimiento riguroso para garantizar la fiabilidad de la información obtenida.</p>
+                        </div>
+                    """, unsafe_allow_html=True)
+
+                    # Diseño de fases en columnas 2x2 para mayor claridad
+                    f1, f2 = st.columns(2)
+                    
+                    with f1:
+                        st.markdown("""
+                        <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #3498db; height: 320px;">
+                            <h4 style="color: #3498db;">1. Exploración</h4>
+                            <p style="color: #bdc3c7; font-size: 0.9em;"><i>Búsqueda de fuentes</i></p>
+                            <ul style="color: white; font-size: 0.9em;">
+                                <li><b>Búsqueda:</b> Localización activa.</li>
+                                <li><b>Forma voluntaria:</b> Presentación espontánea.</li>
+                                <li><b>Evaluación y motivación:</b> Análisis de intereses.</li>
+                                <li><b>Selección preliminar:</b> Filtrado inicial.</li>
+                            </ul>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        st.write("") # Espaciador
+                        
+                        st.markdown("""
+                        <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #e74c3c; height: 200px;">
+                            <h4 style="color: #e74c3c;">3. Registro</h4>
+                            <p style="color: #bdc3c7; font-size: 0.9em;"><i>Ingresar la fuente en:</i></p>
+                            <ul style="color: white; font-size: 0.9em;">
+                                <li>Sistema de Administración de Fuentes Humanas (Oficial).</li>
+                            </ul>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    with f2:
+                        st.markdown("""
+                        <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #f1c40f; height: 320px;">
+                            <h4 style="color: #f1c40f;">2. Aproximación</h4>
+                            <p style="color: #bdc3c7; font-size: 0.9em;"><i>Establecimiento de contacto</i></p>
+                            <ul style="color: white; font-size: 0.9em;">
+                                <li><b>La Entrevista:</b> Primer contacto formal.</li>
+                                <li><b>Sonsacamiento:</b> Técnica de obtención sutil.</li>
+                                <li><b>Evaluación:</b> Calificación de acceso y credibilidad.</li>
+                            </ul>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        st.write("") # Espaciador
+
+                        st.markdown("""
+                        <div style="background-color: #1e1e1e; padding: 15px; border-radius: 10px; border-top: 4px solid #2ecc71; height: 200px;">
+                            <h4 style="color: #2ecc71;">4. Entrenamiento</h4>
+                            <p style="color: #bdc3c7; font-size: 0.9em;"><i>Preparar la fuente</i></p>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; color: white; font-size: 0.9em;">
+                                <div>• Instruir</div>
+                                <div>• Orientar</div>
+                                <div>• Dirigir</div>
+                                <div>• Controlar</div>
+                            </div>
+                        </div>
+                        """, unsafe_allow_html=True)
+
+                    st.divider()
 
                 with t4:
                     st.subheader("La Entrevista de Inteligencia")
