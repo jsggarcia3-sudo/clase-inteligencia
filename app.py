@@ -3,75 +3,119 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from urllib.parse import quote_plus
 
-# 1. Primero defines el engine (asegúrate de usar tus credenciales reales)
-engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}") 
+# 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
+st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
 
-# 2. Luego la función de caché que utiliza ese engine
+# 2. CONEXIÓN A BASE DE DATOS (Se define fuera para que la caché la vea)
+# Extraemos los secretos de Streamlit
+try:
+    db_s = st.secrets["connections"]["postgresql"]
+    # Usamos quote_plus por si la contraseña tiene caracteres especiales (@, #, $)
+    pass_clean = quote_plus(db_s['password'])
+    conn_str = f"postgresql://{db_s['username']}:{pass_clean}@{db_s['host']}:{db_s['port']}/{db_s['database']}"
+    engine = create_engine(conn_str)
+except Exception as e:
+    st.error("Error al cargar credenciales de base de datos. Verifica st.secrets.")
+
+# 3. FUNCIONES DE DATOS CON CACHÉ (Para velocidad máxima)
 @st.cache_data(ttl=60)
 def cargar_datos_agente(nombre_agente):
-    # Usamos engine directamente aquí
     with engine.connect() as conn:
         query = text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n ORDER BY fecha DESC")
         return pd.read_sql(query, conn, params={"n": nombre_agente})
 
-# 1. CONFIGURACIÓN E IDENTIDAD VISUAL
-st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
+@st.cache_data(ttl=60)
+def cargar_todo_admin():
+    with engine.connect() as conn:
+        query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
+        return pd.read_sql(query, conn)
 
+# 4. ESTILOS VISUALES
 st.markdown("""
     <style>
     .stApp { background-color: #001226; }
-    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; }
-    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
-    h1, h2, h3, h4 { color: #D4AF37 !important; }
-    .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
+    h1, h2, h3 { color: #D4AF37 !important; font-family: 'Segoe UI', sans-serif; }
+    .stMetric { background-color: #002147; border: 1px solid #30363d; padding: 20px; border-radius: 12px; }
+    [data-testid="stMetricValue"] { color: #D4AF37 !important; font-size: 3rem !important; font-weight: 800; }
+    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; border: none; }
+    .stButton>button:hover { background-color: #ffffff; color: #001226; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. GESTIÓN DE SESIÓN
+# 5. GESTIÓN DE SESIÓN
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
 if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
-if 'modulo_activo' not in st.session_state: st.session_state['modulo_activo'] = "Módulo 1: Conceptualización"
-if 'nav_index' not in st.session_state: st.session_state['nav_index'] = 0
 
 def login():
-    st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 style='text-align: center; font-size: 3em;'>🛡️ SISTEMA DIPOL</h1>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([1,1.5,1])
     with col2:
-        st.write("### Identificación de Funcionario")
-        nombre = st.text_input("Nombre Completo")
-        usuario = st.text_input("Usuario")
-        clave = st.text_input("Contraseña", type="password")
-        if st.button("ACCEDER"):
-            if usuario == "admin_dipol" and clave == "DIPOL2026":
-                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                st.rerun()
-            elif nombre and usuario and clave == "ESTUDIANTE2026":
-                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                st.rerun()
-            else: st.error("Credenciales incorrectas.")
+        with st.form("login_form"):
+            st.write("### Identificación de Funcionario")
+            nombre = st.text_input("Nombre Completo")
+            usuario = st.text_input("Usuario")
+            clave = st.text_input("Contraseña", type="password")
+            submit = st.form_submit_button("ACCEDER AL SISTEMA")
+            
+            if submit:
+                if usuario == "admin_dipol" and clave == "DIPOL2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Administrador"})
+                    st.rerun()
+                elif nombre and usuario and clave == "ESTUDIANTE2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                    st.rerun()
+                else:
+                    st.error("Credenciales incorrectas o campos vacíos.")
 
+# 6. LÓGICA DE NAVEGACIÓN
 if not st.session_state['autenticado']:
     login()
 else:
-    # Configuración de base de datos
-    db_s = st.secrets["connections"]["postgresql"]
-    engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
-
-    # 3. BARRA LATERAL (MENÚ)
+    # BARRA LATERAL
     with st.sidebar:
-        st.title("📂 MENÚ")
-        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        st.markdown(f"### 👤 {st.session_state['agente_nombre']}")
+        st.write(f"Rol: {'🛡️ Administrador' if st.session_state['es_admin'] else '👮 Agente Operativo'}")
+        st.divider()
         
-        opciones_nav = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
-        seccion = st.radio("Ir a:", opciones_nav, index=st.session_state['nav_index'])
+        opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso"]
+        if st.session_state['es_admin']:
+            opciones.append("📈 Dashboard General")
+            
+        seccion = st.radio("Navegación", opciones)
         
-        # Sincronizar nav_index con la selección manual del radio
-        st.session_state['nav_index'] = opciones_nav.index(seccion)
-
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
+
+    # --- CONTENIDO DE LAS SECCIONES ---
+    if seccion == "🏠 Inicio":
+        st.title("Bienvenido al Centro de Capacitación")
+        st.info(f"Hola {st.session_state['agente_nombre']}, selecciona un módulo para comenzar.")
+
+    elif seccion == "📊 Mi Progreso":
+        st.markdown("<h1>📊 Mi Expediente</h1>", unsafe_allow_html=True)
+        df = cargar_datos_agente(st.session_state['agente_nombre'])
+        if not df.empty:
+            c1, c2 = st.columns(2)
+            c1.metric("Promedio", f"{df['nota'].mean():.1f}%")
+            c2.metric("Evaluaciones", len(df))
+            st.dataframe(df, use_container_width=True, hide_index=True)
+        else:
+            st.info("No hay registros aún.")
+
+    elif seccion == "📈 Dashboard General":
+        if st.session_state['es_admin']:
+            st.title("📈 Dashboard Estratégico")
+            df_all = cargar_todo_admin()
+            if not df_all.empty:
+                m1, m2, m3 = st.columns(3)
+                m1.metric("Total Agentes", df_all['funcionario'].nunique())
+                m2.metric("Promedio Global", f"{df_all['nota'].mean():.1f}%")
+                m3.metric("Exámenes Realizados", len(df_all))
+                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
+        else:
+            st.error("Área restringida.")
             
     if seccion == "🏠 Inicio":
         st.session_state['nav_index'] = 0
