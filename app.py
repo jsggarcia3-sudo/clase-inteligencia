@@ -1055,271 +1055,133 @@ else:
             st.warning("Asegúrate de que la variable 'engine' esté definida al inicio del script.")
             
     elif seccion == "📈 Dashboard General":
-
         if st.session_state.get('es_admin', False):
-
             # Título con estilo institucional y profesional
-
             st.markdown("""
-
                 <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-bottom: 4px solid #D4AF37; margin-bottom: 25px;">
-
                     <h1 style="color: white; margin: 0;">🛡️ Centro de Inteligencia Analítica</h1>
-
                     <p style="color: #D4AF37; margin: 0; font-weight: bold;">Panel de Control y Rendimiento Académico - DIPOL</p>
-
                 </div>
-
             """, unsafe_allow_html=True)
-
             
-
             try:
-
                 with engine.begin() as conn:
-
                     query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
-
-                    df_all = pd.read_sql(query, conn)
-
+                    df_raw = pd.read_sql(query, conn)
                 
-
-                if not df_all.empty:
-
-                    df_all['fecha'] = pd.to_datetime(df_all['fecha']).dt.strftime('%Y-%m-%d %H:%M')
-
+                if not df_raw.empty:
+                    # --- CORRECCIÓN DE DUPLICADOS ---
+                    # Convertimos a datetime y ordenamos para quedarnos con el registro más reciente por agente y módulo
+                    df_raw['fecha'] = pd.to_datetime(df_raw['fecha'])
+                    df_all = df_raw.sort_values('fecha').drop_duplicates(subset=['funcionario', 'modulo'], keep='last')
                     
-
-                    # --- MÉTRICAS KPI (Key Performance Indicators) ---
-
+                    # Formateamos la fecha para mostrar en la tabla
+                    df_all['fecha_display'] = df_all['fecha'].dt.strftime('%Y-%m-%d %H:%M')
+                    
+                    # --- MÉTRICAS KPI (Usando datos limpios) ---
                     promedio = df_all['nota'].mean()
-
-                    total_eval = len(df_all)
-
+                    total_eval = len(df_all) # Ahora cuenta evaluaciones únicas por módulo/agente
                     aprobados = len(df_all[df_all['nota'] >= 70])
-
                     porcentaje_exito = (aprobados / total_eval) * 100
 
-
-
-                    # --- DISEÑO DE TARJETAS PRO (TAMAÑO MAXIMIZADO) ---
-
+                    # --- DISEÑO DE TARJETAS PRO ---
                     st.markdown("""
-
                         <style>
-
                         .metric-card {
-
                             background: linear-gradient(145deg, #0d1117, #161b22);
-
                             border: 1px solid #30363d;
-
                             border-top: 4px solid #D4AF37;
-
                             border-radius: 15px;
-
                             padding: 25px 10px;
-
                             text-align: center;
-
                             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-
-                            transition: transform 0.3s ease;
-
                         }
-
-                        .metric-card:hover {
-
-                            transform: scale(1.02);
-
-                            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-
-                        }
-
                         .metric-title {
-
                             color: #8b949e;
-
                             font-size: 1rem;
-
                             font-weight: bold;
-
                             text-transform: uppercase;
-
                             letter-spacing: 1.5px;
-
                             margin-bottom: 15px;
-
                         }
-
                         .metric-value {
-
                             color: #D4AF37;
-
-                            font-size: 3.5rem; /* Tamaño aumentado */
-
+                            font-size: 3.5rem;
                             font-weight: 900;
-
                             margin: 0;
-
                             font-family: 'Arial Black', Gadget, sans-serif;
-
-                            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-
                         }
-
                         </style>
-
                     """, unsafe_allow_html=True)
-
-
 
                     m1, m2, m3, m4 = st.columns(4)
 
-
-
                     with m1:
-
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Evaluaciones</p><p class="metric-value">{total_eval}</p></div>', unsafe_allow_html=True)
-
                     with m2:
-
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Promedio</p><p class="metric-value">{promedio:.1f}%</p></div>', unsafe_allow_html=True)
-
                     with m3:
-
                         color_tasa = "#2ecc71" if porcentaje_exito >= 70 else "#e74c3c"
-
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Tasa Éxito</p><p class="metric-value" style="color: {color_tasa};">{porcentaje_exito:.1f}%</p></div>', unsafe_allow_html=True)
-
                     with m4:
-
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Agentes</p><p class="metric-value">{df_all["funcionario"].nunique()}</p></div>', unsafe_allow_html=True)
 
-
-
                     # --- PESTAÑAS DE ANÁLISIS ---
-
                     tab_rend, tab_detalles = st.tabs(["📊 Análisis de Rendimiento", "🔍 Detalle por Agente"])
 
-
-
                     with tab_rend:
-
                         c1, c2 = st.columns([1.2, 0.8])
-
-                        
-
                         with c1:
-
                             st.subheader("Promedio por Componente Educativo")
-
                             chart_data = df_all.groupby('modulo')['nota'].mean().reset_index()
-
-                            # Gráfico de barras con color institucional
-
                             st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37", use_container_width=True)
-
                         
-
                         with c2:
-
                             st.subheader("Distribución de Calificaciones")
-
-                            # Clasificación de desempeño
-
                             bins = [0, 69, 89, 100]
-
                             labels = ['Insuficiente (0-69)', 'Satisfactorio (70-89)', 'Sobresaliente (90-100)']
-
                             df_all['Nivel'] = pd.cut(df_all['nota'], bins=bins, labels=labels)
-
                             dist_data = df_all['Nivel'].value_counts()
-
                             st.bar_chart(dist_data, color="#2ecc71")
 
-
-
                     with tab_detalles:
-
                         col_filtro, col_descarga = st.columns([3, 1])
-
                         with col_filtro:
-
                             search = st.text_input("🔍 Buscar funcionario...", placeholder="Ingrese nombre para filtrar")
-
                         with col_descarga:
-
                             st.write("📄 **Reportes**")
-
                             csv = df_all.to_csv(index=False).encode('utf-8')
-
                             st.download_button("Descargar CSV", data=csv, file_name='reporte_dipol.csv', use_container_width=True)
 
-
-
-                        # Aplicar filtro de búsqueda si existe
-
                         display_df = df_all.copy()
-
                         if search:
-
                             display_df = display_df[display_df['funcionario'].str.contains(search, case=False)]
-
                         
-
-                        # Tabla con barras de progreso para las notas
-
                         st.dataframe(
-
                             display_df.sort_values(by='fecha', ascending=False),
-
                             column_config={
-
                                 "nota": st.column_config.ProgressColumn("Calificación", format="%d%%", min_value=0, max_value=100),
-
-                                "fecha": "Fecha",
-
+                                "fecha_display": "Fecha",
                                 "funcionario": "Agente",
-
                                 "modulo": "Módulo"
-
                             },
-
+                            column_order=("funcionario", "modulo", "nota", "fecha_display"),
                             use_container_width=True,
-
                             hide_index=True
-
                         )
 
-
-
                     # --- ALERTAS DE SEGUIMIENTO ---
-
                     st.divider()
-
                     low_performers = df_all[df_all['nota'] < 70]
-
                     if not low_performers.empty:
-
                         with st.expander("⚠️ Alerta: Personal con necesidad de refuerzo"):
-
-                            st.warning(f"Se identificaron {len(low_performers)} intentos fallidos. Se recomienda capacitación adicional para estos funcionarios.")
-
+                            st.warning(f"Se identificaron {len(low_performers)} agentes que no alcanzaron la nota mínima en su último intento.")
                             st.table(low_performers[['funcionario', 'modulo', 'nota']])
 
-
-
                 else:
-
                     st.info("ℹ️ No hay registros en la base de datos para generar el análisis.")
 
-
-
             except Exception as e:
-
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
-
         else:
-
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
