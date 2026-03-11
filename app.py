@@ -986,39 +986,38 @@ else:
                     aprobados = len(df_all[df_all['nota'] >= 70])
                     porcentaje_exito = (aprobados / total_eval) * 100
 
-                    # CSS para personalizar las métricas (Cards)
-                    # --- DISEÑO DE TARJETAS PRO ---
+                    # --- DISEÑO DE TARJETAS PRO (TAMAÑO MAXIMIZADO) ---
                     st.markdown("""
                         <style>
                         .metric-card {
-                            background: linear-gradient(145deg, #161b22, #0d1117);
+                            background: linear-gradient(145deg, #0d1117, #161b22);
                             border: 1px solid #30363d;
-                            border-top: 3px solid #D4AF37;
-                            border-radius: 12px;
-                            padding: 20px;
+                            border-top: 4px solid #D4AF37;
+                            border-radius: 15px;
+                            padding: 25px 10px;
                             text-align: center;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
                             transition: transform 0.3s ease;
                         }
                         .metric-card:hover {
-                            transform: translateY(-5px);
-                            border-top: 3px solid #ffffff;
-                            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.2);
+                            transform: scale(1.02);
+                            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
                         }
                         .metric-title {
                             color: #8b949e;
-                            font-size: 0.8em;
+                            font-size: 1rem;
                             font-weight: bold;
                             text-transform: uppercase;
-                            letter-spacing: 1px;
-                            margin-bottom: 10px;
+                            letter-spacing: 1.5px;
+                            margin-bottom: 15px;
                         }
                         .metric-value {
                             color: #D4AF37;
-                            font-size: 2.2em;
-                            font-weight: 800;
+                            font-size: 3.5rem; /* Tamaño aumentado */
+                            font-weight: 900;
                             margin: 0;
-                            font-family: 'Courier New', Courier, monospace;
+                            font-family: 'Arial Black', Gadget, sans-serif;
+                            text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
                         }
                         </style>
                     """, unsafe_allow_html=True)
@@ -1030,13 +1029,10 @@ else:
                     with m2:
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Promedio</p><p class="metric-value">{promedio:.1f}%</p></div>', unsafe_allow_html=True)
                     with m3:
-                        # Color dinámico para la tasa de éxito (Verde si es buena, Dorado si es regular)
-                        color_tasa = "#2ecc71" if porcentaje_exito >= 80 else "#D4AF37"
+                        color_tasa = "#2ecc71" if porcentaje_exito >= 70 else "#e74c3c"
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Tasa Éxito</p><p class="metric-value" style="color: {color_tasa};">{porcentaje_exito:.1f}%</p></div>', unsafe_allow_html=True)
                     with m4:
                         st.markdown(f'<div class="metric-card"><p class="metric-title">Agentes</p><p class="metric-value">{df_all["funcionario"].nunique()}</p></div>', unsafe_allow_html=True)
-
-                    st.write("") # Espaciador
 
                     # --- PESTAÑAS DE ANÁLISIS ---
                     tab_rend, tab_detalles = st.tabs(["📊 Análisis de Rendimiento", "🔍 Detalle por Agente"])
