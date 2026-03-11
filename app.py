@@ -20,7 +20,7 @@ st.markdown("""
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
 if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
-if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
+if 'modulo_activo' not in st.session_state: st.session_state['modulo_activo'] = "Módulo 1: Conceptualización"
 
 def login():
     st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
@@ -39,14 +39,6 @@ def login():
                 st.rerun()
             else: st.error("Credenciales incorrectas.")
 
-def verificar_intento(nombre, modulo, engine):
-    try:
-        query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
-        with engine.connect() as conn:
-            result = conn.execute(query, {"f": nombre, "m": modulo}).fetchone()
-        return result[0] if result else None
-    except: return None
-
 if not st.session_state['autenticado']:
     login()
 else:
@@ -56,13 +48,19 @@ else:
     with st.sidebar:
         st.title("📂 MENÚ")
         st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
-        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
+        
+        # Sincronización de navegación
+        opciones_nav = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"]
+        if 'nav_index' not in st.session_state: st.session_state['nav_index'] = 0
+        
+        seccion = st.radio("Ir a:", opciones_nav, index=st.session_state['nav_index'])
+        
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
             
     if seccion == "🏠 Inicio":
-        # Tarjetas de inicio con los 7 módulos
+        st.session_state['nav_index'] = 0
         modulos_home = [
             {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
             {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -76,14 +74,7 @@ else:
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
                 st.markdown(f"""
-                <div style="background: linear-gradient(145deg, #002147, #001226); 
-                            padding: 25px; 
-                            border-radius: 15px; 
-                            border: 1px solid #D4AF37; 
-                            text-align: center; 
-                            margin-bottom: 20px;
-                            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-                            min-height: 220px;">
+                <div style="background: linear-gradient(145deg, #002147, #001226); padding: 25px; border-radius: 15px; border: 1px solid #D4AF37; text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); min-height: 220px;">
                     <div style="font-size: 3em; margin-bottom: 10px;">{m['icon']}</div>
                     <h3 style="color: #D4AF37; margin: 0;">{m['tit']}</h3>
                     <p style="color: #ffffff; font-size: 0.9em; opacity: 0.8;">{m['sub']}</p>
@@ -91,72 +82,54 @@ else:
                 """, unsafe_allow_html=True)
                 if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
                     st.session_state['modulo_activo'] = m['full']
-                    st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
+                    st.session_state['nav_index'] = 1 # Mueve a Módulos
+                    st.rerun()
 
     elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", [
-            "Módulo 1: Conceptualización", 
-            "Módulo 2: Ciclo de Inteligencia", 
-            "Módulo 3: Recolección", 
-            "Módulo 4: Tratamiento", 
-            "Módulo 5: Análisis", 
-            "Módulo 6: Comunicación", 
-            "Módulo 7: Evaluación"
-        ])
+        st.session_state['nav_index'] = 1
+        lista_modulos = [
+            "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
+            "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
+            "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
+        ]
         
-        # --- MÓDULO 1 ---
+        # El selectbox inicia en el módulo seleccionado desde el inicio
+        idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
+        st.session_state['modulo_activo'] = modulo_selec
+
         if modulo_selec == "Módulo 1: Conceptualización":
-            # (contenido y examen del módulo 1)
+            st.header("📖 Módulo 1: Conceptualización")
             pass
-
-        # --- MÓDULO 2 ---
         elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
-            # (contenido y examen del módulo 2)
+            st.header("🔄 Módulo 2: Ciclo de Inteligencia")
             pass
-
-        # --- MÓDULO 3 ---
-        elif modulo_selec == "Módulo 3: Recolección":
-            # (contenido completo y examen del módulo 3)
-            pass
-
-        # --- MÓDULO 4 ---
-        elif modulo_selec == "Módulo 4: Tratamiento":
-            # (contenido y examen del módulo 4)
-            pass
-
-        # --- MÓDULO 5 ---
-        elif modulo_selec == "Módulo 5: Análisis":
-            # (contenido y examen del módulo 5)
-            pass
-
-        # --- MÓDULO 6 ---
-        elif modulo_selec == "Módulo 6: Comunicación":
-            # (contenido y examen del módulo 6)
-            pass
-
-        # --- MÓDULO 7 ---
-        elif modulo_selec == "Módulo 7: Evaluación":
-            # (contenido y examen del módulo 7)
-            pass
+        # ... Repetir elif para los demás módulos ...
 
     elif seccion == "📊 Mi Progreso":
+        st.session_state['nav_index'] = 2
         st.header("📊 Mi Progreso")
         try:
-            query = text("SELECT modulo, nota FROM calificaciones WHERE funcionario = :f")
             with engine.connect() as conn:
                 df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), conn, params={"n": st.session_state['agente_nombre']})
             if not df.empty:
                 st.dataframe(df, use_container_width=True)
             else: st.info("No hay registros aún.")
-        except: st.info("No hay registros aún.")
+        except Exception as e:
+            st.info("Error al conectar con la base de datos.")
 
-elif seccion == "📈 Dashboard General":
+    elif seccion == "📈 Dashboard General":
+        st.session_state['nav_index'] = 3
         if st.session_state['es_admin']:
             st.title("🛡️ Panel Administrativo")
-            with engine.connect() as conn:
-                df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
-            st.dataframe(df_all, use_container_width=True)
-            st.divider()
-            if not df_all.empty:
-                st.bar_chart(df_all.groupby('modulo')['nota'].mean())
-        else: st.warning("Acceso restringido a administradores.")
+            try:
+                with engine.connect() as conn:
+                    df_all = pd.read_sql(text("SELECT funcionario, modulo, nota, fecha FROM calificaciones"), conn)
+                if not df_all.empty:
+                    st.dataframe(df_all, use_container_width=True)
+                    st.divider()
+                    st.bar_chart(df_all.groupby('modulo')['nota'].mean())
+                else: st.info("No hay datos globales aún.")
+            except: st.error("Error al cargar datos administrativos.")
+        else:
+            st.warning("Acceso restringido a administradores.")
