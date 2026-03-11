@@ -90,20 +90,20 @@ else:
             
     if seccion == "🏠 Inicio":
     # Encabezado institucional con estilo más profesional
-    st.markdown("""
-        <div style="text-align: center; padding: 50px; 
-                    background: linear-gradient(135deg, #001226, #002147); 
-                    border-radius: 15px; 
-                    border: 1px solid #D4AF37; 
-                    box-shadow: 0 6px 20px rgba(0,0,0,0.6);">
-            <h1 style="color: #D4AF37; font-size: 2.8em; margin-bottom: 10px;">
-                🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN
-            </h1>
-            <p style="color: #ffffff; font-size: 1.2em; opacity: 0.9;">
-                Dirección de Inteligencia Policial (DIPOL)
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+            <div style="text-align: center; padding: 50px; 
+                        background: linear-gradient(135deg, #001226, #002147); 
+                        border-radius: 15px; 
+                        border: 1px solid #D4AF37; 
+                        box-shadow: 0 6px 20px rgba(0,0,0,0.6);">
+                <h1 style="color: #D4AF37; font-size: 2.8em; margin-bottom: 10px;">
+                    🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN
+                </h1>
+                <p style="color: #ffffff; font-size: 1.2em; opacity: 0.9;">
+                    Dirección de Inteligencia Policial (DIPOL)
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
 
     st.divider()
 
