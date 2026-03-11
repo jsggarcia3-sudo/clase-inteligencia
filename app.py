@@ -154,24 +154,37 @@ else:
                         st.write("**🔴 ACTUAR:** Implementar acciones correctivas o preventivas.")
 
                 with t2:
-                    st.subheader("🕵️ Operaciones de Inteligencia")
-                    st.info("Actividades orientadas a la obtención de información privilegiada mediante el uso de medios técnicos.")
+                    st.subheader("🕵️ Operaciones de Inteligencia Policial")
                     
-                    with st.expander("🛠️ OPERACIONES BÁSICAS", expanded=True):
-                        c1, c2 = st.columns(2)
-                        with c1:
-                            st.markdown("#### 🔍 Reconocimiento")
-                            st.caption("Concretar y ampliar datos previos: entorno, inmuebles, vías de acceso y seguridad.")
-                            st.markdown("#### 🔭 Vigilancia")
-                            st.caption("Observación continua y discreta sobre objetivos para establecer rutinas.")
-                        with c2:
-                            st.markdown("#### ✅ Verificación")
-                            st.caption("Establecer veracidad o desvirtuar información mediante consultas a bases de datos.")
-                            st.markdown("#### 🚗 Seguimiento")
-                            st.caption("Control sobre un elemento en movimiento para identificar puntos de llegada.")
+                    st.markdown("""
+                    <div style="background-color: #002b55; padding: 15px; border-radius: 10px; border-left: 5px solid #D4AF37; margin-bottom: 20px;">
+                        <p style="color: white; margin: 0;">Para la ejecución de las siguientes operaciones es indispensable el <b>Empleo y uso de Medios Técnicos</b>.</p>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-                    st.markdown("#### 🗣️ Sonsacamiento")
-                    st.warning("Técnica que permite obtener información mediante el **diálogo sutil** sin que la fuente detecte la intención.")
+                    col_op1, col_op2 = st.columns(2)
+
+                    with col_op1:
+                        st.markdown("### 🛠️ Operaciones Básicas")
+                        st.markdown("""
+                        * **Reconocimiento:** Concretar y ampliar datos previos sobre el entorno y objetivos.
+                        * **Verificación:** Establecer la veracidad de los datos o desvirtuar información.
+                        * **Vigilancia:** Observación continua y discreta (fija/móvil) para establecer rutinas.
+                        * **Seguimiento:** Control sobre personas o elementos en movimiento.
+                        * **Sonsacamiento:** Obtención de información mediante diálogo sutil e invisible.
+                        """)
+
+                    with col_op2:
+                        st.markdown("### 🛡️ Operaciones Especializadas")
+                        st.markdown("""
+                        * **Admón. de Fuentes Humanas:** Dirección y control de personas que cooperan.
+                        * **Entrevista:** Intercambio de ideas para obtener información específica.
+                        * **Infiltración:** Ubicar agentes dentro de una organización con cobertura.
+                        * **Penetración:** Lograr la colaboración de alguien que ya pertenece a la organización.
+                        * **Caracterización y Fachada:** El "quién eres" (rol) y el entorno que lo respalda (entorno físico).
+                        """)
+
+                    st.divider()
 
                 with t3:
                     st.subheader("Fuentes de Información")
