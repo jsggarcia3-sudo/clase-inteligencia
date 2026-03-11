@@ -74,27 +74,12 @@ if not st.session_state['autenticado']:
 else:
     # BARRA LATERAL
     with st.sidebar:
-        st.markdown(f"### 👤 {st.session_state['agente_nombre']}")
-        st.write(f"Rol: {'🛡️ Administrador' if st.session_state['es_admin'] else '👮 Agente Operativo'}")
-        st.divider()
-        
-        # Define las opciones en el mismo orden que tus 'elif'
-        opciones = ["🏠 Inicio", "📖 Módulos", "📊 Calificaciones", "📈 Dashboard General"]
-
-# El menú debe estar vinculado al nav_index
-        seccion = st.sidebar.option_menu(
-            "Navegación", 
-            opciones,
-            icons=['house', 'book', 'bar-chart', 'graph-up'], 
-            menu_icon="cast", 
-            default_index=st.session_state.get('nav_index', 0) # <--- ESTO HACE QUE CAMBIE DE PESTAÑA
-        )
-            
-        seccion = st.radio("Navegación", opciones)
-        
+        st.title("📂 MENÚ")
+        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
-            st.rerun()
+            st.rerun()     
 
     # --- CONTENIDO DE LAS SECCIONES ---
     if seccion == "🏠 Inicio":
