@@ -964,47 +964,85 @@ else:
 
     elif seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
-            st.title("🛡️ Panel Administrativo")
+            st.markdown('<h1 style="color: #D4AF37;">🛡️ Centro de Mando Analítico</h1>', unsafe_allow_html=True)
+            st.caption("Visualización avanzada del rendimiento académico de la unidad")
             
             try:
-                # Usamos una forma más robusta de conexión para evitar el Error
                 with engine.begin() as conn:
                     query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
                     df_all = pd.read_sql(query, conn)
                 
                 if not df_all.empty:
-                    # --- MÉTRICAS PRINCIPALES ---
-                    m1, m2, m3 = st.columns(3)
-                    with m1:
-                        st.metric("Total Evaluaciones", len(df_all))
-                    with m2:
-                        st.metric("Promedio Global", f"{df_all['nota'].mean():.1f}%")
-                    with m3:
-                        st.metric("Agentes Evaluados", df_all['funcionario'].nunique())
+                    # Formatear fecha para visualización
+                    df_all['fecha'] = pd.to_datetime(df_all['fecha']).dt.strftime('%Y-%m-%d %H:%M')
                     
-                    st.divider()
+                    # --- KPI CARDS (Métricas Pro) ---
+                    total_eval = len(df_all)
+                    promedio = df_all['nota'].mean()
+                    agentes_unicos = df_all['funcionario'].nunique()
 
-                    # --- VISUALIZACIÓN ---
-                    c1, c2 = st.columns([1, 1])
+                    st.markdown("""
+                        <style>
+                        [data-testid="stMetricValue"] { font-size: 32px; color: #D4AF37; }
+                        div[data-testid="stMetric"] { background-color: #0e1117; padding: 15px; border-radius: 10px; border: 1px solid #31333F; }
+                        </style>
+                    """, unsafe_allow_html=True)
+
+                    m1, m2, m3, m4 = st.columns(4)
+                    m1.metric("Evaluaciones", total_eval, help="Total de exámenes realizados")
+                    m2.metric("Promedio Global", f"{promedio:.1f}%", delta=f"{promedio-70:.1f}% vs Meta")
+                    m3.metric("Personal", agentes_unicos, help="Agentes únicos evaluados")
                     
-                    with c1:
-                        st.subheader("📋 Registro de Calificaciones")
-                        st.dataframe(df_all.sort_values(by='fecha', ascending=False), use_container_width=True)
-                    
-                    with c2:
-                        st.subheader("📊 Rendimiento por Módulo")
-                        # Preparamos los datos para el gráfico
+                    # Filtro rápido en la cuarta columna
+                    with m4:
+                        st.write("📥 **Reportes**")
+                        csv = df_all.to_csv(index=False).encode('utf-8')
+                        st.download_button(
+                            label="Descargar CSV",
+                            data=csv,
+                            file_name='reporte_calificaciones_dipol.csv',
+                            mime='text/csv',
+                        )
+
+                    st.write("---")
+
+                    # --- GRÁFICOS Y TABLAS ---
+                    col_left, col_right = st.columns([1.2, 0.8])
+
+                    with col_left:
+                        st.subheader("📊 Análisis por Componente")
                         chart_data = df_all.groupby('modulo')['nota'].mean().reset_index()
-                        # Usamos bar_chart indicando X e Y para evitar errores de índice
+                        # Diseño de gráfico de barras horizontal para mejor lectura de nombres largos
                         st.bar_chart(data=chart_data, x='modulo', y='nota', color="#D4AF37")
+                        
+                        # Pequeño insight debajo del gráfico
+                        min_mod = chart_data.loc[chart_data['nota'].idxmin()]
+                        st.warning(f"⚠️ Punto Crítico: El **{min_mod['modulo']}** presenta el promedio más bajo ({min_mod['nota']:.1f}%).")
+
+                    with col_right:
+                        st.subheader("📋 Últimos Resultados")
+                        # Tabla estilizada con los 10 registros más recientes
+                        recent_df = df_all.sort_values(by='fecha', ascending=False).head(10)
+                        st.dataframe(
+                            recent_df[['funcionario', 'nota', 'modulo']], 
+                            use_container_width=True,
+                            hide_index=True
+                        )
+                        
+                    # --- SECCIÓN DE BÚSQUEDA ---
+                    with st.expander("🔍 Buscador Avanzado de Agentes"):
+                        search_user = st.text_input("Ingrese nombre del funcionario:")
+                        if search_user:
+                            user_data = df_all[df_all['funcionario'].str.contains(search_user, case=False)]
+                            st.table(user_data)
 
                 else: 
-                    st.info("No hay datos globales registrados todavía.")
+                    st.info("💡 La base de datos está vacía. Los resultados aparecerán aquí una vez que los agentes completen los módulos.")
                     
             except Exception as e:
-                # Imprimimos el error real en la consola para que tú lo veas
-                print(f"DEBUG ERROR: {e}")
-                st.error(f"Error técnico: {e}")
-                st.info("💡 Verifica que la tabla 'calificaciones' exista en tu base de datos y que las columnas coincidan.")
+                st.error("🚨 Error de Conexión Crítico")
+                with st.expander("Ver detalle técnico del error"):
+                    st.code(e)
         else: 
-            st.warning("Acceso restringido. Por favor, inicie sesión como administrador.")
+            st.error("🚫 ACCESO DENEGADO")
+            st.info("Esta sección es de uso exclusivo para el personal administrativo de DIPOL.")
