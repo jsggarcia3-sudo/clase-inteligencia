@@ -78,9 +78,17 @@ else:
         st.write(f"Rol: {'🛡️ Administrador' if st.session_state['es_admin'] else '👮 Agente Operativo'}")
         st.divider()
         
-        opciones = ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso"]
-        if st.session_state['es_admin']:
-            opciones.append("📈 Dashboard General")
+        # Define las opciones en el mismo orden que tus 'elif'
+        opciones = ["🏠 Inicio", "📖 Módulos", "📊 Calificaciones", "📈 Dashboard General"]
+
+# El menú debe estar vinculado al nav_index
+        seccion = st.sidebar.option_menu(
+            "Navegación", 
+            opciones,
+            icons=['house', 'book', 'bar-chart', 'graph-up'], 
+            menu_icon="cast", 
+            default_index=st.session_state.get('nav_index', 0) # <--- ESTO HACE QUE CAMBIE DE PESTAÑA
+        )
             
         seccion = st.radio("Navegación", opciones)
         
