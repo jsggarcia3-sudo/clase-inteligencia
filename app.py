@@ -985,9 +985,100 @@ else:
                 if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
                     st.session_state['modo_examen'] = True
                     st.rerun()
-            else:
-                st.subheader("📝 Examen de Conocimientos - M6")
-                # Aquí puedes insertar el st.form con las preguntas
+           else:
+                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: COMUNICACIÓN E INTEGRACIÓN</h2>", unsafe_allow_html=True)
+                st.warning("Asegúrese de haber comprendido los protocolos de seguridad antes de enviar sus respuestas.")
+
+                with st.form("examen_m6"):
+                    # Pregunta 1: El propósito de la comunicación
+                    q1 = st.radio(
+                        "1. ¿Cuál es la premisa fundamental de la comunicación en inteligencia?",
+                        ["Almacenar la información en servidores seguros indefinidamente", 
+                         "Que la inteligencia llegue al decisor en el momento oportuno", 
+                         "Publicar los resultados en medios de comunicación abiertos", 
+                         "Compartir la información con todas las unidades policiales"],
+                        index=None
+                    )
+
+                    # Pregunta 2: Pasos de difusión
+                    q2 = st.selectbox(
+                        "2. Según el procedimiento estándar, ¿cuál es el primer paso antes de realizar la difusión?",
+                        [None, 
+                         "Seleccionar el canal de envío", 
+                         "Aplicar algoritmos de encriptación", 
+                         "Identificar al receptor (nombre, cargo y lugar)", 
+                         "Registrar el envío en la base de datos"]
+                    )
+
+                    # Pregunta 3: Seguridad física
+                    q3 = st.radio(
+                        "3. En una 'Entrega Exclusiva' de carácter físico, ¿qué medida garantiza que el contenido no fue manipulado?",
+                        ["El uso de correo electrónico institucional", 
+                         "La encriptación de disco duro", 
+                         "El embalaje en sobres de seguridad con cinta de evidencia", 
+                         "El uso de alias o lenguaje codificado"],
+                        index=None
+                    )
+
+                    # Pregunta 4: Canal Virtual
+                    q4 = st.radio(
+                        "4. Al utilizar el canal virtual para enviar reportes de criminalidad, ¿cuál es la acción recomendada de seguridad?",
+                        ["Enviar el archivo en formato Word editable", 
+                         "Usar redes sociales personales para mayor rapidez", 
+                         "Utilizar archivos PDF protegidos y cifrado PGP", 
+                         "No utilizar ningún tipo de protección para evitar demoras"],
+                        index=None
+                    )
+
+                    # Pregunta 5: Clasificación legal
+                    q5 = st.multiselect(
+                        "5. Según las medidas de protección, ¿cómo debe marcarse claramente un producto de inteligencia?",
+                        ["Público", "Reservado", "Urgente", "Secreto", "Informativo"],
+                        max_selections=2
+                    )
+
+                    enviar_m6 = st.form_submit_button("REGISTRAR RESULTADOS")
+
+                if enviar_m6:
+                    # Cálculo de Nota
+                    puntos = 0
+                    if q1 == "Que la inteligencia llegue al decisor en el momento oportuno": puntos += 20
+                    if q2 == "Identificar al receptor (nombre, cargo y lugar)": puntos += 20
+                    if q3 == "El embalaje en sobres de seguridad con cinta de evidencia": puntos += 20
+                    if q4 == "Utilizar archivos PDF protegidos y cifrado PGP": puntos += 20
+                    if set(q5) == {"Reservado", "Secreto"}: puntos += 20
+
+                    # Inserción en DB
+                    try:
+                        from datetime import datetime
+                        with engine.connect() as conn:
+                            query = text("""
+                                INSERT INTO calificaciones (funcionario, modulo, nota, fecha) 
+                                VALUES (:f, :m, :n, :d)
+                            """)
+                            conn.execute(query, {
+                                "f": st.session_state['agente_nombre'],
+                                "m": "Módulo 6: Comunicación",
+                                "n": puntos,
+                                "d": datetime.now()
+                            })
+                            conn.commit()
+                        
+                        # Feedback al usuario
+                        if puntos >= 70:
+                            st.balloons()
+                            st.success(f"🏆 ¡Excelente! Ha aprobado el módulo con {puntos}%.")
+                        else:
+                            st.error(f"Nota: {puntos}%. Se requiere un mínimo de 70% para aprobar. Repase el material de difusión.")
+                        
+                        if st.button("Regresar al Panel Principal"):
+                            st.session_state['modo_examen'] = False
+                            st.session_state['nav_index'] = 0
+                            st.rerun()
+
+                    except Exception as e:
+                        st.error(f"Falla de conexión al registrar nota: {e}")
+ 
                 if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
