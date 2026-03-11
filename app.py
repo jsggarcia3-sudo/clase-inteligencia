@@ -106,17 +106,84 @@ else:
             pass
         # ... Repetir elif para los demás módulos ...
 
-    elif seccion == "📊 Mi Progreso":
-        st.session_state['nav_index'] = 2
-        st.header("📊 Mi Progreso")
-        try:
-            with engine.connect() as conn:
-                df = pd.read_sql(text("SELECT modulo, nota, fecha FROM calificaciones WHERE funcionario = :n"), conn, params={"n": st.session_state['agente_nombre']})
-            if not df.empty:
-                st.dataframe(df, use_container_width=True)
-            else: st.info("No hay registros aún.")
-        except Exception as e:
-            st.info("Error al conectar con la base de datos.")
+    elif seccion == "📚 Módulos":
+        st.session_state['nav_index'] = 1
+        lista_modulos = [
+            "Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", 
+            "Módulo 3: Recolección", "Módulo 4: Tratamiento", 
+            "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"
+        ]
+        
+        idx_mod = lista_modulos.index(st.session_state['modulo_activo'])
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=idx_mod)
+        st.session_state['modulo_activo'] = modulo_selec
+
+        # =========================================================
+        # ESTRUCTURA DE CONTENIDO POR MÓDULO
+        # =========================================================
+
+        # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
+        if modulo_selec == "Módulo 1: Conceptualización":
+            st.header("📖 Módulo 1: Conceptualización")
+            # [AQUÍ: Insertar texto de lectura, definiciones y leyes]
+            # [AQUÍ: Insertar imágenes o diagramas del Módulo 1]
+            
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M1")
+            # [AQUÍ: Insertar st.form() con las preguntas del examen 1]
+
+        # --- MÓDULO 2: CICLO DE INTELIGENCIA ---
+        elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
+            st.header("🔄 Módulo 2: Ciclo de Inteligencia")
+            # [AQUÍ: Insertar las fases del ciclo (Planeación, Búsqueda, etc.)]
+            # [AQUÍ: Insertar st.image() del diagrama del ciclo]
+
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M2")
+            # [AQUÍ: Insertar st.form() con las preguntas del examen 2]
+
+        # --- MÓDULO 3: RECOLECCIÓN ---
+        elif modulo_selec == "Módulo 3: Recolección":
+            st.header("🕵️ Módulo 3: Recolección de Información")
+            # [AQUÍ: Contenido sobre fuentes abiertas, cerradas y humanas]
+
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M3")
+            # [AQUÍ: Lógica de evaluación para el Módulo 3]
+
+        # --- MÓDULO 4: TRATAMIENTO ---
+        elif modulo_selec == "Módulo 4: Tratamiento":
+            st.header("📊 Módulo 4: Tratamiento de Datos")
+            # [AQUÍ: Insertar la matriz de evaluación de fuente y contenido]
+            # Ejemplo: st.image("tu_tabla_de_evaluacion.png")
+
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M4")
+
+        # --- MÓDULO 5: ANÁLISIS ---
+        elif modulo_selec == "Módulo 5: Análisis":
+            st.header("🧠 Módulo 5: Análisis de Inteligencia")
+            # [AQUÍ: Insertar la "Línea del Conocimiento Analítico"]
+            # st.image("linea_analitica.png")
+            
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M5")
+
+        # --- MÓDULO 6: COMUNICACIÓN ---
+        elif modulo_selec == "Módulo 6: Comunicación":
+            st.header("📢 Módulo 6: Comunicación e Integración")
+            # [AQUÍ: Contenido sobre Difusión y tipos de documentos de inteligencia]
+
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M6")
+
+        # --- MÓDULO 7: EVALUACIÓN ---
+        elif modulo_selec == "Módulo 7: Evaluación":
+            st.header("🔄 Módulo 7: Evaluación y Retroalimentación")
+            # [AQUÍ: Contenido sobre el impacto del producto de inteligencia]
+
+            st.divider()
+            st.subheader("📝 Examen de Conocimientos - M7")
 
     elif seccion == "📈 Dashboard General":
         st.session_state['nav_index'] = 3
