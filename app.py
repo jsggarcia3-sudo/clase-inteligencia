@@ -128,7 +128,7 @@ else:
                     st.session_state['modulo_activo'] = m['full']
                     st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
 
-               
+           
     elif seccion == "📚 Módulos":
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", [
             "Módulo 1: Conceptualización", 
@@ -139,8 +139,6 @@ else:
             "Módulo 6: Comunicación", 
             "Módulo 7: Evaluación"
         ])
-    st.markdown("---")
-    st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
         
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
