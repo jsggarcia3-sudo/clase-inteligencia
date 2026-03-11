@@ -89,29 +89,21 @@ else:
             st.rerun()
             
     if seccion == "🏠 Inicio":
-    # Encabezado institucional con estilo más profesional
-        st.markdown("""
-            <div style="text-align: center; padding: 50px; 
-                        background: linear-gradient(135deg, #001226, #002147); 
-                        border-radius: 15px; 
-                        border: 1px solid #D4AF37; 
-                        box-shadow: 0 6px 20px rgba(0,0,0,0.6);">
-                <h1 style="color: #D4AF37; font-size: 2.8em; margin-bottom: 10px;">
-                    🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN
-                </h1>
-                <p style="color: #ffffff; font-size: 1.2em; opacity: 0.9;">
-                    Dirección de Inteligencia Policial (DIPOL)
-                </p>
-            </div>
-        """, unsafe_allow_html=True)
+    # Encabezado institucional
+    st.markdown("""
+        <div style="text-align: center; padding: 40px; background: linear-gradient(135deg, #001226, #002147); border-radius: 15px; border: 1px solid #D4AF37; box-shadow: 0 6px 20px rgba(0,0,0,0.6);">
+            <h1 style="color: #D4AF37; font-size: 2.5em; margin-bottom: 10px;">🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>
+            <p style="color: #ffffff; font-size: 1.2em; opacity: 0.9;">Dirección de Inteligencia Policial (DIPOL)</p>
+        </div>
+    """, unsafe_allow_html=True)
 
     st.divider()
 
-    # Texto introductorio
+    # Sección introductoria
     st.markdown("""
         <div style="text-align: center; margin: 30px 0; color: white;">
-            <h2 style="color: #D4AF37; font-size: 1.8em;">Bienvenido a la Plataforma Educativa DIPOL</h2>
-            <p style="font-size: 1.05em; opacity: 0.85; max-width: 800px; margin: auto;">
+            <h2 style="color: #D4AF37;">Bienvenido a la Plataforma Educativa DIPOL</h2>
+            <p style="font-size: 1.1em; opacity: 0.85;">
                 Este sistema ha sido diseñado para fortalecer las competencias estratégicas de nuestros funcionarios, 
                 mediante un recorrido estructurado en siete módulos clave de la inteligencia policial.
             </p>
@@ -140,6 +132,7 @@ else:
                         border: 1px solid #D4AF37; 
                         text-align: center; 
                         margin-bottom: 25px;
+                        transition: transform 0.3s ease;
                         box-shadow: 0 6px 18px rgba(0,0,0,0.5);">
                 <div style="font-size: 3em; margin-bottom: 15px;">{m['icon']}</div>
                 <h3 style="color: #D4AF37; margin: 0; font-size: 1.3em;">{m['tit']}</h3>
@@ -153,18 +146,6 @@ else:
 
     st.markdown("---")
     st.caption("© 2026 Plataforma de Inteligencia Policial - Seguridad y Tecnología.")
-
-        
-    elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", [
-            "Módulo 1: Conceptualización", 
-            "Módulo 2: Ciclo de Inteligencia", 
-            "Módulo 3: Recolección", 
-            "Módulo 4: Tratamiento", 
-            "Módulo 5: Análisis", 
-            "Módulo 6: Comunicación", 
-            "Módulo 7: Evaluación"
-         ])
         
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
