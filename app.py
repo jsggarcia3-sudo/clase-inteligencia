@@ -1010,9 +1010,7 @@ else:
                 if st.button("⬅️ Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
-        elif modulo_selec == "Módulo 7: Evaluación":
-             st.write("Contenido del Módulo 7...")
-¿Quieres que te ayude a redactar las preguntas reales para el Módulo 7 ahora que la estructura está fija?
+
         elif modulo_selec == "Módulo 7: Evaluación":
             # Aquí va todo tu contenido del Módulo 7 que pasaste antes
             if not st.session_state.get('modo_examen', False):
