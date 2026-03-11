@@ -188,12 +188,69 @@ else:
             st.subheader("📝 Examen de Conocimientos - M6")
 
         # --- MÓDULO 7: EVALUACIÓN ---
-        elif modulo_selec == "Módulo 7: Evaluación":
-            st.header("🔄 Módulo 7: Evaluación y Retroalimentación")
-            st.markdown("[AQUÍ: Contenido sobre el impacto del producto de inteligencia]")
+        # --- CONTENIDO MÓDULO 7 (VERIFICADO: COMPLETO) ---
+        if modulo_selec == "Módulo 7: Evaluación":
+            if not st.session_state['modo_examen']:
+                st.header("🔄 Material: Evaluar y Retroalimentar")
+                
+                # 1. OBJETIVO (Tu texto sobre PNIP y mejoramiento del servicio)
+                st.markdown("""
+                <div style="background: linear-gradient(90deg, #002147 0%, #003366 100%); padding: 25px; border-radius: 15px; border-right: 5px solid #D4AF37; margin-bottom: 25px;">
+                    <h3 style="color: #D4AF37; margin-top: 0;">🎯 Objetivo de la Fase</h3>
+                    <p style="color: white; font-size: 1.1em;">
+                        Evaluar el impacto del <b>Plan Nacional (PNIP)</b>, <b>Planes Regionales</b> y los productos de inteligencia, 
+                        asegurando que los responsables del ciclo identifiquen oportunidades reales de mejoramiento del servicio.
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
 
-            st.divider()
-            st.subheader("📝 Examen de Conocimientos - M7")
+                # 2. LAS 3 PESTAÑAS (Actividades, SINAI, Ejemplos)
+                tab_act, tab_sinai, tab_ejemplos = st.tabs(["⚙️ Actividades Clave", "📊 Trazabilidad y Análisis", "📝 Casos de Evaluación"])
+
+                with tab_act:
+                    st.subheader("Ruta Crítica de Evaluación")
+                    # Las 5 actividades fundamentales que enviaste
+                    actividades = [
+                        "1. Planificar y programar la evaluación.",
+                        "2. Realizar trazabilidad en SINAI.",
+                        "3. Seleccionar productos para rastreo.",
+                        "4. Trazabilidad de los planes de inteligencia.",
+                        "5. Analizar el impacto decisional."
+                    ]
+                    for act in actividades:
+                        st.markdown(f'<div style="background-color: #0e1117; padding: 12px; border-radius: 8px; border: 1px solid #444; margin-bottom: 8px; color: #D4AF37; font-weight: bold;">{act}</div>', unsafe_allow_html=True)
+
+                with tab_sinai:
+                    st.subheader("Trazabilidad en SINAI")
+                    st.info("La trazabilidad no es solo archivo; es el rastreo de acciones y decisiones tomadas basadas en nuestra inteligencia.")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        # Pertinencia, Oportunidad, Exactitud
+                        st.markdown('<div class="lectura-box"><h4 style="color: #D4AF37;">¿Qué evaluamos?</h4><ul><li><b>Pertinencia:</b> ¿Respondió al requerimiento?</li><li><b>Oportunidad:</b> ¿Llegó a tiempo?</li><li><b>Exactitud:</b> ¿Fue veraz?</li></ul></div>', unsafe_allow_html=True)
+                    with col2:
+                        # Impacto Decisional
+                        st.markdown('<div class="lectura-box"><h4 style="color: #D4AF37;">Impacto Decisional</h4><p>Se mide si el producto generó una acción concreta: una captura, una desarticulación, o un cambio en la política de seguridad regional.</p></div>', unsafe_allow_html=True)
+
+                with tab_ejemplos:
+                    st.subheader("Ejemplos de Retroalimentación")
+                    # Los cuadros Verde (Positiva) y Rojo (Mejora)
+                    st.markdown("""
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="ejemplo-box" style="border-left: 4px solid #4CAF50;">
+                            <h4 style="color: #4CAF50;">✅ Evaluación Positiva</h4>
+                            <p style="color: white; font-size: 0.9em;"><b>Decisión:</b> El mando ordena intervención relámpago.<br><b>Resultado:</b> 5 capturas. Se felicita al equipo por la precisión geográfica.</p>
+                        </div>
+                        <div class="ejemplo-box" style="border-left: 4px solid #F44336;">
+                            <h4 style="color: #F44336;">⚠️ Oportunidad de Mejora</h4>
+                            <p style="color: white; font-size: 0.9em;"><b>Hallazgo:</b> El informe llegó 15 días tarde.<br><b>Acción:</b> Reajustar los tiempos de tratamiento para el próximo ciclo.</p>
+                        </div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+                st.divider()
+                if st.button("🚀 INICIAR EXAMEN MÓDULO 7"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
 
     elif seccion == "📊 Mi Progreso":
         st.header("📊 Mi Progreso")
