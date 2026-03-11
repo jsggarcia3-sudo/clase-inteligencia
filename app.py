@@ -124,11 +124,6 @@ else:
 
         st.divider()
 
-        # --- CONTENIDO POR MÓDULO (IDENTACIÓN CORREGIDA) ---
-        if modulo_selec == "Módulo 1: Conceptualización":
-            st.header("📖 Módulo 1: Conceptualización")
-            st.markdown("### Fundamentos de Inteligencia\nContenido en desarrollo...")
-
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state.get('modo_examen', False):
