@@ -810,9 +810,98 @@ else:
                     st.session_state['modo_examen'] = True
                     st.rerun()
             else:
-                st.subheader("📝 Examen de Conocimientos - M5")
-                # Espacio para el formulario de examen
-                if st.button("⬅️ Volver al Material"):
+                st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN DE COMPETENCIAS: MÓDULO 5</h2>", unsafe_allow_html=True)
+                st.info("Responda con precisión. Una vez enviada, la calificación se registrará en su expediente oficial.")
+
+                with st.form("examen_m5"):
+                    # Pregunta 1: Definición de Análisis
+                    q1 = st.radio(
+                        "1. Según el material, ¿cuál es el objeto principal del proceso de análisis?",
+                        ["Recopilar la mayor cantidad de datos posible", 
+                         "Generar conocimiento con base en la información disponible", 
+                         "Archivar antecedentes históricos", 
+                         "Interceptar comunicaciones en tiempo real"],
+                        index=None
+                    )
+
+                    # Pregunta 2: Fases del Análisis
+                    q2 = st.multiselect(
+                        "2. Seleccione las 4 fases que componen el Estudio Especializado de la Información:",
+                        ["Interpretación", "Recolección", "Integración", "Hipótesis", "Difusión", "Conclusiones"],
+                        max_selections=4
+                    )
+
+                    # Pregunta 3: Proceso Analítico
+                    q3 = st.selectbox(
+                        "3. ¿En qué consiste específicamente la acción de 'ANALIZAR' dentro del proceso analítico?",
+                        [None, 
+                         "Recomponer las partes para entender el significado final", 
+                         "Descomponer el todo e identificar cada elemento individual", 
+                         "Ignorar las ideas secundarias para enfocarse en el todo"]
+                    )
+
+                    # Pregunta 4: Línea del Conocimiento Analítico (LCA)
+                    q4 = st.radio(
+                        "4. En la LCA, ¿qué elemento permite transformar la memoria histórica (pasado) en proyecciones (futuro)?",
+                        ["La recolección de fuentes humanas", 
+                         "La interpretación técnica del presente", 
+                         "El almacenamiento masivo de datos", 
+                         "La suerte y el azar"],
+                        index=None
+                    )
+
+                    # Pregunta 5: Valor de la Inteligencia
+                    q5 = st.radio(
+                        "5. ¿Qué sucede si la inteligencia no cuenta con una síntesis clara que defina cursos de acción?",
+                        ["Gana valor estratégico", 
+                         "Se vuelve más confidencial", 
+                         "Pierde su valor operativo y de orientación", 
+                         "Es más fácil de interpretar"],
+                        index=None
+                    )
+
+                    enviar = st.form_submit_button("FINALIZAR Y REGISTRAR EVALUACIÓN")
+
+                if enviar:
+                    # Lógica de Calificación
+                    puntos = 0
+                    if q1 == "Generar conocimiento con base en la información disponible": puntos += 20
+                    if set(q2) == {"Interpretación", "Integración", "Hipótesis", "Conclusiones"}: puntos += 20
+                    if q3 == "Descomponer el todo e identificar cada elemento individual": puntos += 20
+                    if q4 == "La interpretación técnica del presente": puntos += 20
+                    if q5 == "Pierde su valor operativo y de orientación": puntos += 20
+
+                    # Registro en Base de Datos
+                    try:
+                        from datetime import datetime
+                        with engine.connect() as conn:
+                            query = text("""
+                                INSERT INTO calificaciones (funcionario, modulo, nota, fecha) 
+                                VALUES (:f, :m, :n, :d)
+                            """)
+                            conn.execute(query, {
+                                "f": st.session_state['agente_nombre'],
+                                "m": "Módulo 5: Análisis",
+                                "n": puntos,
+                                "d": datetime.now()
+                            })
+                            conn.commit()
+                        
+                        # Resultado Visual
+                        if puntos >= 70:
+                            st.balloons()
+                            st.success(f"✅ Evaluación Finalizada. Calificación: {puntos}%")
+                        else:
+                            st.warning(f"⚠️ Evaluación Finalizada. Calificación: {puntos}%. Se recomienda repasar el material.")
+                        
+                        if st.button("Finalizar Módulo"):
+                            st.session_state['modo_examen'] = False
+                            st.rerun()
+
+                    except Exception as e:
+                        st.error(f"Error al registrar la nota: {e}")
+
+                if st.button("⬅️ Cancelar y Volver al Material"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
                     
