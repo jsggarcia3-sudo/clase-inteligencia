@@ -46,23 +46,57 @@ st.markdown("""
 # 2. AGREGA AQUÍ EL CÓDIGO DE LA MARCA DE AGUA
 agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
 
-st.markdown(f"""
+st.markdown("""
     <style>
-    .watermark {{
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        font-size: 80px;
-        color: rgba(212, 175, 55, 0.05); /* Muy sutil para no estorbar la lectura */
-        z-index: 9999;
-        pointer-events: none;
-        white-space: nowrap;
-        user-select: none;
-    }}
-    </style>
-    <div class="watermark">{agente_actual}</div>
-""", unsafe_allow_html=True)
+    /* Fondo general */
+    .stApp { background-color: #001226; font-family: 'Montserrat', sans-serif; }
+
+    /* Botones */
+    .stButton>button { 
+        width: 100%; 
+        border-radius: 6px; 
+        background: linear-gradient(90deg, #D4AF37, #b38f2c); 
+        color: #001226; 
+        font-weight: bold; 
+        border: none;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background: #FFD700;
+        color: black;
+    }
+
+    /* Formularios */
+    .stForm { 
+        border: 1px solid #D4AF37 !important; 
+        background-color: #002147 !important; 
+        padding: 25px; 
+        border-radius: 12px; 
+        box-shadow: 0px 0px 12px rgba(212,175,55,0.4);
+    }
+
+    /* Títulos */
+    h1, h2, h3, h4 { 
+        color: #D4AF37 !important; 
+        font-family: 'Montserrat', sans-serif; 
+    }
+
+    /* Caja de lectura */
+    .lectura-box { 
+        background-color: #002b55; 
+        padding: 20px; 
+        border-radius: 10px; 
+        border-left: 5px solid #D4AF37; 
+        color: white; 
+        margin-bottom: 20px; 
+    }
+
+    /* Sidebar */
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #0A0F24, #1C1F33);
+        color: white;
+    }
+    [data-testid="stSidebar"] h1
 
 # 2. GESTIÓN DE SESIÓN
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
