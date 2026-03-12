@@ -125,54 +125,64 @@ def login():
     st.markdown("""
     <style>
     :root {
-        --bg-primary: #001f3f;
-        --bg-secondary: #003366;
-        --accent: #D4AF37;
+        --bg-primary: #000000;
+        --bg-secondary: #000000;
+        --accent: #00f0ff;
         --text-light: #ffffff;
-        --text-dark: #001f3f;
-        --card-bg: #0e1117;
-        --border: #30363d;
-        --shadow: rgba(0,0,0,0.5);
-        --hover-glow: rgba(212, 175, 55, 0.2);
+        --text-dark: #000000;
+        --card-bg: #0a0a0f;
+        --border: #00f0ff;
+        --shadow: rgba(0, 240, 255, 0.3);
+        --hover-glow: rgba(0, 240, 255, 0.2);
     }
 
     [data-theme="light"] {
         --bg-primary: #f8f9fa;
         --bg-secondary: #e9ecef;
-        --accent: #D4AF37;
-        --text-light: #001f3f;
+        --accent: #00f0ff;
+        --text-light: #000000;
         --text-dark: #ffffff;
         --card-bg: #ffffff;
-        --border: #dee2e6;
-        --shadow: rgba(0,0,0,0.1);
-        --hover-glow: rgba(212, 175, 55, 0.1);
+        --border: #00f0ff;
+        --shadow: rgba(0, 240, 255, 0.1);
+        --hover-glow: rgba(0, 240, 255, 0.1);
+    }
+
+    body {
+        background: #000000;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
     }
 
     .login-container {
-        max-width: 500px;
-        margin: 50px auto;
+        max-width: 400px;
+        margin: 100px auto;
         padding: 30px;
-        background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+        background: rgba(10, 10, 15, 0.8);
         border-radius: 15px;
-        box-shadow: 0 10px 30px var(--shadow);
-        animation: fadeIn 0.8s ease-in-out;
-        border: 1px solid var(--accent);
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        border: 1px solid #00f0ff;
         position: relative;
         overflow: hidden;
+        animation: fadeIn 1s ease-in-out;
+        backdrop-filter: blur(10px);
     }
 
     @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(20px); }
+        from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
     }
 
     .login-title {
-        color: var(--accent);
+        color: #00f0ff;
         text-align: center;
         font-size: 2.2rem;
         margin-bottom: 15px;
         font-weight: bold;
         letter-spacing: 1px;
+        text-shadow: 0 0 10px #00f0ff;
         position: relative;
     }
 
@@ -181,38 +191,43 @@ def login():
         display: block;
         width: 50px;
         height: 3px;
-        background: var(--accent);
+        background: #00f0ff;
         margin: 10px auto;
         border-radius: 3px;
+        box-shadow: 0 0 10px #00f0ff;
     }
 
     .login-input {
-        margin-bottom: 15px;
+        margin-bottom: 20px;
     }
 
     .login-input label {
-        color: var(--text-light);
+        color: #ffffff;
         font-weight: bold;
         font-size: 0.95rem;
+        text-shadow: 0 0 5px #00f0ff;
     }
 
     .stTextInput > div > div > input {
-        background-color: var(--card-bg) !important;
-        color: var(--text-light) !important;
-        border: 1px solid var(--border) !important;
+        background-color: #0a0a0f !important;
+        color: #ffffff !important;
+        border: 1px solid #00f0ff !important;
         border-radius: 8px !important;
         padding: 10px 15px !important;
         font-size: 1rem !important;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+        transition: all 0.3s ease;
     }
 
     .stTextInput > div > div > input:focus {
-        border-color: var(--accent) !important;
-        box-shadow: 0 0 0 2px var(--hover-glow) !important;
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important;
+        outline: none;
     }
 
     .stButton > button {
-        background: linear-gradient(90deg, var(--accent), #F0C419);
-        color: var(--text-dark) !important;
+        background: linear-gradient(90deg, #00f0ff, #00c0ff);
+        color: #000000 !important;
         font-weight: bold;
         font-size: 1.1rem;
         padding: 12px 25px;
@@ -220,15 +235,16 @@ def login():
         border: none;
         width: 100%;
         transition: all 0.3s ease;
-        box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+        box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
         position: relative;
         overflow: hidden;
+        text-shadow: 0 0 5px #000000;
     }
 
     .stButton > button:hover {
         transform: translateY(-2px);
-        box-shadow: 0 6px 15px rgba(212, 175, 55, 0.5);
-        background: linear-gradient(90deg, #F0C419, var(--accent));
+        box-shadow: 0 6px 15px rgba(0, 240, 255, 0.5);
+        background: linear-gradient(90deg, #00c0ff, #00f0ff);
     }
 
     .stButton > button:active {
@@ -251,6 +267,7 @@ def login():
         border-left: 4px solid #c0392b;
         font-weight: bold;
         animation: shake 0.5s ease-in-out;
+        box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
     }
 
     @keyframes shake {
@@ -265,8 +282,8 @@ def login():
         position: fixed;
         top: 20px;
         right: 20px;
-        background: var(--card-bg);
-        border: 1px solid var(--border);
+        background: #0a0a0f;
+        border: 1px solid #00f0ff;
         border-radius: 50%;
         width: 40px;
         height: 40px;
@@ -274,15 +291,15 @@ def login():
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        box-shadow: 0 2px 8px var(--shadow);
+        box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
         z-index: 1000;
         transition: all 0.3s ease;
     }
 
     .theme-toggle:hover {
         transform: scale(1.1);
-        background: var(--accent);
-        color: var(--text-dark);
+        background: #00f0ff;
+        color: #000000;
     }
 
     .logo-container {
@@ -293,8 +310,8 @@ def login():
     .logo-svg {
         width: 80px;
         height: 80px;
-        fill: var(--accent);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        fill: #00f0ff;
+        filter: drop-shadow(0 2px 4px rgba(0, 240, 255, 0.5));
     }
 
     .loader {
@@ -308,7 +325,7 @@ def login():
         display: block;
         width: 40px;
         height: 40px;
-        border: 4px solid var(--accent);
+        border: 4px solid #00f0ff;
         border-top: 4px solid transparent;
         border-radius: 50%;
         animation: spin 1s linear infinite;
@@ -321,9 +338,32 @@ def login():
     }
 
     .loader-text {
-        color: var(--text-light);
+        color: #ffffff;
         margin-top: 10px;
         font-size: 0.9rem;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top:
+        
+   .signup-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        color: #8b949e;
+    }
+
+    .signup-link a {
+        color: #00f0ff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .signup-link a:hover {
+        color: #00c0ff;
+        text-shadow: 0 0 5px #00f0ff;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -340,21 +380,22 @@ def login():
         const currentTheme = document.documentElement.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-    updateToggleIcon();
-}
-
-function updateToggleIcon() {
-    const icon = document.querySelector('.theme-toggle svg path');
-    if (document.documentElement.getAttribute('data-theme') === 'dark') {
-        icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
-    } else {
-        icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
+        localStorage.setItem('theme', newTheme);
+        updateToggleIcon();
     }
-}
-updateToggleIcon();
-</script>
-""", unsafe_allow_html=True)
+
+    function updateToggleIcon() {
+        const icon = document.querySelector('.theme-toggle svg path');
+        if (document.documentElement.getAttribute('data-theme') === 'dark') {
+            icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
+        } else {
+            icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
+        }
+    }
+    updateToggleIcon();
+    </script>
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 class='login-title'>Login Here</h1>", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     with col2:
         st.write("### Identificación de Funcionario")
