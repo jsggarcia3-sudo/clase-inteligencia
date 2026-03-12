@@ -395,7 +395,7 @@ def login():
     updateToggleIcon();
     </script>
     """, unsafe_allow_html=True)
-    st.markdown("<h1 class='login-title'>Login Here</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
     with st.form("login_form"):
         nombre = st.text_input("Nombre Completo", placeholder="John Doe")
         usuario = st.text_input("Usuario", placeholder="username")
