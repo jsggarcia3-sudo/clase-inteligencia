@@ -121,7 +121,241 @@ if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
 if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
 
 def login():
-    st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
+    def login():
+    # --- CSS GLOBAL Y ESTILOS DINÁMICOS ---
+    st.markdown("""
+    <style>
+    :root {
+        --bg-primary: #001f3f;
+        --bg-secondary: #003366;
+        --accent: #D4AF37;
+        --text-light: #ffffff;
+        --text-dark: #001f3f;
+        --card-bg: #0e1117;
+        --border: #30363d;
+        --shadow: rgba(0,0,0,0.5);
+        --hover-glow: rgba(212, 175, 55, 0.2);
+    }
+
+    [data-theme="light"] {
+        --bg-primary: #f8f9fa;
+        --bg-secondary: #e9ecef;
+        --accent: #D4AF37;
+        --text-light: #001f3f;
+        --text-dark: #ffffff;
+        --card-bg: #ffffff;
+        --border: #dee2e6;
+        --shadow: rgba(0,0,0,0.1);
+        --hover-glow: rgba(212, 175, 55, 0.1);
+    }
+
+    .login-container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 30px;
+        background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+        border-radius: 15px;
+        box-shadow: 0 10px 30px var(--shadow);
+        animation: fadeIn 0.8s ease-in-out;
+        border: 1px solid var(--accent);
+        position: relative;
+        overflow: hidden;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-title {
+        color: var(--accent);
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        position: relative;
+    }
+
+    .login-title::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: var(--accent);
+        margin: 10px auto;
+        border-radius: 3px;
+    }
+
+    .login-input {
+        margin-bottom: 15px;
+    }
+
+    .login-input label {
+        color: var(--text-light);
+        font-weight: bold;
+        font-size: 0.95rem;
+    }
+
+    .stTextInput > div > div > input {
+        background-color: var(--card-bg) !important;
+        color: var(--text-light) !important;
+        border: 1px solid var(--border) !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+        font-size: 1rem !important;
+    }
+
+    .stTextInput > div > div > input:focus {
+        border-color: var(--accent) !important;
+        box-shadow: 0 0 0 2px var(--hover-glow) !important;
+    }
+
+    .stButton > button {
+        background: linear-gradient(90deg, var(--accent), #F0C419);
+        color: var(--text-dark) !important;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(212, 175, 55, 0.5);
+        background: linear-gradient(90deg, #F0C419, var(--accent));
+    }
+
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #8b949e;
+        font-size: 0.85rem;
+    }
+
+    .error-box {
+        background-color: #e74c3c;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #c0392b;
+        font-weight: bold;
+        animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px var(--shadow);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+        background: var(--accent);
+        color: var(--text-dark);
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo-svg {
+        width: 80px;
+        height: 80px;
+        fill: var(--accent);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    .loader {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .loader:after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid var(--accent);
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+        color: var(--text-light);
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+    # --- TOGGLE DE MODO OSCURO/CLARO ---
+    st.markdown("""
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z"/>
+        </svg>
+    </div>
+    <script>
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    updateToggleIcon();
+}
+
+function updateToggleIcon() {
+    const icon = document.querySelector('.theme-toggle svg path');
+    if (document.documentElement.getAttribute('data-theme') === 'dark') {
+        icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
+    } else {
+        icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
+    }
+}
+updateToggleIcon();
+</script>
+""", unsafe_allow_html=True)
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     with col2:
         st.write("### Identificación de Funcionario")
