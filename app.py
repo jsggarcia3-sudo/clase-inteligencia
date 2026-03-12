@@ -421,20 +421,7 @@ def login():
     """, unsafe_allow_html=True)
     
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
-    with col2:
-        st.write("### Identificación de Funcionario")
-        nombre = st.text_input("Nombre Completo")
-        usuario = st.text_input("Usuario")
-        clave = st.text_input("Contraseña", type="password")
-        if st.button("ACCEDER"):
-            if usuario == "admin_dipol" and clave == "DIPOL2026":
-                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                st.rerun()
-            elif nombre and usuario and clave == "ESTUDIANTE2026":
-                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                st.rerun()
-            else: st.error("Credenciales incorrectas.")
-
+    
 def verificar_intento(nombre, modulo, engine):
     try:
         query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
