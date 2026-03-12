@@ -121,7 +121,6 @@ if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
 if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
 
 def login():
-    def login():
     # --- CSS GLOBAL Y ESTILOS DINÁMICOS ---
     st.markdown("""
     <style>
