@@ -1650,7 +1650,7 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA SUTIL PERO VISIBLE (ESTILO NEÓN AZUL) ---
+# --- MARCA DE AGUA VISIBLE EN FONDO OSCURO (ESTILO NEÓN AZUL) ---
 st.markdown(
     """
     <style>
@@ -1660,11 +1660,11 @@ st.markdown(
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none" stroke="rgba(0, 240, 255, 0.15)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="100" y="100" text-anchor="middle" dominant-baseline="middle" font-size="24" font-family="monospace" fill="rgba(0, 240, 255, 0.15)">DIPOL</text></svg>') repeat;
-        background-size: 200px 200px;
-        z-index: -1;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="rgba(0, 240, 255, 0.1)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="rgba(0, 240, 255, 0.1)">DIPOL</text></svg>') repeat;
+        background-size: 300px 300px;
+        z-index: 9999;
         pointer-events: none;
-        opacity: 0.3;
+        opacity: 0.15;
         transition: all 0.3s ease;
     }
     </style>
