@@ -1653,23 +1653,21 @@ else:
 st.markdown(
     """
     <style>
-    .footer {
+    .watermark {
         position: fixed;
         left: 0;
         bottom: 0;
         width: 100%;
-        background-color: #0a0a0f;
-        color: #00f0ff;
-        text-align: center;
-        padding: 5px;
-        font-size: 0.8rem;
-        box-shadow: 0 -2px 10px rgba(0, 240, 255, 0.2);
-        z-index: 1000;
+        height: 100%;
+        background: url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"100\" viewBox=\"0 0 100 100\" fill=\"none\" stroke=\"rgba(0, 240, 255, 0.1)\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><text x=\"50\" y=\"50\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"20\" font-family=\"monospace\" fill=\"rgba(0, 240, 255, 0.1)\">DIPOL</text></svg>') no-repeat center center;
+        background-size: 100px 100px;
+        z-index: 1;
+        pointer-events: none;
+        opacity: 0.1;
+        transition: all 0.3s ease;
     }
     </style>
-    <div class="footer">
-        🛡️ Plataforma Educativa DIPOL © 2026 — Made with Streamlit
-    </div>
+    <div class="watermark"></div>
     """,
     unsafe_allow_html=True
 )
