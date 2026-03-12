@@ -122,7 +122,7 @@ if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = Fals
 
 def login():
     st.markdown("<h1 style='text-align: center;'>🛡️ SISTEMA DE CAPACITACIÓN DIPOL</h1>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([1,1.5,1])
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
     with col2:
         st.write("### Identificación de Funcionario")
         nombre = st.text_input("Nombre Completo")
@@ -153,6 +153,7 @@ else:
 
     with st.sidebar:
         st.title("📂 MENÚ")
+        st.caption("☰ Desliza para cerrar")
         st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
         seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
         if st.button("Cerrar Sesión"):
@@ -176,7 +177,7 @@ else:
         ]
 
         # Creación de la Grilla Tecnológica (Cards)
-        cols = st.columns(3) # Organizado en 3 columnas
+        cols = st.columns([1, 1, 1]) # Organizado en 3 columnas
 
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
