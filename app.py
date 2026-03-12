@@ -1691,71 +1691,29 @@ else:
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
 # --- MARCA DE AGUA VISIBLE EN AMBOS MODOS (MODO OSCURO Y CLARO) ---
-# --- MARCA DE AGUA SUTIL SOBRE TEXTO (NO EN FONDO) ---
+# --- MARCA DE AGUA SUTIL EN ESQUINA (SOLO PARA CAPTURAS) ---
 st.markdown(
     """
     <style>
-    .text-watermark {
-        position: relative;
-        display: inline-block;
-        color: rgba(0, 240, 255, 0.05) !important;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
-        transition: all 0.3s ease;
-    }
-
-    [data-theme="light"] .text-watermark {
-        color: rgba(0, 0, 0, 0.05) !important;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    }
-
-    /* Aplica la marca de agua a todos los elementos de texto */
-    .stMarkdown, .stText, .stTitle, .stHeader, .stSubheader, .stCaption, .stCode, .stSidebar, .stButton > button {
-        position: relative;
-    }
-
-    .stMarkdown::after,
-    .stText::after,
-    .stTitle::after,
-    .stHeader::after,
-    .stSubheader::after,
-    .stCaption::after,
-    .stCode::after,
-    .stSidebar::after,
-    .stButton > button::after {
-        content: " CONFIDENCIAL-DIPOL ";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        color: rgba(0, 240, 255, 0.05) !important;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
-        pointer-events: none;
-        z-index: 9999;
-        opacity: 0.05;
+    .watermark-corner {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        color: rgba(0, 240, 255, 0.1) !important;
         font-size: 12px;
         font-family: monospace;
         letter-spacing: 1px;
-        transform: rotate(-45deg);
-        transform-origin: 0 0;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0.1;
+        transition: all 0.3s ease;
     }
 
-    [data-theme="light"] .stMarkdown::after,
-    [data-theme="light"] .stText::after,
-    [data-theme="light"] .stTitle::after,
-    [data-theme="light"] .stHeader::after,
-    [data-theme="light"] .stSubheader::after,
-    [data-theme="light"] .stCaption::after,
-    [data-theme="light"] .stCode::after,
-    [data-theme="light"] .stSidebar::after,
-    [data-theme="light"] .stButton > button::after {
-        color: rgba(0, 0, 0, 0.05) !important;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    [data-theme="light"] .watermark-corner {
+        color: rgba(0, 0, 0, 0.1) !important;
     }
     </style>
+    <div class="watermark-corner">CONFIDENCIAL-DIPOL</div>
     """,
     unsafe_allow_html=True
 )
