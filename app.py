@@ -39,87 +39,76 @@ def cargar_todo_admin():
 st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
 
 st.markdown("""
-    <style>
-    .stApp { background-color: #001226; }
-    .stButton>button { width: 100%; border-radius: 4px; background-color: #D4AF37; color: #001226; font-weight: bold; }
-    .stForm { border: 1px solid #D4AF37 !important; background-color: #002147 !important; padding: 25px; border-radius: 10px; }
-    h1, h2, h3, h4 { color: #D4AF37 !important; }
-    .lectura-box { background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; color: white; margin-bottom: 20px; }
-    </style>
-    """, unsafe_allow_html=True)
+<style>
+/* ===== RESPONSIVE MÓVIL ===== */
 
-# 2. AGREGA AQUÍ EL CÓDIGO DE LA MARCA DE AGUA
-agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
+/* Viewport base */
+@media (max-width: 768px) {
 
-st.markdown("""
-    <style>
-    /* Fondo general */
-    .stApp { background-color: #001226; font-family: 'Montserrat', sans-serif; }
-
-    /* Botones */
-    .stButton>button { 
-        width: 100%; 
-        border-radius: 6px; 
-        background: linear-gradient(90deg, #D4AF37, #b38f2c); 
-        color: #001226; 
-        font-weight: bold; 
-        border: none;
-        transition: 0.3s;
+    /* Reducir padding general */
+    .block-container {
+        padding: 1rem 0.5rem !important;
     }
-    .stButton>button:hover {
-        background: #FFD700;
-        color: black;
+
+    /* Botones full-width en móvil */
+    .stButton > button {
+        font-size: 0.85rem !important;
+        padding: 10px 5px !important;
+    }
+
+    /* Títulos más pequeños */
+    h1 { font-size: 1.4rem !important; }
+    h2 { font-size: 1.2rem !important; }
+    h3 { font-size: 1rem !important; }
+
+    /* Columnas en móvil: apilar verticalmente */
+    [data-testid="column"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+    }
+
+    /* Sidebar colapsado por defecto */
+    [data-testid="stSidebar"] {
+        width: 80vw !important;
+    }
+
+    /* Marca de agua más pequeña en móvil */
+    .watermark {
+        font-size: 40px !important;
+    }
+
+    /* Cards del home */
+    div[style*="min-height: 220px"] {
+        min-height: auto !important;
+        padding: 15px !important;
+    }
+
+    /* Tabs: scroll horizontal si no caben */
+    [data-testid="stTabs"] {
+        overflow-x: auto !important;
     }
 
     /* Formularios */
-    .stForm { 
-        border: 1px solid #D4AF37 !important; 
-        background-color: #002147 !important; 
-        padding: 25px; 
-        border-radius: 12px; 
-        box-shadow: 0px 0px 12px rgba(212,175,55,0.4);
+    .stForm {
+        padding: 15px !important;
     }
 
-    /* Títulos */
-    h1, h2, h3, h4 { 
-        color: #D4AF37 !important; 
-        font-family: 'Montserrat', sans-serif; 
+    /* Tablas: scroll horizontal */
+    [data-testid="stDataFrame"] {
+        overflow-x: auto !important;
     }
+}
 
-    /* Caja de lectura */
-    .lectura-box { 
-        background-color: #002b55; 
-        padding: 20px; 
-        border-radius: 10px; 
-        border-left: 5px solid #D4AF37; 
-        color: white; 
-        margin-bottom: 20px; 
+/* ===== TABLETS (768px - 1024px) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .block-container {
+        padding: 1.5rem 1rem !important;
     }
-
-    /* Sidebar */
-    [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #0A0F24, #1C1F33);
-        color: white;
-    }
-    [data-testid="stSidebar"] h1 {
-        color: #D4AF37 !important;
-    }
-
-    /* Marca de agua */
-    .watermark {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) rotate(-45deg);
-        font-size: 80px;
-        color: rgba(212, 175, 55, 0.05);
-        z-index: 9999;
-        pointer-events: none;
-        white-space: nowrap;
-        user-select: none;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    h1 { font-size: 1.8rem !important; }
+}
+</style>
+""", unsafe_allow_html=True)
 
 # 2. MARCA DE AGUA
 agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
