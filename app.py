@@ -4,7 +4,12 @@ from sqlalchemy import create_engine, text
 from urllib.parse import quote_plus
 
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
-st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
+st.set_page_config(
+    page_title="Plataforma Educativa DIPOL",
+    page_icon="🛡️",
+    layout="wide",
+    initial_sidebar_state="collapsed"  # Sidebar oculto por defecto en móvil
+)
 
 # 2. CONEXIÓN A BASE DE DATOS (Se define fuera para que la caché la vea)
 # Extraemos los secretos de Streamlit
