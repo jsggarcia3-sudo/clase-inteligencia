@@ -412,14 +412,7 @@ def login():
                 st.rerun()
             else:
                 st.error("Credenciales incorrectas.")
-
-    # --- ENLACE "SIGN UP" ---
-    st.markdown("""
-    <div class="signup-link">
-        Don't have an account? <a href="#" onclick="alert('Sign Up feature coming soon!')">Sign Up</a>
-    </div>
-    """, unsafe_allow_html=True)
-    
+       
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
 def verificar_intento(nombre, modulo, engine):
