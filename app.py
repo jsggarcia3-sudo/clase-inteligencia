@@ -1690,32 +1690,48 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA VISIBLE EN CAPTURAS (CENTRO DE PANTALLA) ---
+# --- MARCA DE AGUA ALEATORIA (3-4 VECES EN PANTALLA) ---
 st.markdown(
     """
     <style>
-    .watermark-center {
+    .watermark-random {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        color: rgba(0, 240, 255, 0.15) !important;
-        font-size: 24px;
+        color: rgba(0, 240, 255, 0.1) !important;
+        font-size: 20px;
         font-family: monospace;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         z-index: 9999;
         pointer-events: none;
-        opacity: 0.15;
+        opacity: 0.1;
         transition: all 0.3s ease;
-        text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.2);
     }
 
-    [data-theme="light"] .watermark-center {
-        color: rgba(0, 0, 0, 0.15) !important;
-        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    [data-theme="light"] .watermark-random {
+        color: rgba(0, 0, 0, 0.1) !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     }
     </style>
-    <div class="watermark-center">CONFIDENCIAL-DIPOL</div>
+    <script>
+    // Generar 4 marcas de agua aleatorias
+    for (let i = 0; i < 4; i++) {
+        const watermark = document.createElement('div');
+        watermark.className = 'watermark-random';
+        watermark.textContent = 'CONFIDENCIAL-DIPOL';
+        
+        // Posición aleatoria (dentro del 80% de la pantalla para no salirse)
+        const x = Math.random() * 80 + 10; // 10% a 90%
+        const y = Math.random() * 80 + 10; // 10% a 90%
+        const rotation = Math.random() * 360; // Rotación aleatoria
+
+        watermark.style.left = `${x}%`;
+        watermark.style.top = `${y}%`;
+        watermark.style.transform = `rotate(${rotation}deg)`;
+        watermark.style.opacity = '0.1';
+
+        document.body.appendChild(watermark);
+    }
+    </script>
     """,
     unsafe_allow_html=True
 )
