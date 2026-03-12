@@ -1690,40 +1690,39 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA VISIBLE EN CAPTURAS (ESQUINA INFERIOR DERECHA) ---
-# --- MARCA DE AGUA ALEATORIA (3-4 VECES EN PANTALLA) ---
+# --- MARCA DE AGUA VISIBLE EN PANTALLA (3-4 VECES, ALEATORIAS) ---
 st.markdown(
     """
     <style>
-    .watermark-random {
+    .watermark-visible {
         position: fixed;
-        color: rgba(0, 240, 255, 0.2) !important;
-        font-size: 18px;
+        color: rgba(0, 240, 255, 0.4) !important;
+        font-size: 20px;
         font-family: monospace;
         letter-spacing: 1px;
         z-index: 9999;
         pointer-events: none;
-        opacity: 0.2;
+        opacity: 0.4;
         transition: all 0.3s ease;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
         transform-origin: center;
     }
 
-    [data-theme="light"] .watermark-random {
-        color: rgba(0, 0, 0, 0.2) !important;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    [data-theme="light"] .watermark-visible {
+        color: rgba(0, 0, 0, 0.4) !important;
+        text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
     }
     </style>
     <script>
     // Generar 4 marcas de agua aleatorias
     for (let i = 0; i < 4; i++) {
         const watermark = document.createElement('div');
-        watermark.className = 'watermark-random';
+        watermark.className = 'watermark-visible';
         watermark.textContent = 'CONFIDENCIAL-DIPOL';
         
-        // Posición aleatoria (dentro del 90% de la pantalla para no salirse)
-        const x = Math.random() * 90; // 0% a 90%
-        const y = Math.random() * 90; // 0% a 90%
+        // Posición aleatoria (dentro del 85% de la pantalla para no salirse)
+        const x = Math.random() * 85; // 0% a 85%
+        const y = Math.random() * 85; // 0% a 85%
         const rotation = Math.random() * 360; // Rotación aleatoria
 
         watermark.style.left = `${x}%`;
