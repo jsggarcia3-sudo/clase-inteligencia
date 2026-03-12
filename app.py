@@ -1650,3 +1650,26 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
+st.markdown(
+    """
+    <style>
+    .footer {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        background-color: #0a0a0f;
+        color: #00f0ff;
+        text-align: center;
+        padding: 5px;
+        font-size: 0.8rem;
+        box-shadow: 0 -2px 10px rgba(0, 240, 255, 0.2);
+        z-index: 1000;
+    }
+    </style>
+    <div class="footer">
+        🛡️ Plataforma Educativa DIPOL © 2026 — Made with Streamlit
+    </div>
+    """,
+    unsafe_allow_html=True
+)
