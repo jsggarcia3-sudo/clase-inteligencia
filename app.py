@@ -1690,48 +1690,40 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA VISIBLE EN PANTALLA (3-4 VECES, ALEATORIAS) ---
+
+# --- MARCA DE AGUA VISIBLE EN PANTALLA (3-4 VECES, SIN JAVASCRIPT) ---
 st.markdown(
     """
     <style>
-    .watermark-visible {
-        position: fixed;
-        color: rgba(0, 240, 255, 0.4) !important;
-        font-size: 20px;
+    .watermark-inline {
+        position: relative;
+        display: inline-block;
+        color: rgba(0, 240, 255, 0.3) !important;
+        font-size: 16px;
         font-family: monospace;
         letter-spacing: 1px;
-        z-index: 9999;
-        pointer-events: none;
-        opacity: 0.4;
-        transition: all 0.3s ease;
-        text-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+        opacity: 0.3;
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+        transform: rotate(-45deg);
         transform-origin: center;
+        margin: 20px;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
     }
 
-    [data-theme="light"] .watermark-visible {
-        color: rgba(0, 0, 0, 0.4) !important;
-        text-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+    [data-theme="light"] .watermark-inline {
+        color: rgba(0, 0, 0, 0.3) !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        background: rgba(255, 255, 255, 0.1);
     }
     </style>
-    <script>
-    // Generar 4 marcas de agua aleatorias
-    for (let i = 0; i < 4; i++) {
-        const watermark = document.createElement('div');
-        watermark.className = 'watermark-visible';
-        watermark.textContent = 'CONFIDENCIAL-DIPOL';
-        
-        // Posición aleatoria (dentro del 85% de la pantalla para no salirse)
-        const x = Math.random() * 85; // 0% a 85%
-        const y = Math.random() * 85; // 0% a 85%
-        const rotation = Math.random() * 360; // Rotación aleatoria
-
-        watermark.style.left = `${x}%`;
-        watermark.style.top = `${y}%`;
-        watermark.style.transform = `rotate(${rotation}deg)`;
-
-        document.body.appendChild(watermark);
-    }
-    </script>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; pointer-events: none;">
+        <div class="watermark-inline">CONFIDENCIAL-DIPOL</div>
+        <div class="watermark-inline" style="transform: rotate(45deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+        <div class="watermark-inline" style="transform: rotate(135deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+        <div class="watermark-inline" style="transform: rotate(225deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+    </div>
     """,
     unsafe_allow_html=True
 )
