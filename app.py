@@ -1700,8 +1700,8 @@ st.markdown(
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="rgba(0, 240, 255, 0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="rgba(0, 240, 255, 0.2)">CONFIDENCIAL-DIPOL</text></svg>') repeat;
-        background-size: 300px 300px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(0, 240, 255, 0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-size="16" font-family="monospace" fill="rgba(0, 240, 255, 0.2)" transform="rotate(-45 50 50)">CONFIDENCIAL-DIPOL</text></svg>') repeat;
+        background-size: 100px 100px;
         z-index: 9999;
         pointer-events: none;
         opacity: 0.15;
@@ -1709,7 +1709,7 @@ st.markdown(
     }
 
     [data-theme="light"] .watermark {
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="rgba(0, 0, 0, 0.15)">DIPOL</text></svg>') repeat;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-size="16" font-family="monospace" fill="rgba(0, 0, 0, 0.15)" transform="rotate(-45 50 50)">CONFIDENCIAL-DIPOL</text></svg>') repeat;
         opacity: 0.15;
     }
     </style>
