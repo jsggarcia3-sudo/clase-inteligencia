@@ -1691,30 +1691,48 @@ else:
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
 # --- MARCA DE AGUA VISIBLE EN CAPTURAS (ESQUINA INFERIOR DERECHA) ---
+# --- MARCA DE AGUA ALEATORIA (3-4 VECES EN PANTALLA) ---
 st.markdown(
     """
     <style>
-    .watermark-corner {
+    .watermark-random {
         position: fixed;
-        bottom: 10px;
-        right: 10px;
-        color: rgba(0, 240, 255, 0.3) !important;
-        font-size: 14px;
+        color: rgba(0, 240, 255, 0.2) !important;
+        font-size: 18px;
         font-family: monospace;
         letter-spacing: 1px;
         z-index: 9999;
         pointer-events: none;
-        opacity: 0.3;
+        opacity: 0.2;
         transition: all 0.3s ease;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.3);
+        transform-origin: center;
     }
 
-    [data-theme="light"] .watermark-corner {
-        color: rgba(0, 0, 0, 0.3) !important;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    [data-theme="light"] .watermark-random {
+        color: rgba(0, 0, 0, 0.2) !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
     }
     </style>
-    <div class="watermark-corner">CONFIDENCIAL-DIPOL</div>
+    <script>
+    // Generar 4 marcas de agua aleatorias
+    for (let i = 0; i < 4; i++) {
+        const watermark = document.createElement('div');
+        watermark.className = 'watermark-random';
+        watermark.textContent = 'CONFIDENCIAL-DIPOL';
+        
+        // Posición aleatoria (dentro del 90% de la pantalla para no salirse)
+        const x = Math.random() * 90; // 0% a 90%
+        const y = Math.random() * 90; // 0% a 90%
+        const rotation = Math.random() * 360; // Rotación aleatoria
+
+        watermark.style.left = `${x}%`;
+        watermark.style.top = `${y}%`;
+        watermark.style.transform = `rotate(${rotation}deg)`;
+
+        document.body.appendChild(watermark);
+    }
+    </script>
     """,
     unsafe_allow_html=True
 )
