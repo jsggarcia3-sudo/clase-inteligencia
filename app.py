@@ -1691,29 +1691,71 @@ else:
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
 # --- MARCA DE AGUA VISIBLE EN AMBOS MODOS (MODO OSCURO Y CLARO) ---
+# --- MARCA DE AGUA SUTIL SOBRE TEXTO (NO EN FONDO) ---
 st.markdown(
     """
     <style>
-    .watermark {
-        position: fixed;
+    .text-watermark {
+        position: relative;
+        display: inline-block;
+        color: rgba(0, 240, 255, 0.05) !important;
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    [data-theme="light"] .text-watermark {
+        color: rgba(0, 0, 0, 0.05) !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Aplica la marca de agua a todos los elementos de texto */
+    .stMarkdown, .stText, .stTitle, .stHeader, .stSubheader, .stCaption, .stCode, .stSidebar, .stButton > button {
+        position: relative;
+    }
+
+    .stMarkdown::after,
+    .stText::after,
+    .stTitle::after,
+    .stHeader::after,
+    .stSubheader::after,
+    .stCaption::after,
+    .stCode::after,
+    .stSidebar::after,
+    .stButton > button::after {
+        content: " CONFIDENCIAL-DIPOL ";
+        position: absolute;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(0, 240, 255, 0.2)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-size="16" font-family="monospace" fill="rgba(0, 240, 255, 0.2)" transform="rotate(-45 50 50)">CONFIDENCIAL-DIPOL</text></svg>') repeat;
-        background-size: 100px 100px;
-        z-index: 9999;
+        color: rgba(0, 240, 255, 0.05) !important;
+        text-shadow: 0 0 5px rgba(0, 240, 255, 0.1);
         pointer-events: none;
-        opacity: 0.15;
-        transition: all 0.3s ease;
+        z-index: 9999;
+        opacity: 0.05;
+        font-size: 12px;
+        font-family: monospace;
+        letter-spacing: 1px;
+        transform: rotate(-45deg);
+        transform-origin: 0 0;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    [data-theme="light"] .watermark {
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none" stroke="rgba(0, 0, 0, 0.15)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="50" y="50" text-anchor="middle" dominant-baseline="middle" font-size="16" font-family="monospace" fill="rgba(0, 0, 0, 0.15)" transform="rotate(-45 50 50)">CONFIDENCIAL-DIPOL</text></svg>') repeat;
-        opacity: 0.15;
+    [data-theme="light"] .stMarkdown::after,
+    [data-theme="light"] .stText::after,
+    [data-theme="light"] .stTitle::after,
+    [data-theme="light"] .stHeader::after,
+    [data-theme="light"] .stSubheader::after,
+    [data-theme="light"] .stCaption::after,
+    [data-theme="light"] .stCode::after,
+    [data-theme="light"] .stSidebar::after,
+    [data-theme="light"] .stButton > button::after {
+        color: rgba(0, 0, 0, 0.05) !important;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     }
     </style>
-    <div class="watermark"></div>
     """,
     unsafe_allow_html=True
 )
