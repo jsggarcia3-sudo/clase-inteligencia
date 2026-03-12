@@ -396,6 +396,30 @@ def login():
     </script>
     """, unsafe_allow_html=True)
     st.markdown("<h1 class='login-title'>Login Here</h1>", unsafe_allow_html=True)
+    with st.form("login_form"):
+        nombre = st.text_input("Nombre Completo", placeholder="John Doe")
+        usuario = st.text_input("Usuario", placeholder="username")
+        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+
+        submitted = st.form_submit_button("Login", use_container_width=True)
+
+        if submitted:
+            if usuario == "admin_dipol" and clave == "DIPOL2026":
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                st.rerun()
+            elif nombre and usuario and clave == "ESTUDIANTE2026":
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                st.rerun()
+            else:
+                st.error("Credenciales incorrectas.")
+
+    # --- ENLACE "SIGN UP" ---
+    st.markdown("""
+    <div class="signup-link">
+        Don't have an account? <a href="#" onclick="alert('Sign Up feature coming soon!')">Sign Up</a>
+    </div>
+    """, unsafe_allow_html=True)
+    
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     with col2:
         st.write("### Identificación de Funcionario")
