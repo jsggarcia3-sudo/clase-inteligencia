@@ -1650,7 +1650,7 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA VISIBLE EN FONDO OSCURO (ESTILO NEÓN AZUL) ---
+# --- MARCA DE AGUA ADAPTATIVA (MODO OSCURO Y CLARO) ---
 st.markdown(
     """
     <style>
@@ -1660,12 +1660,17 @@ st.markdown(
         left: 0;
         width: 100%;
         height: 100%;
-        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="rgba(0, 240, 255, 0.1)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="rgba(0, 240, 255, 0.1)">CONFIDENCIA-DIPOL</text></svg>') repeat;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="var(--accent)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="var(--accent)">DIPOL</text></svg>') repeat;
         background-size: 300px 300px;
         z-index: 9999;
         pointer-events: none;
-        opacity: 0.15;
+        opacity: 0.1;
         transition: all 0.3s ease;
+    }
+
+    [data-theme="light"] .watermark {
+        opacity: 0.08;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 300 300" fill="none" stroke="var(--text-dark)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><text x="150" y="150" text-anchor="middle" dominant-baseline="middle" font-size="32" font-family="monospace" fill="var(--text-dark)">DIPOL</text></svg>') repeat;
     }
     </style>
     <div class="watermark"></div>
