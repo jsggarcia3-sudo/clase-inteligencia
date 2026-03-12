@@ -1690,30 +1690,32 @@ else:
                 st.error(f"❌ Error crítico en el Dashboard: {e}")
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
-# --- MARCA DE AGUA VISIBLE EN AMBOS MODOS (MODO OSCURO Y CLARO) ---
-# --- MARCA DE AGUA SUTIL EN ESQUINA (SOLO PARA CAPTURAS) ---
+# --- MARCA DE AGUA VISIBLE EN CAPTURAS (CENTRO DE PANTALLA) ---
 st.markdown(
     """
     <style>
-    .watermark-corner {
+    .watermark-center {
         position: fixed;
-        bottom: 10px;
-        right: 10px;
-        color: rgba(0, 240, 255, 0.1) !important;
-        font-size: 12px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: rgba(0, 240, 255, 0.15) !important;
+        font-size: 24px;
         font-family: monospace;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
         z-index: 9999;
         pointer-events: none;
-        opacity: 0.1;
+        opacity: 0.15;
         transition: all 0.3s ease;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
     }
 
-    [data-theme="light"] .watermark-corner {
-        color: rgba(0, 0, 0, 0.1) !important;
+    [data-theme="light"] .watermark-center {
+        color: rgba(0, 0, 0, 0.15) !important;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
     </style>
-    <div class="watermark-corner">CONFIDENCIAL-DIPOL</div>
+    <div class="watermark-center">CONFIDENCIAL-DIPOL</div>
     """,
     unsafe_allow_html=True
 )
