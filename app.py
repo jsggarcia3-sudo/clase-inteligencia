@@ -439,45 +439,6 @@ def login():
     background: linear-gradient(180deg, #001226, #000814);
     border-right: 1px solid #D4AF37;
 }
-
-/* TITULO MENU */
-.sidebar-title {
-    font-size: 22px;
-    font-weight: bold;
-    color: #D4AF37;
-    margin-bottom: 10px;
-}
-
-/* PERFIL USUARIO */
-.user-box {
-    background: rgba(255,255,255,0.05);
-    padding: 12px;
-    border-radius: 10px;
-    border-left: 3px solid #D4AF37;
-    margin-bottom: 15px;
-}
-
-/* BOTONES MENU */
-div[role="radiogroup"] > label {
-    background: rgba(255,255,255,0.04);
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    transition: all 0.2s ease;
-}
-
-div[role="radiogroup"] > label:hover {
-    background: rgba(212,175,55,0.2);
-    transform: translateX(3px);
-}
-
-/* BOTON CERRAR SESION */
-.stButton > button {
-    background: linear-gradient(90deg,#D4AF37,#b8962e);
-    color: black;
-    font-weight: bold;
-    border-radius: 8px;
-}
     </script>
     """, unsafe_allow_html=True)
     st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
