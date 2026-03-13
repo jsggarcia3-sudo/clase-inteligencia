@@ -447,7 +447,7 @@ def login():
         submitted = st.form_submit_button("Login", use_container_width=True)
 
         if submitted:
-            if usuario == "Jsantos" and clave == "Inteligencia@2026":
+            if usuario == "Jsantos" and clave == "Inteligencia2026":
                 st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
                 st.rerun()
             elif nombre and User and clave == "ESTUDIANTE2026":
