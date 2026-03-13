@@ -458,7 +458,7 @@ st.markdown("""
 # --- 2. INTERFAZ DE LOGIN ---
 st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
 
 with col2:
     with st.form("login_form"):
