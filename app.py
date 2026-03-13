@@ -465,7 +465,7 @@ with col2:
         usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
         clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
 
-        submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
+        submitted = st.form_submit_button("INGRESAR Al CURSO", use_container_width=True)
 
         if submitted:
             # Validación Admin
