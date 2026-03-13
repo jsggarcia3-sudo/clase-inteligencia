@@ -485,8 +485,7 @@ with col2:
 
 # --- 3. NOTA DE DISEÑO ---
 st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
-            
-        col1, col2, col3 = st.columns([0.5, 2, 0.5])
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
 def verificar_intento(nombre, modulo, engine):
     try:
