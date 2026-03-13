@@ -469,7 +469,7 @@ else:
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 # --- MENÚ PROFESIONAL (Streamlit) ---
-st.markdown("""
+    st.markdown("""
 <style>
   .menu-container {
     background: white;
