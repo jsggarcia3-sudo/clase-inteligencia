@@ -433,6 +433,51 @@ def login():
         }
     }
     updateToggleIcon();
+    /* ===== SIDEBAR PROFESIONAL ===== */
+
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #001226, #000814);
+    border-right: 1px solid #D4AF37;
+}
+
+/* TITULO MENU */
+.sidebar-title {
+    font-size: 22px;
+    font-weight: bold;
+    color: #D4AF37;
+    margin-bottom: 10px;
+}
+
+/* PERFIL USUARIO */
+.user-box {
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 10px;
+    border-left: 3px solid #D4AF37;
+    margin-bottom: 15px;
+}
+
+/* BOTONES MENU */
+div[role="radiogroup"] > label {
+    background: rgba(255,255,255,0.04);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    transition: all 0.2s ease;
+}
+
+div[role="radiogroup"] > label:hover {
+    background: rgba(212,175,55,0.2);
+    transform: translateX(3px);
+}
+
+/* BOTON CERRAR SESION */
+.stButton > button {
+    background: linear-gradient(90deg,#D4AF37,#b8962e);
+    color: black;
+    font-weight: bold;
+    border-radius: 8px;
+}
     </script>
     """, unsafe_allow_html=True)
     st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
@@ -469,61 +514,7 @@ else:
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 # --- MENÚ PROFESIONAL (Streamlit) ---
-    st.markdown("""
-<style>
-  .menu-container {
-    background: white;
-    border-bottom: 1px solid #e5e7eb;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    padding: 0.75rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .menu-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: #1f2937;
-  }
-  .menu-logo span {
-    font-size: 1.1rem;
-  }
-  .menu-items {
-    display: flex;
-    gap: 1.5rem;
-    font-weight: 500;
-  }
-  .menu-items a {
-    color: #4b5563;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .menu-items a:hover {
-    color: #2563eb;
-  }
-  @media (max-width: 768px) {
-    .menu-items {
-      display: none;
-    }
-  }
-</style>
-
-<div class="menu-container">
-  <div class="menu-logo">
-    <div style="background: #2563eb; width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">SI</div>
-    <span>Sistema de Inteligencia Policial</span>
-  </div>
-  <div class="menu-items">
-    <a href="#">Inicio</a>
-    <a href="#">Módulos</a>
-    <a href="#">Dashboard</a>
-    <a href="#">Perfil</a>
-    <a href="#">Cerrar Sesión</a>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    
     with st.sidebar:
         st.title("📂 MENÚ")
         st.caption("☰ Desliza para cerrar")
