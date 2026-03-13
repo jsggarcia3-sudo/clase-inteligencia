@@ -402,23 +402,78 @@ def login():
     
     """, unsafe_allow_html=True)
     st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-    with st.form("login_form"):
-        nombre = st.text_input("Nombre Completo", placeholder="John Doe")
-        usuario = st.text_input("Usuario", placeholder="username")
-        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
 
-        submitted = st.form_submit_button("Login", use_container_width=True)
+    # Configuración de estilo CSS para el efecto Glassmorphism
+st.markdown("""
+    <style>
+    /* Fondo de la aplicación */
+    .stApp {
+        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
+        background-size: cover;
+    }
 
-        if submitted:
-            if usuario == "Jsantos" and clave == "Inteligencia2026":
-                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                st.rerun()
-            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                st.rerun()
-            else:
-                st.error("Credenciales incorrectas.")
-       
+    /* Contenedor del formulario */
+    [data-testid="stForm"] {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+
+    /* Títulos y etiquetas en blanco */
+    h1, label, p {
+        color: white !important;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Estilo de los inputs */
+    .stTextInput input {
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 10px !important;
+    }
+
+    /* Botón de Login */
+    .stButton button {
+        background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+        color: black !important;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+    
+    .stButton button:hover {
+        transform: scale(1.02);
+        box-shadow: 0px 0px 15px rgba(0, 201, 255, 0.6);
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- TU LÓGICA DE LOGIN ---
+st.markdown("<h1 style='text-align: center;'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+
+with st.form("login_form"):
+    nombre = st.text_input("Nombre Completo", placeholder="John Doe")
+    usuario = st.text_input("Usuario", placeholder="username")
+    clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+
+    submitted = st.form_submit_button("Login", use_container_width=True)
+
+    if submitted:
+        if usuario == "Jsantos" and clave == "Inteligencia2026":
+            st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+            st.rerun()
+        elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+            st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+            st.rerun()
+        else:
+            st.error("Credenciales incorrectas.")
+            
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
 def verificar_intento(nombre, modulo, engine):
