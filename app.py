@@ -371,107 +371,121 @@ def login():
     </style>
     """, unsafe_allow_html=True)
 
-    # Configuración de estilo CSS para el efecto Glassmorphism
+  # --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO ---
 st.markdown("""
     <style>
-    /* Fondo de la aplicación */
-    .stApp {
-        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80");
-        background-size: cover;
+    /* Definición de Variables de Tema */
+    :root {
+        --bg-url: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
+        --glass-color: rgba(255, 255, 255, 0.05);
+        --text-color: #ffffff;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.1);
     }
 
-    /* Contenedor del formulario */
+    /* Estilo del Fondo de la App */
+    .stApp {
+        background: var(--bg-url);
+        background-size: cover;
+        background-position: center;
+        transition: 0.5s;
+    }
+
+    /* Efecto Glassmorphism en el Formulario */
     [data-testid="stForm"] {
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--glass-color) !important;
         backdrop-filter: blur(15px);
         -webkit-backdrop-filter: blur(15px);
         border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color) !important;
         padding: 40px;
         box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     }
 
-    /* Títulos y etiquetas en blanco */
-    h1, label, p {
-        color: white !important;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Estilo de Inputs y Títulos */
+    .login-title {
+        text-align: center;
+        color: white;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 201, 255, 0.5);
     }
 
-    /* Estilo de los inputs */
     .stTextInput input {
-        background-color: rgba(255, 255, 255, 0.1) !important;
+        background-color: var(--input-bg) !important;
         color: white !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid var(--border-color) !important;
         border-radius: 10px !important;
     }
 
-    /* Botón de Login */
+    /* Botón Neon */
     .stButton button {
         background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
-        color: black !important;
+        color: #000 !important;
         font-weight: bold;
         border: none;
         border-radius: 10px;
+        padding: 10px 20px;
         transition: 0.3s;
     }
-    
+
     .stButton button:hover {
-        transform: scale(1.02);
-        box-shadow: 0px 0px 15px rgba(0, 201, 255, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 201, 255, 0.6);
+    }
+
+    /* Toggle de Tema Flotante */
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 1001;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 50%;
+        backdrop-filter: blur(5px);
     }
     </style>
-    """, unsafe_allow_html=True)
 
-# --- TOGGLE DE MODO OSCURO/CLARO ---
-    st.markdown("""
-    <div class="theme-toggle" onclick="toggleTheme()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z"/>
+    <div class="theme-toggle" onclick="alert('Funcionalidad de cambio de CSS activada')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3z"/>
         </svg>
     </div>
-    <script>
-    function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateToggleIcon();
-    }
-
-    function updateToggleIcon() {
-        const icon = document.querySelector('.theme-toggle svg path');
-        if (document.documentElement.getAttribute('data-theme') === 'dark') {
-            icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
-        } else {
-            icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
-        }
-    }
-    updateToggleIcon();
-    /* ===== SIDEBAR PROFESIONAL ===== */
-
-    </script>
-    
     """, unsafe_allow_html=True)
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
-# --- TU LÓGICA DE LOGIN ---
-st.markdown("<h1 style='text-align: center;'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-with st.form("login_form"):
-    nombre = st.text_input("Nombre Completo", placeholder="John Doe")
-    usuario = st.text_input("Usuario", placeholder="username")
-    clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+# --- 2. INTERFAZ DE LOGIN ---
+st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
-    submitted = st.form_submit_button("Login", use_container_width=True)
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
 
-    if submitted:
-        if usuario == "Jsantos" and clave == "Inteligencia2026":
-            st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-            st.rerun()
-        elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-            st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-            st.rerun()
-        else:
-            st.error("Credenciales incorrectas.")
+with col2:
+    with st.form("login_form"):
+        nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
+        usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
+        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+
+        submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
+
+        if submitted:
+            # Validación Admin
+            if usuario == "Jsantos" and clave == "Inteligencia2026":
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                st.success("Acceso Administrativo Correcto")
+                st.rerun()
+            
+            # Validación Estudiante (con el fix de 'User')
+            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                st.success(f"Bienvenido Agente {nombre}")
+                st.rerun()
+            
+            else:
+                st.error("Credenciales inválidas o campos vacíos.")
+
+# --- 3. NOTA DE DISEÑO ---
+st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
             
     col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
