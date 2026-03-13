@@ -371,38 +371,6 @@ def login():
     </style>
     """, unsafe_allow_html=True)
 
-    # --- TOGGLE DE MODO OSCURO/CLARO ---
-    st.markdown("""
-    <div class="theme-toggle" onclick="toggleTheme()">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z"/>
-        </svg>
-    </div>
-    <script>
-    function toggleTheme() {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        updateToggleIcon();
-    }
-
-    function updateToggleIcon() {
-        const icon = document.querySelector('.theme-toggle svg path');
-        if (document.documentElement.getAttribute('data-theme') === 'dark') {
-            icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
-        } else {
-            icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
-        }
-    }
-    updateToggleIcon();
-    /* ===== SIDEBAR PROFESIONAL ===== */
-
-    </script>
-    
-    """, unsafe_allow_html=True)
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-
     # Configuración de estilo CSS para el efecto Glassmorphism
 st.markdown("""
     <style>
@@ -453,6 +421,38 @@ st.markdown("""
     }
     </style>
     """, unsafe_allow_html=True)
+
+# --- TOGGLE DE MODO OSCURO/CLARO ---
+    st.markdown("""
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z"/>
+        </svg>
+    </div>
+    <script>
+    function toggleTheme() {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateToggleIcon();
+    }
+
+    function updateToggleIcon() {
+        const icon = document.querySelector('.theme-toggle svg path');
+        if (document.documentElement.getAttribute('data-theme') === 'dark') {
+            icon.setAttribute('d', 'M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3zm-3 5a4 4 0 014-4 4 4 0 014 4 4 4 0 01-4 4 4 4 0 01-4-4z');
+        } else {
+            icon.setAttribute('d', 'M12 12a5 5 0 110 10 5 5 0 010-10zm0-2a8 8 0 100 16 8 8 0 008-8 8 8 0 00-8-8z');
+        }
+    }
+    updateToggleIcon();
+    /* ===== SIDEBAR PROFESIONAL ===== */
+
+    </script>
+    
+    """, unsafe_allow_html=True)
+    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
 # --- TU LÓGICA DE LOGIN ---
 st.markdown("<h1 style='text-align: center;'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
