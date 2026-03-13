@@ -3,45 +3,8 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 from urllib.parse import quote_plus
 # --- FORZAR MODO OSCURO POR DEFECTO ---
-st.markdown(
-    """
-    <style>
-    :root {
-        --bg-primary: #000000;
-        --bg-secondary: #000000;
-        --accent: #00f0ff;
-        --text-light: #ffffff;
-        --text-dark: #000000;
-        --card-bg: #0a0a0f;
-        --border: #00f0ff;
-        --shadow: rgba(0, 240, 255, 0.3);
-        --hover-glow: rgba(0, 240, 255, 0.2);
-    }
 
-    [data-theme="light"] {
-        --bg-primary: #000000;
-        --bg-secondary: #000000;
-        --accent: #00f0ff;
-        --text-light: #ffffff;
-        --text-dark: #000000;
-        --card-bg: #0a0a0f;
-        --border: #00f0ff;
-        --shadow: rgba(0, 240, 255, 0.3);
-        --hover-glow: rgba(0, 240, 255, 0.2);
-    }
 
-    body {
-        background: #000000 !important;
-        color: #ffffff !important;
-    }
-
-    .stApp {
-        background: #000000 !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
