@@ -434,7 +434,7 @@ def login():
     }
     updateToggleIcon();
     /* ===== SIDEBAR PROFESIONAL ===== */
-}
+
     </script>
     
     """, unsafe_allow_html=True)
