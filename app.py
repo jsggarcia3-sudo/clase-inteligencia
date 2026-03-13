@@ -4,15 +4,15 @@ from sqlalchemy import create_engine, text
 from urllib.parse import quote_plus
 from datetime import datetime
 
-# 1. CONFIGURACIÓN INICIAL (Respetando tu configuración original)
+# 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
     page_title="Plataforma Educativa DIPOL",
     page_icon="🛡️",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="collapsed"  # Sidebar oculto por defecto en móvil
 )
 
-# 2. CONEXIÓN A BASE DE DATOS
+# 2. CONEXIÓN A BASE DE DATOS (Se define fuera para que la caché la vea)
 try:
     db_s = st.secrets["connections"]["postgresql"]
     pass_clean = quote_plus(db_s['password'])
@@ -21,7 +21,7 @@ try:
 except Exception as e:
     st.error("Error al cargar credenciales de base de datos. Verifica st.secrets.")
 
-# 3. FUNCIONES DE DATOS CON CACHÉ
+# 3. FUNCIONES DE DATOS CON CACHÉ (Para velocidad máxima)
 @st.cache_data(ttl=60)
 def cargar_datos_agente(nombre_agente):
     with engine.connect() as conn:
@@ -34,6 +34,101 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (ESTILOS CSS ORIGINALES)
+st.markdown("""
+<style>
+/* ===== RESPONSIVE MÓVIL ===== */
+@media (max-width: 768px) {
+    .block-container { padding: 1rem 0.5rem !important; }
+    .stButton > button { font-size: 0.85rem !important; padding: 10px 5px !important; }
+    h1 { font-size: 1.4rem !important; }
+    h2 { font-size: 1.2rem !important; }
+    h3 { font-size: 1rem !important; }
+    [data-testid="column"] { width: 100% !important; flex: 1 1 100% !important; min-width: 100% !important; }
+    [data-testid="stSidebar"] { width: 80vw !important; }
+    .watermark { font-size: 40px !important; }
+    div[style*="min-height: 220px"] { min-height: auto !important; padding: 15px !important; }
+    [data-testid="stTabs"] { overflow-x: auto !important; }
+    .stForm { padding: 15px !important; }
+    [data-testid="stDataFrame"] { overflow-x: auto !important; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .block-container { padding: 1.5rem 1rem !important; }
+    h1 { font-size: 1.8rem !important; }
+}
+
+/* MARCA DE AGUA PERSONALIZADA (Inyectada) */
+.watermark-pro {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    pointer-events: none;
+    opacity: 0.3;
+    font-family: 'Courier New', monospace;
+    color: #00f0ff;
+    text-align: right;
+    line-height: 1.2;
+    border-right: 2px solid #00f0ff;
+    padding-right: 10px;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# 2. GESTIÓN DE SESIÓN
+if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
+if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
+if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
+if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
+
+def login():
+    # --- CSS GLOBAL Y ESTILOS DINÁMICOS ORIGINALES ---
+    st.markdown("""
+    <style>
+    :root {
+        --bg-primary: #000000; --bg-secondary: #000000; --accent: #00f0ff;
+        --text-light: #ffffff; --text-dark: #000000; --card-bg: #0a0a0f;
+        --border: #00f0ff; --shadow: rgba(0, 240, 255, 0.3);
+    }
+    .stApp {
+        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
+        background-size: cover; background-position: center;
+    }
+    [data-testid="stForm"] {
+        background: rgba(255, 255, 255, 0.05) !important;
+        backdrop-filter: blur(15px);
+        border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        padding: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
+    .login-title { color: #00f0ff; text-align: center; font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 10px #00f0ff; }
+    .stTextInput > div > div > input { background-color: #0a0a0f !important; color: white !important; border: 1px solid #00f0ff !important; }
+    .stButton > button { background: linear-gradient(90deg, #00f0ff, #00c0ff); color: #000 !important; font-weight: bold; }
+    .theme-toggle { position: fixed; top: 20px; right: 20px; background: #0a0a0f; border: 1px solid #00f0ff; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    </style>
+    <div class="theme-toggle"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white"><path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3z"/></svg></div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    with col2:
+        with st.form("login_form"):
+            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
+            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
+            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+            submitted = st.form_submit_button("INGRESAR Al CURSO", use_container_width=True)
+
+            if submitted:
+                if usuario == "Jsantos" and clave == "Inteligencia2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                    st.rerun()
+                # Detalle agregado: Validación corregida para 'User'
+                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                    st.rerun()
+                else:
+                    st.error("Credenciales inválidas o campos vacíos.")
+
 def verificar_intento(nombre, modulo, engine):
     try:
         query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
@@ -42,107 +137,30 @@ def verificar_intento(nombre, modulo, engine):
         return result[0] if result else None
     except: return None
 
-# 4. GESTIÓN DE SESIÓN
-if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
-if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
-if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
-if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
-
-# 5. ESTILOS CSS (Combinando tu Responsive + Glassmorphism sugerido)
-st.markdown("""
-<style>
-    /* Tu CSS de Responsive original */
-    @media (max-width: 768px) {
-        .block-container { padding: 1rem 0.5rem !important; }
-        .stButton > button { font-size: 0.85rem !important; padding: 10px 5px !important; }
-        h1 { font-size: 1.4rem !important; }
-        [data-testid="column"] { width: 100% !important; flex: 1 1 100% !important; }
-        .watermark { font-size: 12px !important; }
-    }
-
-    /* Estilo Glassmorphism Sugerido para el Login */
-    .stApp {
-        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
-        background-size: cover;
-        background-attachment: fixed;
-    }
-
-    [data-testid="stForm"] {
-        background: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(15px);
-        -webkit-backdrop-filter: blur(15px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        padding: 40px;
-    }
-
-    .login-title {
-        text-align: center; color: #00f0ff; font-weight: bold;
-        text-shadow: 0 0 10px #00f0ff; font-size: 2.2rem;
-    }
-
-    /* Marca de Agua de Seguridad */
-    .watermark-seguridad {
-        position: fixed; bottom: 20px; right: 20px; z-index: 9999;
-        pointer-events: none; opacity: 0.3; font-family: monospace;
-        color: #00C9FF; text-align: right; border-right: 2px solid #00C9FF; padding-right: 10px;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# 6. FUNCIÓN DE LOGIN (Con corrección de 'User' y Toggle)
-def login():
-    # Toggle de Tema (Tu código original)
-    st.markdown("""
-    <div class="theme-toggle" onclick="alert('Cambio de tema activado')">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3z"/>
-        </svg>
-    </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
-    with col2:
-        with st.form("login_form"):
-            nombre = st.text_input("Nombre Completo", placeholder="John Doe")
-            usuario = st.text_input("Usuario", placeholder="username")
-            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
-            submitted = st.form_submit_button("INGRESAR AL CURSO", use_container_width=True)
-
-            if submitted:
-                if usuario == "Jsantos" and clave == "Inteligencia2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                    st.rerun()
-                # CORRECCIÓN AQUÍ: usuario == "User"
-                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                    st.rerun()
-                else:
-                    st.error("Credenciales incorrectas.")
-
-# 7. CONTROLADOR DE FLUJO PRINCIPAL
+# CONTROLADOR DE FLUJO PRINCIPAL
 if not st.session_state['autenticado']:
     login()
 else:
-    # Marca de Agua de Seguridad (Sugerida)
-    fecha = datetime.now().strftime("%d/%m/%Y %H:%M")
+    # Detalle agregado: Marca de agua con datos reales del agente y tiempo
+    agente_actual = st.session_state.get('agente_nombre', 'Usuario')
+    fecha_hora = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     st.markdown(f"""
-        <div class="watermark-seguridad">
-            <b>DIPOL - CONFIDENCIAL</b><br>
-            AGENTE: {st.session_state.agente_nombre}<br>
-            {fecha}
+        <div class='watermark-pro'>
+            <b>CONFIDENCIAL - DIPOL</b><br>
+            AGENTE: {agente_actual}<br>
+            {fecha_hora}
         </div>
     """, unsafe_allow_html=True)
 
-    # --- MENÚ PROFESIONAL Y DASHBOARD (Tu código siguiente) ---
-    st.sidebar.title(f"Bienvenido {st.session_state.agente_nombre}")
+    # Re-definición del engine tras el login para el resto del sistema
+    db_s = st.secrets["connections"]["postgresql"]
+    engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
+
+    # --- MENÚ PROFESIONAL Y RESTO DEL SISTEMA ---
+    st.sidebar.success(f"Agente: {st.session_state.agente_nombre}")
     if st.sidebar.button("Cerrar Sesión"):
         st.session_state.autenticado = False
         st.rerun()
-    
-    st.write("Has ingresado correctamente a la plataforma educativa.")
 # --- MENÚ PROFESIONAL (Streamlit) ---
     
     with st.sidebar:
