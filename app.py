@@ -519,6 +519,16 @@ else:
         st.title("📂 MENÚ")
         st.caption("☰ Desliza para cerrar")
         st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        st.sidebar.markdown(
+"""
+<div class="user-box">
+<b>🛡️ ADMIN</b><br>
+<span style="color:#D4AF37">Jose Santos Garcia</span>
+</div>
+""",
+unsafe_allow_html=True
+)
+
         seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
