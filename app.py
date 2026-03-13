@@ -436,6 +436,7 @@ def login():
     /* ===== SIDEBAR PROFESIONAL ===== */
 }
     </script>
+    
     """, unsafe_allow_html=True)
     st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
     with st.form("login_form"):
