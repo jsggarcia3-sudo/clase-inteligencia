@@ -434,10 +434,6 @@ def login():
     }
     updateToggleIcon();
     /* ===== SIDEBAR PROFESIONAL ===== */
-
-[data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #001226, #000814);
-    border-right: 1px solid #D4AF37;
 }
     </script>
     """, unsafe_allow_html=True)
