@@ -1,9 +1,3 @@
-import streamlit as st
-import pandas as pd
-from sqlalchemy import create_engine, text
-from urllib.parse import quote_plus
-from datetime import datetime
-
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
     page_title="Plataforma Educativa DIPOL",
@@ -12,7 +6,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed"  # Sidebar oculto por defecto en móvil
 )
 
-# 2. CONEXIÓN A BASE DE DATOS
+# 2. CONEXIÓN A BASE DE DATOS (Se define fuera para que la caché la vea)
+# Extraemos los secretos de Streamlit
 try:
     db_s = st.secrets["connections"]["postgresql"]
     # Usamos quote_plus por si la contraseña tiene caracteres especiales (@, #, $)
@@ -22,7 +17,7 @@ try:
 except Exception as e:
     st.error("Error al cargar credenciales de base de datos. Verifica st.secrets.")
 
-# 3. FUNCIONES DE DATOS CON CACHÉ
+# 3. FUNCIONES DE DATOS CON CACHÉ (Para velocidad máxima)
 @st.cache_data(ttl=60)
 def cargar_datos_agente(nombre_agente):
     with engine.connect() as conn:
@@ -35,96 +30,455 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
-# 4. IDENTIDAD VISUAL Y CSS RESPONSIVE ORIGINAL
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL
+st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
+
 st.markdown("""
 <style>
-/* ===== RESPONSIVE MÓVIL ORIGINAL ===== */
+/* ===== RESPONSIVE MÓVIL ===== */
+
+/* Viewport base */
 @media (max-width: 768px) {
-    .block-container { padding: 1rem 0.5rem !important; }
-    .stButton > button { font-size: 0.85rem !important; padding: 10px 5px !important; }
+
+    /* Reducir padding general */
+    .block-container {
+        padding: 1rem 0.5rem !important;
+    }
+
+    /* Botones full-width en móvil */
+    .stButton > button {
+        font-size: 0.85rem !important;
+        padding: 10px 5px !important;
+    }
+
+    /* Títulos más pequeños */
     h1 { font-size: 1.4rem !important; }
     h2 { font-size: 1.2rem !important; }
     h3 { font-size: 1rem !important; }
-    [data-testid="column"] { width: 100% !important; flex: 1 1 100% !important; min-width: 100% !important; }
-    [data-testid="stSidebar"] { width: 80vw !important; }
-    .watermark { font-size: 40px !important; }
-    div[style*="min-height: 220px"] { min-height: auto !important; padding: 15px !important; }
-    [data-testid="stTabs"] { overflow-x: auto !important; }
-    .stForm { padding: 15px !important; }
-    [data-testid="stDataFrame"] { overflow-x: auto !important; }
+
+    /* Columnas en móvil: apilar verticalmente */
+    [data-testid="column"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+    }
+
+    /* Sidebar colapsado por defecto */
+    [data-testid="stSidebar"] {
+        width: 80vw !important;
+    }
+
+    /* Marca de agua más pequeña en móvil */
+    .watermark {
+        font-size: 40px !important;
+    }
+
+    /* Cards del home */
+    div[style*="min-height: 220px"] {
+        min-height: auto !important;
+        padding: 15px !important;
+    }
+
+    /* Tabs: scroll horizontal si no caben */
+    [data-testid="stTabs"] {
+        overflow-x: auto !important;
+    }
+
+    /* Formularios */
+    .stForm {
+        padding: 15px !important;
+    }
+
+    /* Tablas: scroll horizontal */
+    [data-testid="stDataFrame"] {
+        overflow-x: auto !important;
+    }
 }
 
+/* ===== TABLETS (768px - 1024px) ===== */
 @media (min-width: 769px) and (max-width: 1024px) {
-    .block-container { padding: 1.5rem 1rem !important; }
+    .block-container {
+        padding: 1.5rem 1rem !important;
+    }
     h1 { font-size: 1.8rem !important; }
-}
-
-/* MARCA DE AGUA DINÁMICA MEJORADA */
-.watermark-seguridad {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0.3;
-    font-family: 'Courier New', monospace;
-    color: #00f0ff;
-    text-align: right;
-    border-right: 3px solid #00f0ff;
-    padding-right: 12px;
 }
 </style>
 """, unsafe_allow_html=True)
 
-# 5. GESTIÓN DE SESIÓN
+# 2. MARCA DE AGUA
+agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
+st.markdown(f"<div class='watermark'>{agente_actual}</div>", unsafe_allow_html=True)
+
+# 2. GESTIÓN DE SESIÓN
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
 if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
 if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
 
-# 6. FUNCIÓN DE LOGIN (Con CSS Glassmorphism integrado)
 def login():
+    # --- CSS GLOBAL Y ESTILOS DINÁMICOS ---
     st.markdown("""
     <style>
-    .stApp {
-        background: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
-        background-size: cover;
-        background-position: center;
+    :root {
+        --bg-primary: #000000;
+        --bg-secondary: #000000;
+        --accent: #00f0ff;
+        --text-light: #ffffff;
+        --text-dark: #000000;
+        --card-bg: #0a0a0f;
+        --border: #00f0ff;
+        --shadow: rgba(0, 240, 255, 0.3);
+        --hover-glow: rgba(0, 240, 255, 0.2);
     }
-    [data-testid="stForm"] {
-        background: rgba(255, 255, 255, 0.05) !important;
-        backdrop-filter: blur(15px);
-        border-radius: 20px;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        padding: 40px;
+
+    [data-theme="light"] {
+        --bg-primary: #f8f9fa;
+        --bg-secondary: #e9ecef;
+        --accent: #00f0ff;
+        --text-light: #000000;
+        --text-dark: #ffffff;
+        --card-bg: #ffffff;
+        --border: #00f0ff;
+        --shadow: rgba(0, 240, 255, 0.1);
+        --hover-glow: rgba(0, 240, 255, 0.1);
     }
-    .login-title { color: #00f0ff; text-align: center; font-size: 2.2rem; font-weight: bold; text-shadow: 0 0 10px #00f0ff; }
+
+    body {
+        background: #000000;
+        margin: 0;
+        padding: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+    }
+
+    .login-container {
+        max-width: 400px;
+        margin: 100px auto;
+        padding: 30px;
+        background: rgba(10, 10, 15, 0.8);
+        border-radius: 15px;
+        box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+        border: 1px solid #00f0ff;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 1s ease-in-out;
+        backdrop-filter: blur(10px);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .login-title {
+        color: #00f0ff;
+        text-align: center;
+        font-size: 2.2rem;
+        margin-bottom: 15px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-shadow: 0 0 10px #00f0ff;
+        position: relative;
+    }
+
+    .login-title::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: #00f0ff;
+        margin: 10px auto;
+        border-radius: 3px;
+        box-shadow: 0 0 10px #00f0ff;
+    }
+
+    .login-input {
+        margin-bottom: 20px;
+    }
+
+    .login-input label {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.95rem;
+        text-shadow: 0 0 5px #00f0ff;
+    }
+
+    .stTextInput > div > div > input {
+        background-color: #0a0a0f !important;
+        color: #ffffff !important;
+        border: 1px solid #00f0ff !important;
+        border-radius: 8px !important;
+        padding: 10px 15px !important;
+        font-size: 1rem !important;
+        box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+        transition: all 0.3s ease;
+    }
+
+    .stTextInput > div > div > input:focus {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important;
+        outline: none;
+    }
+
+    .stButton > button {
+        background: linear-gradient(90deg, #00f0ff, #00c0ff);
+        color: #000000 !important;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 8px;
+        border: none;
+        width: 100%;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        text-shadow: 0 0 5px #000000;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 240, 255, 0.5);
+        background: linear-gradient(90deg, #00c0ff, #00f0ff);
+    }
+
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #8b949e;
+        font-size: 0.85rem;
+    }
+
+    .error-box {
+        background-color: #e74c3c;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #c0392b;
+        font-weight: bold;
+        animation: shake 0.5s ease-in-out;
+        box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+    }
+
+    @keyframes shake {
+        0% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #0a0a0f;
+        border: 1px solid #00f0ff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+        background: #00f0ff;
+        color: #000000;
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo-svg {
+        width: 80px;
+        height: 80px;
+        fill: #00f0ff;
+        filter: drop-shadow(0 2px 4px rgba(0, 240, 255, 0.5));
+    }
+
+    .loader {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .loader:after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #00f0ff;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+        color: #ffffff;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top:
+        
+   .signup-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        color: #8b949e;
+    }
+
+    .signup-link a {
+        color: #00f0ff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .signup-link a:hover {
+        color: #00c0ff;
+        text-shadow: 0 0 5px #00f0ff;
+    }
     </style>
     """, unsafe_allow_html=True)
 
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
+  # --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO ---
+st.markdown("""
+    <style>
+    /* Definición de Variables de Tema */
+    :root {
+        --bg-url: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
+        --glass-color: rgba(255, 255, 255, 0.05);
+        --text-color: #ffffff;
+        --border-color: rgba(255, 255, 255, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.1);
+    }
 
-    with col2:
-        with st.form("login_form"):
-            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
-            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
-            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
-            submitted = st.form_submit_button("INGRESAR AL CURSO", use_container_width=True)
+    /* Estilo del Fondo de la App */
+    .stApp {
+        background: var(--bg-url);
+        background-size: cover;
+        background-position: center;
+        transition: 0.5s;
+    }
 
-            if submitted:
-                if usuario == "Jsantos" and clave == "Inteligencia2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                    st.success("Acceso Administrativo Correcto")
-                    st.rerun()
-                # CORRECCIÓN: Validación exacta para estudiante
-                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                    st.success(f"Bienvenido Agente {nombre}")
-                    st.rerun()
-                else:
-                    st.error("Credenciales inválidas o campos vacíos.")
+    /* Efecto Glassmorphism en el Formulario */
+    [data-testid="stForm"] {
+        background: var(--glass-color) !important;
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        border-radius: 20px;
+        border: 1px solid var(--border-color) !important;
+        padding: 40px;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    }
 
+    /* Estilo de Inputs y Títulos */
+    .login-title {
+        text-align: center;
+        color: white;
+        font-weight: 800;
+        letter-spacing: 2px;
+        text-shadow: 0 0 10px rgba(0, 201, 255, 0.5);
+    }
+
+    .stTextInput input {
+        background-color: var(--input-bg) !important;
+        color: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+    }
+
+    /* Botón Neon */
+    .stButton button {
+        background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+        color: #000 !important;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        transition: 0.3s;
+    }
+
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 201, 255, 0.6);
+    }
+
+    /* Toggle de Tema Flotante */
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 1001;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 50%;
+        backdrop-filter: blur(5px);
+    }
+    </style>
+
+    <div class="theme-toggle" onclick="alert('Funcionalidad de cambio de CSS activada')">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+            <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3z"/>
+        </svg>
+    </div>
+    """, unsafe_allow_html=True)
+
+# --- 2. INTERFAZ DE LOGIN ---
+st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
+
+with col2:
+    with st.form("login_form"):
+        nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
+        usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
+        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+
+        submitted = st.form_submit_button("INGRESAR Al CURSO", use_container_width=True)
+
+        if submitted:
+            # Validación Admin
+            if usuario == "Jsantos" and clave == "Inteligencia2026":
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                st.success("Acceso Administrativo Correcto")
+                st.rerun()
+            
+            # Validación Estudiante (con el fix de 'User')
+            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                st.success(f"Bienvenido Agente {nombre}")
+                st.rerun()
+            
+            else:
+                st.error("Credenciales inválidas o campos vacíos.")
+
+# --- 3. NOTA DE DISEÑO ---
+st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    
 def verificar_intento(nombre, modulo, engine):
     try:
         query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
@@ -133,38 +487,12 @@ def verificar_intento(nombre, modulo, engine):
         return result[0] if result else None
     except: return None
 
-# 7. CONTROLADOR DE FLUJO (Aquí es donde se ejecutan tus 400 líneas)
 if not st.session_state['autenticado']:
     login()
 else:
-    # MARCA DE AGUA DINÁMICA (Solo visible tras el login)
-    agente_actual = st.session_state.get('agente_nombre', 'Usuario Identificado')
-    fecha_acceso = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    st.markdown(f"""
-        <div class="watermark-seguridad">
-            <b>DIPOL - PLATAFORMA EDUCATIVA</b><br>
-            AGENTE: {agente_actual}<br>
-            ACCESO: {fecha_acceso}
-        </div>
-    """, unsafe_allow_html=True)
-
-    # Re-instanciamos el engine para el resto del script
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
-
-    # =========================================================
-    # AQUÍ CONTINÚA TODO TU CÓDIGO ORIGINAL (MENÚS, TABS, CURSOS)
-    # No he borrado nada de lo que sigue en tu archivo.
-    # =========================================================
-    
-    st.sidebar.title(f"🛡️ Bienvenid@")
-    st.sidebar.info(f"Funcionario: {st.session_state.agente_nombre}")
-    
-    if st.sidebar.button("Cerrar Sesión"):
-        st.session_state.autenticado = False
-        st.rerun()
-
-    # (Sigue aquí con tus st.tabs, st.write, y la lógica de tus módulos...)
+# --- MENÚ PROFESIONAL (Streamlit) ---
     
     with st.sidebar:
         st.title("📂 MENÚ")
