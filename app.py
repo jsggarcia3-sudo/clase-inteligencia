@@ -413,7 +413,7 @@ def login():
             if usuario == "Jsantos" and clave == "Inteligencia2026":
                 st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
                 st.rerun()
-            elif nombre and usuario and clave == "ESTUDIANTE2026":
+            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
                 st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
                 st.rerun()
             else:
