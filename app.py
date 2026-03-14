@@ -139,6 +139,95 @@ body:hover .watermark {
     text-shadow: 5px 5px 15px rgba(212, 175, 55, 0.3);
 }
 
+/* ===== ADVANCED FUTURISTIC SIDEBAR STYLING ===== */
+[data-testid="stSidebar"] {
+    background-color: rgba(6, 11, 25, 0.85) !important;
+    backdrop-filter: blur(15px) !important;
+    border-right: 1px solid rgba(0, 240, 255, 0.3) !important;
+    box-shadow: 3px 0 20px rgba(0, 240, 255, 0.15) !important;
+}
+
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+    animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateY(-100%); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] p {
+    color: #e0f7fa !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    font-weight: 600;
+}
+
+/* Mejorando el diseño de radio buttons (El Menú Principal) */
+[data-testid="stSidebar"] .stRadio > div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label {
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label:hover {
+    background: rgba(0, 240, 255, 0.15);
+    border-color: #00f0ff;
+    transform: translateX(5px);
+    box-shadow: -2px 0 10px rgba(0, 240, 255, 0.4);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label[data-checked="true"] {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), transparent);
+    border-left: 4px solid #00f0ff;
+    border-top: 1px solid rgba(0, 240, 255, 0.5);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.5);
+    border-right: 1px solid rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label > div > div > p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #ffffff !important;
+    text-transform: uppercase;
+}
+
+/* Futurist Button para Cerrar Sesión en Sidebar */
+[data-testid="stSidebar"] .stButton > button {
+    background: transparent !important;
+    border: 1px solid #ff0055 !important;
+    color: #ff0055 !important;
+    margin-top: 30px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 800;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.1);
+}
+
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: rgba(255, 0, 85, 0.1) !important;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5) !important;
+    text-shadow: 0 0 5px #ff0055;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
