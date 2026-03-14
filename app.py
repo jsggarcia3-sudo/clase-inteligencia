@@ -670,6 +670,11 @@ header {visibility: hidden;}
 footer {visibility: hidden;}
 div[data-testid="stHeader"] {display: none;}
 div[data-testid="stToolbar"] {display: none;}
+div[data-testid="stDecoration"] {display: none;}
+div[data-testid="stStatusWidget"] {display: none;}
+#manage-app-button {display: none !important;}
+button[title="View source code"] {display: none !important;}
+.st-emotion-cache-1ky8h6e {display: none !important;} /* Common class for cloud button */
 
 </style>
 """, unsafe_allow_html=True)
