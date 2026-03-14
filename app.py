@@ -664,6 +664,13 @@ div.lectura-box::after {
     pointer-events: none !important;
 }
 
+/* Hide Streamlit default components (Hamburger, Header, Footer) */
+#MainMenu {visibility: hidden;}
+header {visibility: hidden;}
+footer {visibility: hidden;}
+div[data-testid="stHeader"] {display: none;}
+div[data-testid="stToolbar"] {display: none;}
+
 </style>
 """, unsafe_allow_html=True)
 
