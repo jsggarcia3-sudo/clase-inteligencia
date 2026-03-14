@@ -268,6 +268,76 @@ body:hover .watermark {
     left: 100%;
 }
 
+/* ===== MODULE CARDS ===== */
+.modulo-card {
+    background: rgba(6, 11, 25, 0.7);
+    padding: 30px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    text-align: center;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.35s ease;
+    cursor: pointer;
+}
+
+.modulo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: #00f0ff;
+    box-shadow: 0 15px 40px rgba(0, 240, 255, 0.3);
+}
+
+.card-corner-tl {
+    position: absolute;
+    top: 0; left: 0;
+    width: 28px; height: 28px;
+    border-top: 2px solid #00f0ff;
+    border-left: 2px solid #00f0ff;
+    border-top-left-radius: 12px;
+}
+
+.card-corner-br {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 28px; height: 28px;
+    border-bottom: 2px solid #00f0ff;
+    border-right: 2px solid #00f0ff;
+    border-bottom-right-radius: 12px;
+}
+
+.card-icon {
+    font-size: 3.5em;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+}
+
+.card-title {
+    color: #e0f7fa !important;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+.card-sub {
+    color: #00f0ff !important;
+    font-size: 0.9em;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -689,42 +759,20 @@ else:
 
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
-                st.markdown(f"""
-                <div style="background: rgba(6, 11, 25, 0.7); 
-                            padding: 30px 20px; 
-                            border-radius: 12px; 
-                            border: 1px solid rgba(0, 240, 255, 0.3); 
-                            text-align: center; 
-                            margin-bottom: 20px;
-                            box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.1);
-                            backdrop-filter: blur(10px);
-                            -webkit-backdrop-filter: blur(10px);
-                            position: relative;
-                            overflow: hidden;
-                            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                            min-height: 240px;
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: center;
-                            align-items: center;
-                            cursor: pointer;"
-                            onmouseover="this.style.transform='translateY(-10px) scale(1.02)'; this.style.boxShadow='0 15px 40px rgba(0, 240, 255, 0.3)'; this.style.borderColor='#00f0ff';"
-                            onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 32px 0 rgba(0, 240, 255, 0.1)'; this.style.borderColor='rgba(0, 240, 255, 0.3)';">
-                    
-                    <!-- Decoración Tron/Sci-Fi -->
-                    <div style="position: absolute; top: 0; left: 0; width: 30px; height: 30px; border-top: 2px solid #00f0ff; border-left: 2px solid #00f0ff; border-top-left-radius: 12px;"></div>
-                    <div style="position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; border-bottom: 2px solid #00f0ff; border-right: 2px solid #00f0ff; border-bottom-right-radius: 12px;"></div>
-                    
-                    <div style="font-size: 3.5em; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));">{m['icon']}</div>
-                    <h3 style="color: #e0f7fa; margin: 0; font-weight: 800; letter-spacing: 1px; font-size: 1.4rem; text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);">{m['tit']}</h3>
-                    <p style="color: #00f0ff; font-size: 0.95em; opacity: 0.9; text-transform: uppercase; letter-spacing: 2px; margin-top: 10px;">{m['sub']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                # Botón de streamlit envuelto en un contenedor para aplicar CSS
-                st.markdown('<div class="futuristic-btn-container">', unsafe_allow_html=True)
+                icon = m['icon']
+                tit  = m['tit']
+                sub  = m['sub']
+                card_html = (
+                    "<div class='modulo-card'>"
+                    f"<div class='card-corner-tl'></div>"
+                    f"<div class='card-corner-br'></div>"
+                    f"<div class='card-icon'>{icon}</div>"
+                    f"<h3 class='card-title'>{tit}</h3>"
+                    f"<p class='card-sub'>{sub}</p>"
+                    "</div>"
+                )
+                st.markdown(card_html, unsafe_allow_html=True)
                 st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}", on_click=ir_a_modulo, args=(m['full'],))
-                st.markdown('</div>', unsafe_allow_html=True)
 
            
     elif st.session_state.menu_seccion == "📚 Módulos":
