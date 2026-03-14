@@ -151,12 +151,12 @@ def login():
         --hover-glow: rgba(0, 240, 255, 0.1);
     }
 
-    /* Aplicamos el fondo negro solo al login */
-    .stApp {
-        background: #000000 !important;
+    body {
+        background: #000000;
         margin: 0;
         padding: 0;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
     }
 
     .login-container {
@@ -179,13 +179,36 @@ def login():
     }
 
     .login-title {
-        color: #00f0ff !important;
+        color: #00f0ff;
         text-align: center;
         font-size: 2.2rem;
         margin-bottom: 15px;
         font-weight: bold;
         letter-spacing: 1px;
         text-shadow: 0 0 10px #00f0ff;
+        position: relative;
+    }
+
+    .login-title::after {
+        content: '';
+        display: block;
+        width: 50px;
+        height: 3px;
+        background: #00f0ff;
+        margin: 10px auto;
+        border-radius: 3px;
+        box-shadow: 0 0 10px #00f0ff;
+    }
+
+    .login-input {
+        margin-bottom: 20px;
+    }
+
+    .login-input label {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 0.95rem;
+        text-shadow: 0 0 5px #00f0ff;
     }
 
     .stTextInput > div > div > input {
@@ -194,16 +217,48 @@ def login():
         border: 1px solid #00f0ff !important;
         border-radius: 8px !important;
         padding: 10px 15px !important;
+        font-size: 1rem !important;
         box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+        transition: all 0.3s ease;
+    }
+
+    .stTextInput > div > div > input:focus {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important;
+        outline: none;
     }
 
     .stButton > button {
-        background: linear-gradient(90deg, #00f0ff, #00c0ff) !important;
+        background: linear-gradient(90deg, #00f0ff, #00c0ff);
         color: #000000 !important;
-        font-weight: bold !important;
-        border: none !important;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 12px 25px;
+        border-radius: 8px;
+        border: none;
         width: 100%;
-        box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3) !important;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
+        position: relative;
+        overflow: hidden;
+        text-shadow: 0 0 5px #000000;
+    }
+
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(0, 240, 255, 0.5);
+        background: linear-gradient(90deg, #00c0ff, #00f0ff);
+    }
+
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 20px;
+        color: #8b949e;
+        font-size: 0.85rem;
     }
 
     .error-box {
@@ -211,20 +266,115 @@ def login():
         color: white;
         padding: 12px;
         border-radius: 8px;
+        margin: 15px 0;
+        border-left: 4px solid #c0392b;
+        font-weight: bold;
         animation: shake 0.5s ease-in-out;
+        box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
     }
 
     @keyframes shake {
-        0%, 100% { transform: translateX(0); }
+        0% { transform: translateX(0); }
         25% { transform: translateX(-5px); }
-        75% { transform: translateX(5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+        100% { transform: translateX(0); }
+    }
+
+    .theme-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #0a0a0f;
+        border: 1px solid #00f0ff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 8px rgba(0, 240, 255, 0.3);
+        z-index: 1000;
+        transition: all 0.3s ease;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.1);
+        background: #00f0ff;
+        color: #000000;
+    }
+
+    .logo-container {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .logo-svg {
+        width: 80px;
+        height: 80px;
+        fill: #00f0ff;
+        filter: drop-shadow(0 2px 4px rgba(0, 240, 255, 0.5));
+    }
+
+    .loader {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+
+    .loader:after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #00f0ff;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loader-text {
+        color: #ffffff;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    .signup-link {
+        text-align: center;
+        margin-top:
+        
+   .signup-link {
+        text-align: center;
+        margin-top: 15px;
+        font-size: 0.9rem;
+        color: #8b949e;
+    }
+
+    .signup-link a {
+        color: #00f0ff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .signup-link a:hover {
+        color: #00c0ff;
+        text-shadow: 0 0 5px #00f0ff;
     }
     </style>
     """, unsafe_allow_html=True)
-# --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO (Glassmorphism) ---
-    st.markdown("""
+
+  # --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO ---
+st.markdown("""
     <style>
-    /* Definición de Variables de Tema para el efecto Glass */
+    /* Definición de Variables de Tema */
     :root {
         --bg-url: url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1350&q=80");
         --glass-color: rgba(255, 255, 255, 0.05);
@@ -233,11 +383,12 @@ def login():
         --input-bg: rgba(255, 255, 255, 0.1);
     }
 
-    /* Estilo del Fondo Dinámico */
+    /* Estilo del Fondo de la App */
     .stApp {
-        background: var(--bg-url) !important;
-        background-size: cover !important;
-        background-position: center !important;
+        background: var(--bg-url);
+        background-size: cover;
+        background-position: center;
+        transition: 0.5s;
     }
 
     /* Efecto Glassmorphism en el Formulario */
@@ -260,7 +411,30 @@ def login():
         text-shadow: 0 0 10px rgba(0, 201, 255, 0.5);
     }
 
-    /* Toggle de Tema Flotante (Icono de Luna) */
+    .stTextInput input {
+        background-color: var(--input-bg) !important;
+        color: white !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 10px !important;
+    }
+
+    /* Botón Neon */
+    .stButton button {
+        background: linear-gradient(90deg, #00C9FF 0%, #92FE9D 100%);
+        color: #000 !important;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 20px;
+        transition: 0.3s;
+    }
+
+    .stButton button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 201, 255, 0.6);
+    }
+
+    /* Toggle de Tema Flotante */
     .theme-toggle {
         position: fixed;
         top: 20px;
@@ -274,93 +448,59 @@ def login():
     }
     </style>
 
-    <div class="theme-toggle">
+    <div class="theme-toggle" onclick="alert('Funcionalidad de cambio de CSS activada')">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
             <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.09-1.38a5.375 5.375 0 00-4.4-4.4A9.002 9.002 0 0012 3z"/>
         </svg>
     </div>
     """, unsafe_allow_html=True)
 
-    # --- 2. INTERFAZ DE LOGIN ---
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+# --- 2. INTERFAZ DE LOGIN ---
+st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
 
-    with col2:
-        with st.form("login_form"):
-            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
-            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
-            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+with col2:
+    with st.form("login_form"):
+        nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
+        usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
+        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
 
-            submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
+        submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
 
-            if submitted:
-                # Validación Administrador
-                if usuario == "Jsantos" and clave == "Inteligencia2026":
-                    st.session_state.update({
-                        'autenticado': True, 
-                        'es_admin': True, 
-                        'agente_nombre': nombre if nombre else "Admin"
-                    })
-                    st.success("Acceso Administrativo Correcto")
-                    st.rerun()
-                
-                # Validación Estudiante
-                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                    st.session_state.update({
-                        'autenticado': True, 
-                        'es_admin': False, 
-                        'agente_nombre': nombre
-                    })
-                    st.success(f"Bienvenido Agente {nombre}")
-                    st.rerun()
-                
-                else:
-                    st.error("Credenciales inválidas o campos vacíos.")
+        if submitted:
+            # Validación Admin
+            if usuario == "Jsantos" and clave == "Inteligencia2026":
+                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                st.success("Acceso Administrativo Correcto")
+                st.rerun()
+            
+            # Validación Estudiante (con el fix de 'User')
+            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                st.success(f"Bienvenido Agente {nombre}")
+                st.rerun()
+            
+            else:
+                st.error("Credenciales inválidas o campos vacíos.")
 
-    # --- 3. NOTA DE DISEÑO ---
-    st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
-
-    # --- LA INTERFAZ VISUAL TAMBIÉN DEBE IR AQUÍ ---
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
-
-    with col2:
-        with st.form("login_form"):
-            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
-            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
-            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
-
-            submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
-
-            if submitted:
-                if usuario == "Jsantos" and clave == "Inteligencia2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                    st.success("Acceso Administrativo Correcto")
-                    st.rerun()
-                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                    st.success(f"Bienvenido Agente {nombre}")
-                    st.rerun()
-                else:
-                    st.error("Credenciales inválidas o campos vacíos.")
+# --- 3. NOTA DE DISEÑO ---
+st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
+col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
-    st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
+def verificar_intento(nombre, modulo, engine):
+    try:
+        query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m")
+        with engine.connect() as conn:
+            result = conn.execute(query, {"f": nombre, "m": modulo}).fetchone()
+        return result[0] if result else None
+    except: return None
 
-# --- CONTROL DE FLUJO FINAL ---
-if not st.session_state.get('autenticado', False):
+if not st.session_state['autenticado']:
     login()
 else:
-    # Una vez autenticado, solo se ejecuta lo que pongas aquí
-    # (Tu conexión a la base de datos y el Dashboard principal)
-    st.title(f"Panel Principal - Bienvenido {st.session_state['agente_nombre']}")
-    
-    # Aquí puedes llamar a tu engine de base de datos
     db_s = st.secrets["connections"]["postgresql"]
-    # ... resto del código
-
-
+    engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
 # --- MENÚ PROFESIONAL (Streamlit) ---
     
     with st.sidebar:
