@@ -521,6 +521,85 @@ hr {
     font-size: 0.8rem !important;
 }
 
+/* ===== MODULE THEORY CONTENT BLOCKS ===== */
+
+/* Definition boxes (background #002b55) — upgrade to glass dark blue */
+div[style*="background-color: #002b55"],
+div[style*="background-color:#002b55"] {
+    background: rgba(0, 25, 70, 0.75) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 20px rgba(0, 100, 200, 0.2), 0 0 0 1px rgba(0, 150, 255, 0.15) !important;
+}
+
+/* Level/Phase cards (background #1e1e1e) — add neon glass depth */
+div[style*="background-color: #1e1e1e"],
+div[style*="background-color:#1e1e1e"] {
+    background: rgba(10, 15, 35, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+div[style*="background-color: #1e1e1e"]:hover,
+div[style*="background-color:#1e1e1e"]:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15) !important;
+}
+
+/* Module section boxes (lectura-box, ejemplo-box) */
+div.lectura-box {
+    background: rgba(0, 25, 70, 0.7) !important;
+    border-left: 5px solid #D4AF37 !important;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+    backdrop-filter: blur(8px);
+}
+
+div.ejemplo-box {
+    background: rgba(10, 15, 35, 0.8) !important;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 15px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+}
+
+/* Upgrade ALL stSubheader and header text inside module content */
+.stApp h3, .stApp h4 {
+    letter-spacing: 0.5px !important;
+}
+
+/* Style the stForm inside exam sections */
+div[data-testid='stForm'] {
+    background: rgba(5, 10, 30, 0.7) !important;
+    border: 1px solid rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.05) !important;
+    border-radius: 14px !important;
+    padding: 24px !important;
+}
+
+/* Exam submit button */
+div[data-testid='stForm'] button[kind='primaryFormSubmit'] {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.3), rgba(0, 150, 200, 0.3)) !important;
+    border: 1px solid #00f0ff !important;
+    color: #e0f7fa !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+div[data-testid='stForm'] button[kind='primaryFormSubmit']:hover {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.5), rgba(0, 200, 255, 0.4)) !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
