@@ -75,7 +75,10 @@ st.markdown("""
 
     /* Marca de agua más pequeña en móvil */
     .watermark {
-        font-size: 40px !important;
+        font-size: 30px !important;
+        bottom: 10px !important;
+        right: 15px !important;
+        opacity: 0.15 !important;
     }
 
     /* Cards del home */
@@ -107,6 +110,35 @@ st.markdown("""
     }
     h1 { font-size: 1.8rem !important; }
 }
+
+/* ===== NEW ADVANCED WATERMARK STYLING ===== */
+.watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    font-size: 50px;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.4); /* Dorado sutil */
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    z-index: 9999;
+    pointer-events: none;
+    transform: rotate(0deg);
+    opacity: 0.3;
+    user-select: none;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+}
+
+/* Efecto hover/movimiento sutil al pasar por la pantalla */
+body:hover .watermark {
+    opacity: 0.5;
+    transform: translateY(-5px) scale(1.05);
+    -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.7);
+    text-shadow: 5px 5px 15px rgba(212, 175, 55, 0.3);
+}
+
 </style>
 """, unsafe_allow_html=True)
 
