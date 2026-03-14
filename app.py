@@ -380,16 +380,27 @@ body:hover .watermark {
     color: #00f0ff !important;
 }
 
-/* Make the empty Streamlit button that follows a card invisible overlay */
-.card-btn-wrap + div[data-testid='stButton'] > button {
-    position: absolute;
-    top: -250px;
-    left: 0;
-    width: 100%;
-    height: 250px;
-    opacity: 0;
-    cursor: pointer;
-    z-index: 10;
+/* Button directly after modulo-card — styled to look like a card footer */
+.modulo-card + div[data-testid='stButton'] > button {
+    background: rgba(0, 240, 255, 0.08) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    border-top: 2px solid rgba(0, 240, 255, 0.6) !important;
+    border-radius: 0 0 12px 12px !important;
+    color: #00f0ff !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-size: 0.85rem !important;
+    padding: 10px !important;
+    margin-top: -5px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1) !important;
+}
+
+.modulo-card + div[data-testid='stButton'] > button:hover {
+    background: rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 5px 25px rgba(0, 240, 255, 0.4) !important;
+    color: #ffffff !important;
 }
 
 </style>
@@ -813,27 +824,23 @@ else:
 
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
-                btn_id = f"btn_home_{m['id']}"
-                # CSS injection for this card-button using a unique key
-                st.markdown(f"""
-                <style>
-                div[data-testid='stButton'] button[kind='secondary']:has(+ *) {{}}
-                div[key='{btn_id}'] > div > button,
-                [data-testid='column']:nth-child({(i%3)+1}) div[data-testid='stButton'] button {{
-                    all: unset;
-                }}
-                </style>
-                <div class='card-btn-wrap' id='wrap_{btn_id}'>
-                    <div class='card-corner-tl'></div>
-                    <div class='card-corner-br'></div>
-                    <div class='card-icon'>{m['icon']}</div>
-                    <h3 class='card-title'>{m['tit']}</h3>
-                    <p class='card-sub'>{m['sub']}</p>
-                    <p class='card-cta'>▶ ABRIR MÓDULO</p>
-                </div>
-                """, unsafe_allow_html=True)
-                if st.button("", key=btn_id, on_click=ir_a_modulo, args=(m['full'],)):
-                    pass
+                card_html = (
+                    "<div class='modulo-card'>"
+                    "<div class='card-corner-tl'></div>"
+                    "<div class='card-corner-br'></div>"
+                    f"<div class='card-icon'>{m['icon']}</div>"
+                    f"<h3 class='card-title'>{m['tit']}</h3>"
+                    f"<p class='card-sub'>{m['sub']}</p>"
+                    "</div>"
+                )
+                st.markdown(card_html, unsafe_allow_html=True)
+                st.button(
+                    f"▶ Abrir {m['tit']}",
+                    key=f"btn_home_{m['id']}",
+                    on_click=ir_a_modulo,
+                    args=(m['full'],),
+                    use_container_width=True
+                )
 
            
     elif st.session_state.menu_seccion == "📚 Módulos":
