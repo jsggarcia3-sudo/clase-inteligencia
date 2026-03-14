@@ -529,12 +529,12 @@ else:
         st.caption("☰ Desliza para cerrar")
         st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
         
-        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"])
+        seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"], key="menu_seccion")
         if st.button("Cerrar Sesión"):
             for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
             
-    if seccion == "🏠 Inicio":
+    if st.session_state.menu_seccion == "🏠 Inicio":
         st.markdown("<h1 style='text-align: center; color: #D4AF37;'>🛡️ SISTEMA ESTRATÉGICO DE CAPACITACIÓN</h1>", unsafe_allow_html=True)
         st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
         st.divider()
@@ -549,6 +549,11 @@ else:
             {"id": "M6", "tit": "Módulo 6", "sub": "Comunicación", "icon": "📢", "full": "Módulo 6: Comunicación"},
             {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
         ]
+
+        # Función de callback para el botón
+        def ir_a_modulo(nombre_modulo):
+            st.session_state.menu_seccion = "📚 Módulos"
+            st.session_state.modulo_seleccionado = nombre_modulo
 
         # Creación de la Grilla Tecnológica (Cards)
         cols = st.columns([1, 1, 1]) # Organizado en 3 columnas
@@ -570,13 +575,16 @@ else:
                 </div>
                 """, unsafe_allow_html=True)
                 
-                if st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}"):
-                    st.session_state['modulo_activo'] = m['full']
-                    st.info(f"Cargando {m['tit']}... Por favor, ve a la pestaña 📚 Módulos.")
+                st.button(f"INGRESAR AL {m['id']}", key=f"btn_home_{m['id']}", on_click=ir_a_modulo, args=(m['full'],))
 
            
-    elif seccion == "📚 Módulos":
-        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", [
+    elif st.session_state.menu_seccion == "📚 Módulos":
+        
+        # Obtener el módulo actual (por defecto Módulo 1 si no hay ninguno seleccionado)
+        modulo_actual = st.session_state.get('modulo_seleccionado', "Módulo 1: Conceptualización")
+        
+        # Encontrar el índice del módulo actual para el selectbox
+        lista_modulos = [
             "Módulo 1: Conceptualización", 
             "Módulo 2: Ciclo de Inteligencia", 
             "Módulo 3: Recolección", 
@@ -584,7 +592,13 @@ else:
             "Módulo 5: Análisis", 
             "Módulo 6: Comunicación", 
             "Módulo 7: Evaluación"
-        ])
+        ]
+        index_modulo = lista_modulos.index(modulo_actual) if modulo_actual in lista_modulos else 0
+
+        def actualizar_modulo():
+            st.session_state.modulo_seleccionado = st.session_state.selector_modulo
+
+        modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=index_modulo, key="selector_modulo", on_change=actualizar_modulo)
         
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
