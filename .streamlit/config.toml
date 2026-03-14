@@ -1,0 +1,12 @@
+[client]
+# Oculta la barra de herramientas (iconos de la esquina inferior derecha)
+toolbarMode = "hidden"
+showErrorDetails = false
+
+[browser]
+# Desactiva el envío de estadísticas de uso
+gatherUsageStats = false
+
+[ui]
+# Mejora la estética ocultando elementos de desarrollo
+hideTopBar = true
