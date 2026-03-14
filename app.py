@@ -707,7 +707,7 @@ else:
                             flex-direction: column;
                             justify-content: center;
                             align-items: center;
-                            cursor: pointer;"
+                            cursor: pointer;
                             onmouseover="this.style.transform='translateY(-10px) scale(1.02)'; this.style.boxShadow='0 15px 40px rgba(0, 240, 255, 0.3)'; this.style.borderColor='#00f0ff';"
                             onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 8px 32px 0 rgba(0, 240, 255, 0.1)'; this.style.borderColor='rgba(0, 240, 255, 0.3)';">
                     
