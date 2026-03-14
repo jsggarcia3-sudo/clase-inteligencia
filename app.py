@@ -368,8 +368,8 @@ def login():
     </style>
     """, unsafe_allow_html=True)
 
-  # --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO ---
-st.markdown("""
+    # --- 1. CONFIGURACIÓN Y ESTILO UNIFICADO ---
+    st.markdown("""
     <style>
     /* Definición de Variables de Tema */
     :root {
@@ -452,37 +452,37 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# --- 2. INTERFAZ DE LOGIN ---
-st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+    # --- 2. INTERFAZ DE LOGIN ---
+    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
 
-col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
 
-with col2:
-    with st.form("login_form"):
-        nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
-        usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
-        clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
+    with col2:
+        with st.form("login_form"):
+            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
+            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
+            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
 
-        submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
+            submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
 
-        if submitted:
-            # Validación Admin
-            if usuario == "Jsantos" and clave == "Inteligencia2026":
-                st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                st.success("Acceso Administrativo Correcto")
-                st.rerun()
-            
-            # Validación Estudiante (con el fix de 'User')
-            elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                st.success(f"Bienvenido Agente {nombre}")
-                st.rerun()
-            
-            else:
-                st.error("Credenciales inválidas o campos vacíos.")
+            if submitted:
+                # Validación Admin
+                if usuario == "Jsantos" and clave == "Inteligencia2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
+                    st.success("Acceso Administrativo Correcto")
+                    st.rerun()
+                
+                # Validación Estudiante (con el fix de 'User')
+                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
+                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
+                    st.success(f"Bienvenido Agente {nombre}")
+                    st.rerun()
+                
+                else:
+                    st.error("Credenciales inválidas o campos vacíos.")
 
-    # --- 3. NOTA DE DISEÑO ---
-    st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
+        # --- 3. NOTA DE DISEÑO ---
+        st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
 
 # --- CONTROL DE FLUJO FINAL ---
 if not st.session_state.get('autenticado', False):
