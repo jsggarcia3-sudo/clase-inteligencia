@@ -403,6 +403,124 @@ body:hover .watermark {
     color: #ffffff !important;
 }
 
+/* ===== MÓDULOS - MEJORAS VISUALES ===== */
+
+/* Selectbox del módulo */
+div[data-testid='stSelectbox'] > div > div {
+    background-color: rgba(0, 15, 40, 0.8) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    border-radius: 8px !important;
+    color: #e0f7fa !important;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.1) !important;
+}
+
+/* Headers de módulos */
+.stApp h1, .stApp h2 {
+    background: linear-gradient(90deg, #00f0ff, #92FE9D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px !important;
+}
+
+/* Bloques de información */
+div[data-testid='stAlert'] {
+    border-radius: 10px !important;
+    border-left-width: 5px !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* Info en azul claro neon */
+div[data-testid='stAlert'][data-type='info'] {
+    background: rgba(0, 80, 120, 0.4) !important;
+    border-left-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15) !important;
+}
+
+/* Success en verde esmeralda */
+div[data-testid='stAlert'][data-type='success'] {
+    background: rgba(0, 80, 40, 0.4) !important;
+    border-left-color: #00e676 !important;
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.15) !important;
+}
+
+/* Error en rojo neon */
+div[data-testid='stAlert'][data-type='error'] {
+    background: rgba(100, 0, 20, 0.4) !important;
+    border-left-color: #ff1744 !important;
+    box-shadow: 0 0 15px rgba(255, 23, 68, 0.2) !important;
+}
+
+/* Tabs del modulo (Módulo 3 tiene pestañas) */
+button[data-baseweb='tab'] {
+    background: rgba(0, 20, 50, 0.6) !important;
+    border-bottom: 2px solid rgba(0, 240, 255, 0.2) !important;
+    color: #8ecae6 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s !important;
+}
+
+button[data-baseweb='tab']:hover {
+    color: #00f0ff !important;
+    border-bottom-color: rgba(0, 240, 255, 0.6) !important;
+    background: rgba(0, 240, 255, 0.08) !important;
+}
+
+button[aria-selected='true'][data-baseweb='tab'] {
+    color: #00f0ff !important;
+    border-bottom: 3px solid #00f0ff !important;
+    background: rgba(0, 240, 255, 0.1) !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* Expanders dentro de módulos */
+div[data-testid='stExpander'] {
+    border: 1px solid rgba(0, 240, 255, 0.25) !important;
+    border-radius: 10px !important;
+    background: rgba(6, 11, 25, 0.6) !important;
+    box-shadow: 0 4px 20px rgba(0, 240, 255, 0.05) !important;
+    margin-bottom: 10px !important;
+}
+
+div[data-testid='stExpander'] summary {
+    color: #e0f7fa !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+}
+
+div[data-testid='stExpander'] summary:hover {
+    color: #00f0ff !important;
+}
+
+/* Radio buttons del examen */
+div[data-testid='stRadio'] label {
+    background: rgba(0, 20, 50, 0.5) !important;
+    border: 1px solid rgba(0, 240, 255, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 8px 12px !important;
+    margin: 4px 0 !important;
+    transition: all 0.2s !important;
+    color: #e0f7fa !important;
+}
+
+div[data-testid='stRadio'] label:hover {
+    border-color: rgba(0, 240, 255, 0.5) !important;
+    background: rgba(0, 240, 255, 0.08) !important;
+}
+
+/* Dividers */
+hr {
+    border-color: rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 0 6px rgba(0, 240, 255, 0.1);
+}
+
+/* Caption text */
+.stApp .stMarkdown p small, .stApp [data-testid='stCaptionContainer'] {
+    color: rgba(0, 240, 255, 0.5) !important;
+    font-size: 0.8rem !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
