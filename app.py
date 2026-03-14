@@ -1,3 +1,11 @@
+import streamlit as st
+import pandas as pd
+from sqlalchemy import create_engine, text
+from urllib.parse import quote_plus
+# --- FORZAR MODO OSCURO POR DEFECTO ---
+
+
+
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
     page_title="Plataforma Educativa DIPOL",
