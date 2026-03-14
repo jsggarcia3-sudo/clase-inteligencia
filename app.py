@@ -5,7 +5,6 @@ from urllib.parse import quote_plus
 # --- FORZAR MODO OSCURO POR DEFECTO ---
 
 
-
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
     page_title="Plataforma Educativa DIPOL",
@@ -39,8 +38,6 @@ def cargar_todo_admin():
         return pd.read_sql(query, conn)
 
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
-st.set_page_config(page_title="Plataforma Educativa DIPOL", page_icon="🛡️", layout="wide")
-
 st.markdown("""
 <style>
 /* ===== RESPONSIVE MÓVIL ===== */
@@ -321,32 +318,6 @@ def login():
     # --- 3. NOTA DE DISEÑO ---
     st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
 
-    # --- LA INTERFAZ VISUAL TAMBIÉN DEBE IR AQUÍ ---
-    st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
-
-    with col2:
-        with st.form("login_form"):
-            nombre = st.text_input("Nombre Completo", placeholder="Ej: Noel Viera")
-            usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
-            clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
-
-            submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
-
-            if submitted:
-                if usuario == "Jsantos" and clave == "Inteligencia2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': True, 'agente_nombre': nombre if nombre else "Admin"})
-                    st.success("Acceso Administrativo Correcto")
-                    st.rerun()
-                elif nombre and usuario == "User" and clave == "ESTUDIANTE2026":
-                    st.session_state.update({'autenticado': True, 'es_admin': False, 'agente_nombre': nombre})
-                    st.success(f"Bienvenido Agente {nombre}")
-                    st.rerun()
-                else:
-                    st.error("Credenciales inválidas o campos vacíos.")
-    
-    st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
 
 # --- CONTROL DE FLUJO FINAL ---
 if not st.session_state.get('autenticado', False):
