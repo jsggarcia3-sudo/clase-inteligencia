@@ -600,6 +600,70 @@ div[data-testid='stForm'] button[kind='primaryFormSubmit']:hover {
     color: #ffffff !important;
 }
 
+/* HUD-style list markers */
+.stApp ul {
+    list-style-type: none !important;
+    padding-left: 1.5rem !important;
+}
+
+.stApp li::before {
+    content: "◢ " !important;
+    color: #00f0ff !important;
+    font-size: 0.8em !important;
+    margin-right: 10px !important;
+    display: inline-block !important;
+    filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.4)) !important;
+}
+
+/* Add corner decorations to definition/theory blocks */
+div[style*="background-color: #002b55"],
+div[style*="background-color:#002b55"],
+div[style*="background-color: #1e1e1e"],
+div[style*="background-color:#1e1e1e"],
+div.lectura-box {
+    position: relative !important;
+}
+
+div[style*="background-color: #002b55"]::after,
+div[style*="background-color:#002b55"]::after,
+div[style*="background-color: #1e1e1e"]::after,
+div[style*="background-color:#1e1e1e"]::after,
+div.lectura-box::after {
+    content: "" !important;
+    position: absolute !important;
+    bottom: -1px !important;
+    right: -1px !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-bottom: 2px solid #00f0ff !important;
+    border-right: 2px solid #00f0ff !important;
+    border-bottom-right-radius: 12px !important;
+    opacity: 0.5 !important;
+}
+
+/* Enhanced typography for subheaders */
+.stApp h3 {
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1) !important;
+    padding-bottom: 10px !important;
+    margin-top: 35px !important;
+}
+
+/* Floating HUD decoration at the bottom of the page */
+.stApp::after {
+    content: "SECURITY LEVEL: CLEARANCE GRANTED | DIPOL STRATEGIC CORE" !important;
+    position: fixed !important;
+    bottom: 10px !important;
+    right: 20px !important;
+    font-family: monospace !important;
+    font-size: 10px !important;
+    color: rgba(0, 240, 255, 0.3) !important;
+    letter-spacing: 2px !important;
+    z-index: 999 !important;
+    pointer-events: none !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
