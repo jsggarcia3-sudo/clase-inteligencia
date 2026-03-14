@@ -1,3 +1,11 @@
+import streamlit as st
+import pandas as pd
+from sqlalchemy import create_engine, text
+from urllib.parse import quote_plus
+# --- FORZAR MODO OSCURO POR DEFECTO ---
+
+
+
 # 1. CONFIGURACIÓN INICIAL (Debe ir al puro principio)
 st.set_page_config(
     page_title="Plataforma Educativa DIPOL",
@@ -449,6 +457,7 @@ st.markdown("""
 
 # --- 2. INTERFAZ DE LOGIN ---
 st.markdown("<h1 class='login-title'>ACCESO AL SISTEMA</h1>", unsafe_allow_html=True)
+
 col1, col2, col3 = st.columns([0.5, 2, 0.5])
 
 with col2:
@@ -457,7 +466,7 @@ with col2:
         usuario = st.text_input("Usuario", placeholder="Escriba 'User' o su usuario")
         clave = st.text_input("Contraseña", type="password", placeholder="••••••••")
 
-        submitted = st.form_submit_button("INGRESAR Al CURSO", use_container_width=True)
+        submitted = st.form_submit_button("INGRESAR AL DASHBOARD", use_container_width=True)
 
         if submitted:
             # Validación Admin
@@ -477,7 +486,8 @@ with col2:
 
 # --- 3. NOTA DE DISEÑO ---
 st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
-col1, col2, col3 = st.columns([0.5, 2, 0.5])
+            
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
     
 def verificar_intento(nombre, modulo, engine):
     try:
