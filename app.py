@@ -37,16 +37,6 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
-def verificar_intento(funcionario, modulo, engine):
-    """Verifica si el agente ya tiene una nota para este módulo en el último intento."""
-    try:
-        with engine.connect() as conn:
-            query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m ORDER BY fecha DESC LIMIT 1")
-            result = conn.execute(query, {"f": funcionario, "m": modulo}).fetchone()
-            return result[0] if result else None
-    except:
-        return None
-
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
 st.markdown("""
 <style>
@@ -407,7 +397,23 @@ body:hover .watermark {
     box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1) !important;
 }
 
-.modulo-card + div[data-testid='stButton'] > button:hover {
+.footer-btn button {
+    background: rgba(0, 240, 255, 0.08) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    border-top: 2px solid rgba(0, 240, 255, 0.6) !important;
+    border-radius: 0 0 12px 12px !important;
+    color: #00f0ff !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-size: 0.85rem !important;
+    padding: 10px !important;
+    margin-top: -5px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1) !important;
+}
+
+.footer-btn button:hover {
     background: rgba(0, 240, 255, 0.2) !important;
     box-shadow: 0 5px 25px rgba(0, 240, 255, 0.4) !important;
     color: #ffffff !important;
@@ -1106,10 +1112,8 @@ else:
         st.write(f"**{rol_display}:**\n{nombre_display}")
         
         seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"], key="menu_seccion")
-        
-        st.divider()
-        if st.button("🚪 Cerrar Sesión", use_container_width=True):
-            st.session_state.clear()
+        if st.button("Cerrar Sesión"):
+            for key in list(st.session_state.keys()): del st.session_state[key]
             st.rerun()
             
     if st.session_state.menu_seccion == "🏠 Inicio":
@@ -1635,20 +1639,20 @@ else:
                             </ul>
                         </div>
                         """, unsafe_allow_html=True)
-
+                        
                 with tab_comp:
-                    st.subheader("⚙️ Componentes del Tratamiento")
-                    c1, c2 = st.columns(2)
-                    with c1:
-                        st.write("**📂 ORGANIZACIÓN**")
-                        st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
-                        st.write("**🛡️ CLASIFICACIÓN**")
-                        st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
-                    with c2:
-                        st.write("**⚖️ VALORACIÓN**")
-                        st.caption("Evaluar si es oportuna, confiable y creíble.")
-                        st.write("**📝 REGISTRO**")
-                        st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
+                        st.subheader("⚙️ Componentes del Tratamiento")
+                        c1, c2 = st.columns(2)
+                        with c1:
+                            st.write("**📂 ORGANIZACIÓN**")
+                            st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
+                            st.write("**🛡️ CLASIFICACIÓN**")
+                            st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
+                        with c2:
+                            st.write("**⚖️ VALORACIÓN**")
+                            st.caption("Evaluar si es oportuna, confiable y creíble.")
+                            st.write("**📝 REGISTRO**")
+                            st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
 
                 with tab_4x4:
                     st.subheader("📋 Matriz de Evaluación 4x4")
@@ -1675,7 +1679,7 @@ else:
                         <tr><td class="cod-cell">D</td><td>Desconocida/Sin historial</td><td class="cod-cell">4</td><td>No corroborable</td><td class="perc-25">25</td></tr>
                     </table>
                     """, unsafe_allow_html=True)
-                    
+
                     # Ejemplos visuales rápidos
                     st.markdown("---")
                     col_ex1, col_ex2 = st.columns(2)
@@ -1685,19 +1689,9 @@ else:
                         st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
 
                 st.divider()
-                
-                # Sistema de evaluación
-                try:
-                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
-                except:
-                    nota_p = None
-
-                if nota_p is None:
-                    if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_examen_m4"):
-                        st.session_state['modo_examen'] = True
-                        st.rerun()
-                else: 
-                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
+                if st.button("🚀 INICIAR EXAMEN MÓDULO 4"):
+                    st.session_state['modo_examen'] = True
+                    st.rerun()
             
             else:
                 st.header("📝 Evaluación: Módulo 4")
@@ -1733,6 +1727,7 @@ else:
                         
                         st.session_state['modo_examen'] = False
                         st.rerun()
+
         # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 5: Análisis":
             if not st.session_state.get('modo_examen', False):
