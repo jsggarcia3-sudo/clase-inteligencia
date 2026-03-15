@@ -1615,103 +1615,103 @@ else:
                         """, unsafe_allow_html=True)
 
                with tab_comp:
-    st.subheader("⚙️ Componentes del Tratamiento")
-    c1, c2 = st.columns(2)
-    with c1:
-        st.write("**📂 ORGANIZACIÓN**")
-        st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
-        st.write("**🛡️ CLASIFICACIÓN**")
-        st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
-    with c2:
-        st.write("**⚖️ VALORACIÓN**")
-        st.caption("Evaluar si es oportuna, confiable y creíble.")
-        st.write("**📝 REGISTRO**")
-        st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
-
-with tab_4x4:
-    st.subheader("📋 Matriz de Evaluación 4x4")
-    st.markdown("""
-    <style>
-        .t-4x4 { width: 100%; border-collapse: collapse; color: white; }
-        .t-4x4 th { background-color: #D4AF37; color: #000; padding: 8px; border: 1px solid #444; }
-        .t-4x4 td { padding: 8px; border: 1px solid #444; background-color: #002b55; font-size: 0.85em; }
-        .cod-cell { text-align: center; font-weight: bold; background-color: #003366 !important; width: 40px; }
-        .perc-100 { background-color: #2e7d32 !important; text-align: center; font-weight: bold; }
-        .perc-75 { background-color: #fbc02d !important; text-align: center; font-weight: bold; color: black; }
-        .perc-50 { background-color: #ef6c00 !important; text-align: center; font-weight: bold; }
-        .perc-25 { background-color: #c62828 !important; text-align: center; font-weight: bold; }
-    </style>
-    <table class="t-4x4">
-        <tr>
-            <th colspan="2">CONFIABILIDAD (FUENTE)</th>
-            <th colspan="2">CREDIBILIDAD (INFO)</th>
-            <th>%</th>
-        </tr>
-        <tr><td class="cod-cell">A</td><td>Totalmente confiable</td><td class="cod-cell">1</td><td>Confirmada/Cierta</td><td class="perc-100">100</td></tr>
-        <tr><td class="cod-cell">B</td><td>Usualmente confiable</td><td class="cod-cell">2</td><td>De primera mano</td><td class="perc-75">75</td></tr>
-        <tr><td class="cod-cell">C</td><td>Dudosa/No confiable</td><td class="cod-cell">3</td><td>Corroborable</td><td class="perc-50">50</td></tr>
-        <tr><td class="cod-cell">D</td><td>Desconocida/Sin historial</td><td class="cod-cell">4</td><td>No corroborable</td><td class="perc-25">25</td></tr>
-    </table>
-    """, unsafe_allow_html=True)
-
-    # Ejemplos visuales rápidos
-    st.markdown("---")
-    col_ex1, col_ex2 = st.columns(2)
-    with col_ex1:
-        st.success("**Ejemplo A-1 (100%):** Agente infiltrado entrega grabación original.")
-    with col_ex2:
-        st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
-    
-    st.divider()
-    
-    # Sistema de evaluación
-    try:
-        nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
-    except:
-        nota_p = None
-    
-    # Corregido: Se añade la condición del modo_examen para que el else tenga sentido
-    if not st.session_state.get('modo_examen', False):
-        if nota_p is None:
-            if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_exam_m4"):
-                st.session_state['modo_examen'] = True
-                st.rerun()
-        else: 
-            st.success(f"✅ Módulo completado. Calificación: {nota_p}%")
-    
-    else:
-        st.header("📝 Evaluación: Módulo 4")
-        with st.form("exam_m4"):
-            m4_1 = st.radio("1. ¿Qué implica la etapa de 'Organización'?", 
-                            ["Captura de objetivos", "Determinar tipo de información, blanco y prioridad", "Publicar en redes sociales"])
-            m4_2 = st.radio("2. Según la matriz 4x4, el código 'C-3' representa un porcentaje de:", 
-                            ["100%", "75%", "50%"])
-            m4_3 = st.radio("3. El Tratamiento busca garantizar que el registro se enmarque en:", 
-                            ["Revistas de prensa", "La Constitución y la Jurisprudencia nacional", "Manuales de software"])
-            m4_4 = st.radio("4. ¿Qué elemento de los EEI responde al 'Por qué'?", 
-                            ["Temporalidad", "Causas y motivaciones", "Ubicación"])
-            m4_5 = st.radio("5. ¿Cuál es el producto final tras someter la Información al Proceso?", 
-                            ["Datos crudos", "Inteligencia", "Insumos"])
-    
-            if st.form_submit_button("FINALIZAR EXAMEN"):
-                res_m4 = [
-                    m4_1 == "Determinar tipo de información, blanco y prioridad",
-                    m4_2 == "50%",
-                    m4_3 == "La Constitución y la Jurisprudencia nacional",
-                    m4_4 == "Causas y motivaciones",
-                    m4_5 == "Inteligencia"
-                ]
-                nota_m4 = (sum(res_m4) / 5) * 100
-                try:
-                    with engine.begin() as conn:
-                        conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
-                                    {"f": st.session_state['agente_nombre'], "n": nota_m4, "m": "Módulo 4"})
-                    st.success(f"Examen enviado. Nota: {nota_m4}%")
-                except:
-                    st.warning(f"Calificación calculada: {nota_m4}%. (Error de conexión a DB)")
+                    st.subheader("⚙️ Componentes del Tratamiento")
+                    c1, c2 = st.columns(2)
+                    with c1:
+                        st.write("**📂 ORGANIZACIÓN**")
+                        st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
+                        st.write("**🛡️ CLASIFICACIÓN**")
+                        st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
+                    with c2:
+                        st.write("**⚖️ VALORACIÓN**")
+                        st.caption("Evaluar si es oportuna, confiable y creíble.")
+                        st.write("**📝 REGISTRO**")
+                        st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
                 
-                st.session_state['modo_examen'] = False
-                st.rerun()
+                with tab_4x4:
+                    st.subheader("📋 Matriz de Evaluación 4x4")
+                    st.markdown("""
+                    <style>
+                        .t-4x4 { width: 100%; border-collapse: collapse; color: white; }
+                        .t-4x4 th { background-color: #D4AF37; color: #000; padding: 8px; border: 1px solid #444; }
+                        .t-4x4 td { padding: 8px; border: 1px solid #444; background-color: #002b55; font-size: 0.85em; }
+                        .cod-cell { text-align: center; font-weight: bold; background-color: #003366 !important; width: 40px; }
+                        .perc-100 { background-color: #2e7d32 !important; text-align: center; font-weight: bold; }
+                        .perc-75 { background-color: #fbc02d !important; text-align: center; font-weight: bold; color: black; }
+                        .perc-50 { background-color: #ef6c00 !important; text-align: center; font-weight: bold; }
+                        .perc-25 { background-color: #c62828 !important; text-align: center; font-weight: bold; }
+                    </style>
+                    <table class="t-4x4">
+                        <tr>
+                            <th colspan="2">CONFIABILIDAD (FUENTE)</th>
+                            <th colspan="2">CREDIBILIDAD (INFO)</th>
+                            <th>%</th>
+                        </tr>
+                        <tr><td class="cod-cell">A</td><td>Totalmente confiable</td><td class="cod-cell">1</td><td>Confirmada/Cierta</td><td class="perc-100">100</td></tr>
+                        <tr><td class="cod-cell">B</td><td>Usualmente confiable</td><td class="cod-cell">2</td><td>De primera mano</td><td class="perc-75">75</td></tr>
+                        <tr><td class="cod-cell">C</td><td>Dudosa/No confiable</td><td class="cod-cell">3</td><td>Corroborable</td><td class="perc-50">50</td></tr>
+                        <tr><td class="cod-cell">D</td><td>Desconocida/Sin historial</td><td class="cod-cell">4</td><td>No corroborable</td><td class="perc-25">25</td></tr>
+                    </table>
+                    """, unsafe_allow_html=True)
+                
+                    # Ejemplos visuales rápidos
+                    st.markdown("---")
+                    col_ex1, col_ex2 = st.columns(2)
+                    with col_ex1:
+                        st.success("**Ejemplo A-1 (100%):** Agente infiltrado entrega grabación original.")
+                    with col_ex2:
+                        st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
+                    
+                    st.divider()
+                    
+                    # Sistema de evaluación
+                    try:
+                        nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
+                    except:
+                        nota_p = None
+                    
+                    # Corregido: Se añade la condición del modo_examen para que el else tenga sentido
+                    if not st.session_state.get('modo_examen', False):
+                        if nota_p is None:
+                            if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_exam_m4"):
+                                st.session_state['modo_examen'] = True
+                                st.rerun()
+                        else: 
+                            st.success(f"✅ Módulo completado. Calificación: {nota_p}%")
+                    
+                    else:
+                        st.header("📝 Evaluación: Módulo 4")
+                        with st.form("exam_m4"):
+                            m4_1 = st.radio("1. ¿Qué implica la etapa de 'Organización'?", 
+                                            ["Captura de objetivos", "Determinar tipo de información, blanco y prioridad", "Publicar en redes sociales"])
+                            m4_2 = st.radio("2. Según la matriz 4x4, el código 'C-3' representa un porcentaje de:", 
+                                            ["100%", "75%", "50%"])
+                            m4_3 = st.radio("3. El Tratamiento busca garantizar que el registro se enmarque en:", 
+                                            ["Revistas de prensa", "La Constitución y la Jurisprudencia nacional", "Manuales de software"])
+                            m4_4 = st.radio("4. ¿Qué elemento de los EEI responde al 'Por qué'?", 
+                                            ["Temporalidad", "Causas y motivaciones", "Ubicación"])
+                            m4_5 = st.radio("5. ¿Cuál es el producto final tras someter la Información al Proceso?", 
+                                            ["Datos crudos", "Inteligencia", "Insumos"])
+                    
+                            if st.form_submit_button("FINALIZAR EXAMEN"):
+                                res_m4 = [
+                                    m4_1 == "Determinar tipo de información, blanco y prioridad",
+                                    m4_2 == "50%",
+                                    m4_3 == "La Constitución y la Jurisprudencia nacional",
+                                    m4_4 == "Causas y motivaciones",
+                                    m4_5 == "Inteligencia"
+                                ]
+                                nota_m4 = (sum(res_m4) / 5) * 100
+                                try:
+                                    with engine.begin() as conn:
+                                        conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
+                                                    {"f": st.session_state['agente_nombre'], "n": nota_m4, "m": "Módulo 4"})
+                                    st.success(f"Examen enviado. Nota: {nota_m4}%")
+                                except:
+                                    st.warning(f"Calificación calculada: {nota_m4}%. (Error de conexión a DB)")
+                                
+                                st.session_state['modo_examen'] = False
+                                st.rerun()
                                         
                     
        # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
