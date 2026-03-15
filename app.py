@@ -1614,19 +1614,19 @@ else:
                         </div>
                         """, unsafe_allow_html=True)
                         
-            with tab_comp:
-                    st.subheader("⚙️ Componentes del Tratamiento")
-                    c1, c2 = st.columns(2)
-                    with c1:
-                        st.write("**📂 ORGANIZACIÓN**")
-                        st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
-                        st.write("**🛡️ CLASIFICACIÓN**")
-                        st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
-                    with c2:
-                        st.write("**⚖️ VALORACIÓN**")
-                        st.caption("Evaluar si es oportuna, confiable y creíble.")
-                        st.write("**📝 REGISTRO**")
-                        st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
+                with tab_comp:
+                        st.subheader("⚙️ Componentes del Tratamiento")
+                        c1, c2 = st.columns(2)
+                        with c1:
+                            st.write("**📂 ORGANIZACIÓN**")
+                            st.caption("Determinar tipo de información, blanco y nivel de prioridad.")
+                            st.write("**🛡️ CLASIFICACIÓN**")
+                            st.caption("Origen de la fuente, estado del proceso y nivel de seguridad (Secreto/Reservado).")
+                        with c2:
+                            st.write("**⚖️ VALORACIÓN**")
+                            st.caption("Evaluar si es oportuna, confiable y creíble.")
+                            st.write("**📝 REGISTRO**")
+                            st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
 
                 with tab_4x4:
                     st.subheader("📋 Matriz de Evaluación 4x4")
