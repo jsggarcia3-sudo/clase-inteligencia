@@ -37,6 +37,15 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
+@st.cache_data(ttl=60)
+def verificar_intento(nombre, modulo, _engine):
+    with _engine.connect() as conn:
+        query = text(
+            "SELECT nota FROM calificaciones WHERE funcionario = :n AND modulo = :m ORDER BY fecha DESC LIMIT 1"
+        )
+        result = conn.execute(query, {"n": nombre, "m": modulo}).fetchone()
+    return result if result else None
+    
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
 st.markdown("""
 <style>
@@ -1056,7 +1065,7 @@ else:
         
         seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"], key="menu_seccion")
         if st.button("Cerrar Sesión"):
-            for key in list(st.session_state.keys()): del st.session_state[key]
+            st.session_state.clear()
             st.rerun()
             
     if st.session_state.menu_seccion == "🏠 Inicio":
