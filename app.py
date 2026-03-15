@@ -1613,8 +1613,8 @@ else:
                             </ul>
                         </div>
                         """, unsafe_allow_html=True)
-
-               with tab_comp:
+                        
+            with tab_comp:
                     st.subheader("⚙️ Componentes del Tratamiento")
                     c1, c2 = st.columns(2)
                     with c1:
@@ -1627,7 +1627,7 @@ else:
                         st.caption("Evaluar si es oportuna, confiable y creíble.")
                         st.write("**📝 REGISTRO**")
                         st.caption("Ingreso cronológico, detallado y sistemático en bases de datos.")
-                
+
                 with tab_4x4:
                     st.subheader("📋 Matriz de Evaluación 4x4")
                     st.markdown("""
@@ -1653,7 +1653,7 @@ else:
                         <tr><td class="cod-cell">D</td><td>Desconocida/Sin historial</td><td class="cod-cell">4</td><td>No corroborable</td><td class="perc-25">25</td></tr>
                     </table>
                     """, unsafe_allow_html=True)
-                
+
                     # Ejemplos visuales rápidos
                     st.markdown("---")
                     col_ex1, col_ex2 = st.columns(2)
@@ -1670,7 +1670,6 @@ else:
                     except:
                         nota_p = None
                     
-                    # Corregido: Se añade la condición del modo_examen para que el else tenga sentido
                     if not st.session_state.get('modo_examen', False):
                         if nota_p is None:
                             if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_exam_m4"):
@@ -1711,8 +1710,8 @@ else:
                                     st.warning(f"Calificación calculada: {nota_m4}%. (Error de conexión a DB)")
                                 
                                 st.session_state['modo_examen'] = False
-                                st.rerun()
-                                        
+                                st.rerun()                                                                         
+                                                   
                     
        # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 5: Análisis":
