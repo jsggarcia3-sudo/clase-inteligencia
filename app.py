@@ -1656,51 +1656,61 @@ else:
                     
                     # Ejemplos visuales rápidos
                     st.markdown("---")
-                    col_ex1, col_ex2 = st.columns(2)
-                    with col_ex1:
-                        st.success("**Ejemplo A-1 (100%):** Agente infiltrado entrega grabación original.")
-                    with col_ex2:
-                        st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
+col_ex1, col_ex2 = st.columns(2)
+with col_ex1:
+    st.success("**Ejemplo A-1 (100%):** Agente infiltrado entrega grabación original.")
+with col_ex2:
+    st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
 
-                st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 4"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+st.divider()
+
+# Sistema de evaluación
+try:
+    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
+except:
+    nota_p = None
+
+if nota_p is None:
+    if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_exam_m4"):
+        st.session_state['modo_examen'] = True
+        st.rerun()
+else: 
+    st.success(f"✅ Módulo completado. Calificación: {nota_p}%")
+
+else:
+    st.header("📝 Evaluación: Módulo 4")
+    with st.form("exam_m4"):
+        m4_1 = st.radio("1. ¿Qué implica la etapa de 'Organización'?", 
+                       ["Captura de objetivos", "Determinar tipo de información, blanco y prioridad", "Publicar en redes sociales"])
+        m4_2 = st.radio("2. Según la matriz 4x4, el código 'C-3' representa un porcentaje de:", 
+                       ["100%", "75%", "50%"])
+        m4_3 = st.radio("3. El Tratamiento busca garantizar que el registro se enmarque en:", 
+                       ["Revistas de prensa", "La Constitución y la Jurisprudencia nacional", "Manuales de software"])
+        m4_4 = st.radio("4. ¿Qué elemento de los EEI responde al 'Por qué'?", 
+                       ["Temporalidad", "Causas y motivaciones", "Ubicación"])
+        m4_5 = st.radio("5. ¿Cuál es el producto final tras someter la Información al Proceso?", 
+                       ["Datos crudos", "Inteligencia", "Insumos"])
+
+        if st.form_submit_button("FINALIZAR EXAMEN"):
+            res_m4 = [
+                m4_1 == "Determinar tipo de información, blanco y prioridad",
+                m4_2 == "50%",
+                m4_3 == "La Constitución y la Jurisprudencia nacional",
+                m4_4 == "Causas y motivaciones",
+                m4_5 == "Inteligencia"
+            ]
+            nota_m4 = (sum(res_m4) / 5) * 100
+            try:
+                with engine.begin() as conn:
+                    conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
+                               {"f": st.session_state['agente_nombre'], "n": nota_m4, "m": "Módulo 4"})
+                st.success(f"Examen enviado. Nota: {nota_m4}%")
+            except:
+                st.warning(f"Calificación calculada: {nota_m4}%. (Error de conexión a DB)")
             
-            else:
-                st.header("📝 Evaluación: Módulo 4")
-                with st.form("exam_m4"):
-                    m4_1 = st.radio("1. ¿Qué implica la etapa de 'Organización'?", 
-                                   ["Captura de objetivos", "Determinar tipo de información, blanco y prioridad", "Publicar en redes sociales"])
-                    m4_2 = st.radio("2. Según la matriz 4x4, el código 'C-3' representa un porcentaje de:", 
-                                   ["100%", "75%", "50%"])
-                    m4_3 = st.radio("3. El Tratamiento busca garantizar que el registro se enmarque en:", 
-                                   ["Revistas de prensa", "La Constitución y la Jurisprudencia nacional", "Manuales de software"])
-                    m4_4 = st.radio("4. ¿Qué elemento de los EEI responde al 'Por qué'?", 
-                                   ["Temporalidad", "Causas y motivaciones", "Ubicación"])
-                    m4_5 = st.radio("5. ¿Cuál es el producto final tras someter la Información al Proceso?", 
-                                   ["Datos crudos", "Inteligencia", "Insumos"])
+            st.session_state['modo_examen'] = False
+            st.rerun()
 
-                    if st.form_submit_button("FINALIZAR EXAMEN"):
-                        res_m4 = [
-                            m4_1 == "Determinar tipo de información, blanco y prioridad",
-                            m4_2 == "50%",
-                            m4_3 == "La Constitución y la Jurisprudencia nacional",
-                            m4_4 == "Causas y motivaciones",
-                            m4_5 == "Inteligencia"
-                        ]
-                        nota_m4 = (sum(res_m4) / 5) * 100
-                        # Aquí asumo que tienes tu conexión 'engine' configurada
-                        try:
-                            with engine.begin() as conn:
-                                conn.execute(text("INSERT INTO calificaciones (funcionario, nota, modulo) VALUES (:f, :n, :m)"), 
-                                           {"f": st.session_state['agente_nombre'], "n": nota_m4, "m": "Módulo 4"})
-                            st.success(f"Examen enviado. Nota: {nota_m4}%")
-                        except:
-                            st.warning(f"Calificación calculada: {nota_m4}%. (Error de conexión a DB)")
-                        
-                        st.session_state['modo_examen'] = False
-                        st.rerun()
 
         # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 5: Análisis":
