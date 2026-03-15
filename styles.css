@@ -1,0 +1,593 @@
+/* ===== ESTILOS GLOBALES DE LA APLICACIÓN ===== */
+
+/* ===== RESPONSIVE MÓVIL ===== */
+@media (max-width: 768px) {
+    .block-container {
+        padding: 1rem 0.5rem !important;
+    }
+
+    .stButton > button {
+        font-size: 0.85rem !important;
+        padding: 10px 5px !important;
+    }
+
+    h1 { font-size: 1.4rem !important; }
+    h2 { font-size: 1.2rem !important; }
+    h3 { font-size: 1rem !important; }
+
+    [data-testid="column"] {
+        width: 100% !important;
+        flex: 1 1 100% !important;
+        min-width: 100% !important;
+    }
+
+    [data-testid="stSidebar"] {
+        width: 80vw !important;
+    }
+
+    .watermark {
+        font-size: 30px !important;
+        bottom: 10px !important;
+        right: 15px !important;
+        opacity: 0.15 !important;
+    }
+
+    div[style*="min-height: 220px"] {
+        min-height: auto !important;
+        padding: 15px !important;
+    }
+
+    [data-testid="stTabs"] {
+        overflow-x: auto !important;
+    }
+
+    .stForm {
+        padding: 15px !important;
+    }
+
+    [data-testid="stDataFrame"] {
+        overflow-x: auto !important;
+    }
+}
+
+/* ===== TABLETS (768px - 1024px) ===== */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .block-container {
+        padding: 1.5rem 1rem !important;
+    }
+    h1 { font-size: 1.8rem !important; }
+}
+
+/* ===== WATERMARK ===== */
+.watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    font-size: 50px;
+    font-weight: 900;
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    z-index: 9999;
+    pointer-events: none;
+    transform: rotate(0deg);
+    opacity: 0.3;
+    user-select: none;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.5s ease;
+}
+
+body:hover .watermark {
+    opacity: 0.5;
+    transform: translateY(-5px) scale(1.05);
+    -webkit-text-stroke: 1.5px rgba(212, 175, 55, 0.7);
+    text-shadow: 5px 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== SIDEBAR ===== */
+[data-testid="stSidebar"] {
+    background-color: rgba(6, 11, 25, 0.85) !important;
+    backdrop-filter: blur(15px) !important;
+    border-right: 1px solid rgba(0, 240, 255, 0.3) !important;
+    box-shadow: 3px 0 20px rgba(0, 240, 255, 0.15) !important;
+}
+
+[data-testid="stSidebar"]::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+    animation: scanline 3s linear infinite;
+}
+
+@keyframes scanline {
+    0% { transform: translateY(-100%); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+}
+
+[data-testid="stSidebar"] h1, [data-testid="stSidebar"] p {
+    color: #e0f7fa !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+    font-weight: 600;
+}
+
+/* Radio buttons del menú */
+[data-testid="stSidebar"] .stRadio > div {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label {
+    background: rgba(0, 240, 255, 0.05);
+    border: 1px solid rgba(0, 240, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label:hover {
+    background: rgba(0, 240, 255, 0.15);
+    border-color: #00f0ff;
+    transform: translateX(5px);
+    box-shadow: -2px 0 10px rgba(0, 240, 255, 0.4);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label[data-checked="true"] {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.2), transparent);
+    border-left: 4px solid #00f0ff;
+    border-top: 1px solid rgba(0, 240, 255, 0.5);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.5);
+    border-right: 1px solid rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
+}
+
+[data-testid="stSidebar"] .stRadio > div > div > label > div > div > p {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: #ffffff !important;
+    text-transform: uppercase;
+}
+
+/* Botón Cerrar Sesión */
+[data-testid="stSidebar"] .stButton > button {
+    background: transparent !important;
+    border: 1px solid #ff0055 !important;
+    color: #ff0055 !important;
+    margin-top: 30px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-weight: 800;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 10px rgba(255, 0, 85, 0.1);
+}
+
+[data-testid="stSidebar"] .stButton > button:hover {
+    background: rgba(255, 0, 85, 0.1) !important;
+    box-shadow: 0 0 20px rgba(255, 0, 85, 0.5) !important;
+    text-shadow: 0 0 5px #ff0055;
+}
+
+/* ===== MODULE CARDS ===== */
+.modulo-card {
+    background: rgba(6, 11, 25, 0.7);
+    padding: 30px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0, 240, 255, 0.3);
+    text-align: center;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+    min-height: 230px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.35s ease;
+    cursor: pointer;
+}
+
+.modulo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    border-color: #00f0ff;
+    box-shadow: 0 15px 40px rgba(0, 240, 255, 0.3);
+}
+
+.card-corner-tl {
+    position: absolute;
+    top: 0; left: 0;
+    width: 28px; height: 28px;
+    border-top: 2px solid #00f0ff;
+    border-left: 2px solid #00f0ff;
+    border-top-left-radius: 12px;
+}
+
+.card-corner-br {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 28px; height: 28px;
+    border-bottom: 2px solid #00f0ff;
+    border-right: 2px solid #00f0ff;
+    border-bottom-right-radius: 12px;
+}
+
+.card-icon {
+    font-size: 3.5em;
+    margin-bottom: 15px;
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+}
+
+.card-title {
+    color: #e0f7fa !important;
+    margin: 0;
+    font-weight: 800;
+    letter-spacing: 1px;
+    font-size: 1.3rem;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+.card-sub {
+    color: #00f0ff !important;
+    font-size: 0.9em;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 10px;
+}
+
+/* ===== BOTONES FUTURISTAS ===== */
+.futuristic-btn-container .stButton > button {
+    background: rgba(0, 240, 255, 0.1) !important;
+    border: 1px solid #00f0ff !important;
+    color: #e0f7fa !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.9rem !important;
+    padding: 12px 20px !important;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2) !important;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.futuristic-btn-container .stButton > button:hover {
+    background: rgba(0, 240, 255, 0.2) !important;
+    color: #ffffff !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.6), inset 0 0 10px rgba(0, 240, 255, 0.3) !important;
+    transform: translateY(-3px);
+}
+
+/* ===== COMPONENTES DE MÓDULOS ===== */
+.stApp h1, .stApp h2 {
+    background: linear-gradient(90deg, #00f0ff, #92FE9D);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px !important;
+}
+
+div[data-testid='stAlert'] {
+    border-radius: 10px !important;
+    border-left-width: 5px !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+div[data-testid='stAlert'][data-type='info'] {
+    background: rgba(0, 80, 120, 0.4) !important;
+    border-left-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15) !important;
+}
+
+div[data-testid='stAlert'][data-type='success'] {
+    background: rgba(0, 80, 40, 0.4) !important;
+    border-left-color: #00e676 !important;
+    box-shadow: 0 0 15px rgba(0, 230, 118, 0.15) !important;
+}
+
+div[data-testid='stAlert'][data-type='error'] {
+    background: rgba(100, 0, 20, 0.4) !important;
+    border-left-color: #ff1744 !important;
+    box-shadow: 0 0 15px rgba(255, 23, 68, 0.2) !important;
+}
+
+button[data-baseweb='tab'] {
+    background: rgba(0, 20, 50, 0.6) !important;
+    border-bottom: 2px solid rgba(0, 240, 255, 0.2) !important;
+    color: #8ecae6 !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px !important;
+    transition: all 0.3s !important;
+}
+
+button[data-baseweb='tab']:hover {
+    color: #00f0ff !important;
+    border-bottom-color: rgba(0, 240, 255, 0.6) !important;
+    background: rgba(0, 240, 255, 0.08) !important;
+}
+
+button[aria-selected='true'][data-baseweb='tab'] {
+    color: #00f0ff !important;
+    border-bottom: 3px solid #00f0ff !important;
+    background: rgba(0, 240, 255, 0.1) !important;
+    text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+/* ===== FORMULARIOS ===== */
+div[data-testid='stForm'] {
+    background: rgba(5, 10, 30, 0.7) !important;
+    border: 1px solid rgba(0, 240, 255, 0.2) !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.05) !important;
+    border-radius: 14px !important;
+    padding: 24px !important;
+}
+
+div[data-testid='stForm'] button[kind='primaryFormSubmit'] {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.3), rgba(0, 150, 200, 0.3)) !important;
+    border: 1px solid #00f0ff !important;
+    color: #e0f7fa !important;
+    font-weight: 700 !important;
+    letter-spacing: 2px !important;
+    text-transform: uppercase !important;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.2) !important;
+    transition: all 0.3s ease !important;
+}
+
+div[data-testid='stForm'] button[kind='primaryFormSubmit']:hover {
+    background: linear-gradient(90deg, rgba(0, 240, 255, 0.5), rgba(0, 200, 255, 0.4)) !important;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5) !important;
+    color: #ffffff !important;
+}
+
+/* ===== CONTENIDOS ESPECÍFICOS ===== */
+div[style*="background-color: #002b55"],
+div[style*="background-color:#002b55"] {
+    background: rgba(0, 25, 70, 0.75) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 4px 20px rgba(0, 100, 200, 0.2), 0 0 0 1px rgba(0, 150, 255, 0.15) !important;
+}
+
+div[style*="background-color: #1e1e1e"],
+div[style*="background-color:#1e1e1e"] {
+    background: rgba(10, 15, 35, 0.85) !important;
+    backdrop-filter: blur(8px) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+div[style*="background-color: #1e1e1e"]:hover,
+div[style*="background-color:#1e1e1e"]:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 10px 30px rgba(0, 240, 255, 0.15) !important;
+}
+
+div.lectura-box {
+    background: rgba(0, 25, 70, 0.7) !important;
+    border-left: 5px solid #D4AF37 !important;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+    backdrop-filter: blur(8px);
+}
+
+div.ejemplo-box {
+    background: rgba(10, 15, 35, 0.8) !important;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 15px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+}
+
+/* ===== TIPOGRAFÍA ===== */
+.stApp h3, .stApp h4 {
+    letter-spacing: 0.5px !important;
+}
+
+.stApp h3 {
+    text-transform: uppercase !important;
+    letter-spacing: 1.5px !important;
+    border-bottom: 1px solid rgba(0, 240, 255, 0.1) !important;
+    padding-bottom: 10px !important;
+    margin-top: 35px !important;
+}
+
+/* ===== LISTAS ===== */
+.stApp ul {
+    list-style-type: none !important;
+    padding-left: 1.5rem !important;
+}
+
+.stApp li::before {
+    content: "◢ " !important;
+    color: #00f0ff !important;
+    font-size: 0.8em !important;
+    margin-right: 10px !important;
+    display: inline-block !important;
+    filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.4)) !important;
+}
+
+/* ===== DECORACIONES ===== */
+div[style*="background-color: #002b55"]::after,
+div[style*="background-color:#002b55"]::after,
+div[style*="background-color: #1e1e1e"]::after,
+div[style*="background-color:#1e1e1e"]::after,
+div.lectura-box::after {
+    content: "" !important;
+    position: absolute !important;
+    bottom: -1px !important;
+    right: -1px !important;
+    width: 20px !important;
+    height: 20px !important;
+    border-bottom: 2px solid #00f0ff !important;
+    border-right: 2px solid #00f0ff !important;
+    border-bottom-right-radius: 12px !important;
+    opacity: 0.5 !important;
+}
+
+/* ===== FLOATING HUD ===== */
+.stApp::after {
+    content: "SECURITY LEVEL: CLEARANCE GRANTED | DIPOL STRATEGIC CORE" !important;
+    position: fixed !important;
+    bottom: 10px !important;
+    right: 20px !important;
+    font-family: monospace !important;
+    font-size: 10px !important;
+    color: rgba(0, 240, 255, 0.3) !important;
+    letter-spacing: 2px !important;
+    z-index: 999 !important;
+    pointer-events: none !important;
+}
+
+/* ===== LOGIN STYLES ===== */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 30px;
+    background: rgba(10, 10, 15, 0.8);
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.5);
+    border: 1px solid #00f0ff;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 1s ease-in-out;
+    backdrop-filter: blur(10px);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-title {
+    color: #00f0ff;
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px #00f0ff;
+    position: relative;
+}
+
+.login-title::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 3px;
+    background: #00f0ff;
+    margin: 10px auto;
+    border-radius: 3px;
+    box-shadow: 0 0 10px #00f0ff;
+}
+
+.stTextInput > div > div > input {
+    background-color: #0a0a0f !important;
+    color: #ffffff !important;
+    border: 1px solid #00f0ff !important;
+    border-radius: 8px !important;
+    padding: 10px 15px !important;
+    font-size: 1rem !important;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) !important;
+    transition: all 0.3s ease;
+}
+
+.stTextInput > div > div > input:focus {
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.5) !important;
+    outline: none;
+}
+
+.login-button {
+    background: linear-gradient(90deg, #00f0ff, #00c0ff);
+    color: #000000 !important;
+    font-weight: bold;
+    font-size: 1.1rem;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    width: 100%;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 240, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 0 5px #000000;
+}
+
+.login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 240, 255, 0.5);
+    background: linear-gradient(90deg, #00c0ff, #00f0ff);
+}
+
+.error-box {
+    background-color: #e74c3c;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #c0392b;
+    font-weight: bold;
+    animation: shake 0.5s ease-in-out;
+    box-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
+/* ===== DASHBOARD METRICS ===== */
+.metric-card {
+    background: linear-gradient(145deg, #0d1117, #161b22);
+    border: 1px solid #30363d;
+    border-top: 4px solid #D4AF37;
+    border-radius: 15px;
+    padding: 25px 10px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+.metric-title {
+    color: #8b949e;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 10px;
+}
+
+.metric-value {
+    color: #D4AF37;
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 0;
+    font-family: 'Arial Black', sans-serif;
+}
+
+[data-testid="stMetricValue"] { 
+    color: #D4AF37 !important; 
+    font-size: 3.5rem !important; 
+    font-weight: 900 !important; 
+}
+
+.stMetric { 
+    background-color: #161b22; 
+    border: 1px solid #30363d; 
+    padding: 20px; 
+    border-radius: 12px; 
+}

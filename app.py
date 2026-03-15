@@ -37,6 +37,16 @@ def cargar_todo_admin():
         query = text("SELECT funcionario, modulo, nota, fecha FROM calificaciones")
         return pd.read_sql(query, conn)
 
+def verificar_intento(funcionario, modulo, engine):
+    """Verifica si el agente ya tiene una nota para este módulo en el último intento."""
+    try:
+        with engine.connect() as conn:
+            query = text("SELECT nota FROM calificaciones WHERE funcionario = :f AND modulo = :m ORDER BY fecha DESC LIMIT 1")
+            result = conn.execute(query, {"f": funcionario, "m": modulo}).fetchone()
+            return result[0] if result else None
+    except:
+        return None
+
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL
 st.markdown("""
 <style>
@@ -667,15 +677,14 @@ div.lectura-box::after {
 </style>
 """, unsafe_allow_html=True)
 
-# 2. MARCA DE AGUA
-agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
-st.markdown(f"<div class='watermark'>{agente_actual}</div>", unsafe_allow_html=True)
-
-# 2. GESTIÓN DE SESIÓN
+# 2. GESTIÓN DE SESIÓN E IDENTIDAD
 if 'autenticado' not in st.session_state: st.session_state['autenticado'] = False
 if 'agente_nombre' not in st.session_state: st.session_state['agente_nombre'] = ""
 if 'es_admin' not in st.session_state: st.session_state['es_admin'] = False
 if 'modo_examen' not in st.session_state: st.session_state['modo_examen'] = False
+if 'modulo_seleccionado' not in st.session_state: st.session_state['modulo_seleccionado'] = "Módulo 1: Conceptualización"
+
+agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
 
 def login():
     # --- CSS GLOBAL Y ESTILOS DINÁMICOS ---
@@ -902,10 +911,6 @@ def login():
 
     .signup-link {
         text-align: center;
-        margin-top:
-        
-   .signup-link {
-        text-align: center;
         margin-top: 15px;
         font-size: 0.9rem;
         color: #8b949e;
@@ -1042,21 +1047,69 @@ def login():
         st.caption("Sistema de Inteligencia v2.6 | Conexión Encriptada")
 
 # --- CONTROL DE FLUJO FINAL ---
+# --- CONTROL DE FLUJO ---
 if not st.session_state.get('autenticado', False):
     login()
+    st.stop()
 else:
+    # --- DASHBOARD PRINCIPAL ---
+    agente_actual = st.session_state.get('agente_nombre', 'Usuario No Identificado')
+    st.markdown(f"<div class='watermark'>{agente_actual}</div>", unsafe_allow_html=True)
+
+    # --- MARCA DE AGUA VISIBLE EN PANTALLA (3-4 VECES, SIN JAVASCRIPT) ---
+    st.markdown(
+        """
+        <style>
+        .watermark-inline {
+            position: relative;
+            display: inline-block;
+            color: rgba(0, 240, 255, 0.3) !important;
+            font-size: 16px;
+            font-family: monospace;
+            letter-spacing: 1px;
+            opacity: 0.3;
+            text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
+            transform: rotate(-45deg);
+            transform-origin: center;
+            margin: 20px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+
+        [data-theme="light"] .watermark-inline {
+            color: rgba(0, 0, 0, 0.3) !important;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        </style>
+        <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; pointer-events: none;">
+            <div class="watermark-inline">CONFIDENCIAL-DIPOL</div>
+            <div class="watermark-inline" style="transform: rotate(45deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+            <div class="watermark-inline" style="transform: rotate(135deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+            <div class="watermark-inline" style="transform: rotate(225deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    
+    # Aseguramos motor de DB
     db_s = st.secrets["connections"]["postgresql"]
     engine = create_engine(f"postgresql://{db_s['username']}:{quote_plus(db_s['password'])}@{db_s['host']}:{db_s['port']}/{db_s['database']}")
-# --- MENÚ PROFESIONAL (Streamlit) ---
-    
+
     with st.sidebar:
         st.title("📂 MENÚ")
         st.caption("☰ Desliza para cerrar")
-        st.write(f"**{'🛡️ ADMIN' if st.session_state['es_admin'] else '👤 AGENTE'}:**\n{st.session_state['agente_nombre']}")
+        # Mostramos identidad si existe en el estado
+        nombre_display = st.session_state.get('agente_nombre', 'Usuario')
+        rol_display = '🛡️ ADMIN' if st.session_state.get('es_admin', False) else '👤 AGENTE'
+        st.write(f"**{rol_display}:**\n{nombre_display}")
         
         seccion = st.radio("Ir a:", ["🏠 Inicio", "📚 Módulos", "📊 Mi Progreso", "📈 Dashboard General"], key="menu_seccion")
-        if st.button("Cerrar Sesión"):
-            for key in list(st.session_state.keys()): del st.session_state[key]
+        
+        st.divider()
+        if st.button("🚪 Cerrar Sesión", use_container_width=True):
+            st.session_state.clear()
             st.rerun()
             
     if st.session_state.menu_seccion == "🏠 Inicio":
@@ -1064,7 +1117,6 @@ else:
         st.markdown("<p style='text-align: center; color: white; font-size: 1.2em;'>Dirección de Inteligencia Policial (DIPOL)</p>", unsafe_allow_html=True)
         st.divider()
 
-        # Definición de los 7 módulos con sus iconos y descripciones cortas
         modulos_home = [
             {"id": "M1", "tit": "Módulo 1", "sub": "Conceptualización", "icon": "📖", "full": "Módulo 1: Conceptualización"},
             {"id": "M2", "tit": "Módulo 2", "sub": "Ciclo de Inteligencia", "icon": "🔄", "full": "Módulo 2: Ciclo de Inteligencia"},
@@ -1075,14 +1127,12 @@ else:
             {"id": "M7", "tit": "Módulo 7", "sub": "Evaluación", "icon": "🔄", "full": "Módulo 7: Evaluación"}
         ]
 
-        # Función de callback para el botón
         def ir_a_modulo(nombre_modulo):
             st.session_state.menu_seccion = "📚 Módulos"
             st.session_state.modulo_seleccionado = nombre_modulo
+            st.session_state.modo_examen = False
 
-        # Creación de la Grilla Tecnológica (Cards)
-        cols = st.columns([1, 1, 1]) # Organizado en 3 columnas
-
+        cols = st.columns([1, 1, 1]) 
         for i, m in enumerate(modulos_home):
             with cols[i % 3]:
                 card_html = (
@@ -1095,43 +1145,26 @@ else:
                     "</div>"
                 )
                 st.markdown(card_html, unsafe_allow_html=True)
-                st.button(
-                    f"▶ Abrir {m['tit']}",
-                    key=f"btn_home_{m['id']}",
-                    on_click=ir_a_modulo,
-                    args=(m['full'],),
-                    use_container_width=True
-                )
+                st.button(f"▶ Abrir {m['tit']}", key=f"btn_home_{m['id']}", on_click=ir_a_modulo, args=(m['full'],), use_container_width=True)
 
-           
     elif st.session_state.menu_seccion == "📚 Módulos":
-        
-        # Obtener el módulo actual (por defecto Módulo 1 si no hay ninguno seleccionado)
         modulo_actual = st.session_state.get('modulo_seleccionado', "Módulo 1: Conceptualización")
-        
-        # Encontrar el índice del módulo actual para el selectbox
-        lista_modulos = [
-            "Módulo 1: Conceptualización", 
-            "Módulo 2: Ciclo de Inteligencia", 
-            "Módulo 3: Recolección", 
-            "Módulo 4: Tratamiento", 
-            "Módulo 5: Análisis", 
-            "Módulo 6: Comunicación", 
-            "Módulo 7: Evaluación"
-        ]
+        lista_modulos = ["Módulo 1: Conceptualización", "Módulo 2: Ciclo de Inteligencia", "Módulo 3: Recolección", "Módulo 4: Tratamiento", "Módulo 5: Análisis", "Módulo 6: Comunicación", "Módulo 7: Evaluación"]
         index_modulo = lista_modulos.index(modulo_actual) if modulo_actual in lista_modulos else 0
 
         def actualizar_modulo():
             st.session_state.modulo_seleccionado = st.session_state.selector_modulo
+            st.session_state.modo_examen = False
 
         modulo_selec = st.selectbox("Seleccione Módulo de Estudio:", lista_modulos, index=index_modulo, key="selector_modulo", on_change=actualizar_modulo)
-        
+    
+
         # --- MÓDULO 1: CONCEPTUALIZACIÓN ---
         if modulo_selec == "Módulo 1: Conceptualización":
             if not st.session_state.get('modo_examen', False):
                 st.header("📖 Material: Conceptualización de Inteligencia")
                 
-                # Definición General con diseño destacado
+                # Definición General
                 st.markdown("""
                     <div style="background-color: #002b55; padding: 20px; border-radius: 10px; border-left: 5px solid #D4AF37; margin-bottom: 20px;">
                         <h3 style="color: #D4AF37; margin-top: 0;">¿Qué es Inteligencia?</h3>
@@ -1144,11 +1177,10 @@ else:
                     </div>
                 """, unsafe_allow_html=True)
 
-                # Sección de Inteligencia Policial
                 st.subheader("🛡️ Inteligencia Policial")
                 st.info("""Conjunto de procesos para generar conocimiento relacionado con la **seguridad y convivencia ciudadana**, contribuyendo al diseño de estrategias institucionales y operaciones de la misión policial.""")
 
-                # Inteligencia según su nivel (Diseño de tarjetas profesionales)
+                # Inteligencia según su nivel
                 st.markdown("### 📊 Niveles de Inteligencia")
                 c1, c2, c3 = st.columns(3)
 
@@ -1185,7 +1217,7 @@ else:
                     nota_p = None
 
                 if nota_p is None:
-                    if st.button("🚀 INICIAR EXAMEN M1"):
+                    if st.button("🚀 INICIAR EXAMEN M1", key="btn_examen_m1"):
                         st.session_state['modo_examen'] = True
                         st.rerun()
                 else: 
@@ -1223,7 +1255,7 @@ else:
                         
                         st.session_state['modo_examen'] = False
                         st.rerun()
-                        
+                    
         # --- MÓDULO 2: CICLO DE INTELIGENCIA ---
         elif modulo_selec == "Módulo 2: Ciclo de Inteligencia":
             if not st.session_state.get('modo_examen', False):
@@ -1232,12 +1264,11 @@ else:
                 st.markdown("""
                     <div class="lectura-box" style="border-left: 5px solid #D4AF37; margin-bottom: 20px;">
                         <h3 style="color: #D4AF37; margin-top: 0;">Definición Estratégica</h3>
-                        <p style="color: white;">Es un proceso sistemático de <b>cinco pasos</b> orientado a la generación de conocimiento útil y veraz para un decisor final. Su objetivo es transformar datos brutos en inteligencia estratégica.</p>
+                        <p style="color: white;">Es un proceso sistemático de <b>cinco pasos</b> orientado a la generation de conocimiento útil y veraz para un decisor final. Su objetivo es transformar datos brutos en inteligencia estratégica.</p>
                     </div>
                 """, unsafe_allow_html=True)
 
                 st.subheader("🔄 Las 5 Fases del Ciclo")
-                
                 
                 # Diseño de flujo de proceso con tarjetas
                 col_c1, col_c2 = st.columns(2)
@@ -1281,7 +1312,7 @@ else:
                     nota_p = None
 
                 if nota_p is None:
-                    if st.button("🚀 INICIAR EXAMEN M2"):
+                    if st.button("🚀 INICIAR EXAMEN M2", key="btn_examen_m2"):
                         st.session_state['modo_examen'] = True
                         st.rerun()
                 else: 
@@ -1319,7 +1350,7 @@ else:
                         
                         st.session_state['modo_examen'] = False
                         st.rerun()
-                        
+                    
         # --- MÓDULO 3: RECOLECCIÓN DE INFORMACIÓN ---
         elif modulo_selec == "Módulo 3: Recolección":
             if not st.session_state.get('modo_examen', False):
@@ -1393,8 +1424,8 @@ else:
                         <div class="lectura-box">
                             <h4 style="color: #D4AF37; margin-top: 0;">Fases del Proceso Operativo</h4>
                             <p style="color: white;">La administración de fuentes requiere un seguimiento riguroso para garantizar la fiabilidad de la información obtenida.</p>
-                        </div>
-                    """, unsafe_allow_html=True)
+                    </div>
+                """, unsafe_allow_html=True)
 
                     # Diseño de fases en columnas 2x2 para mayor claridad
                     f1, f2 = st.columns(2)
@@ -1459,7 +1490,7 @@ else:
                     st.markdown("""
                         <div class="lectura-box" style="border-left: 5px solid #e74c3c;">
                             <h4 style="color: #e74c3c; margin-top: 0;">Tipos de Entrevistador a EVITAR</h4>
-                            <p style="color: white;">Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas y la correcta formulación de preguntas por el agente de inteligencia. Para una recolección efectiva, el entrevistador debe mantener el equilibrio y el control. Evite caer en los siguientes perfiles:</p>
+                            <p style="color: white;">Procedimiento utilizado para la obtención de información de una fuente humana, mediante el intercambio de ideas and la correcta formulación de preguntas por el agente de inteligencia. Para una recolección efectiva, el entrevistador debe mantener el equilibrio y el control. Evite caer en los siguientes perfiles:</p>
                         </div>
                     """, unsafe_allow_html=True)
 
@@ -1507,11 +1538,11 @@ else:
                     nota_p = None
 
                 if nota_p is None:
-                    if st.button("🚀 INICIAR EXAMEN MÓDULO 3"):
+                    if st.button("🚀 INICIAR EXAMEN MÓDULO 3", key="btn_examen_m3"):
                         st.session_state['modo_examen'] = True
                         st.rerun()
                 else: 
-                    st.warning(f"Examen completado. Calificación: {nota_p}%")
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
             
             else:
                 st.header("📝 Evaluación: Módulo 3")
@@ -1541,7 +1572,7 @@ else:
                         
                         st.session_state['modo_examen'] = False
                         st.rerun()
-                        
+                    
         # --- MÓDULO 4: TRATAMIENTO DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 4: Tratamiento":
             if not st.session_state.get('modo_examen', False):
@@ -1654,9 +1685,19 @@ else:
                         st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
 
                 st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 4"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+                
+                # Sistema de evaluación
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_examen_m4"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
             
             else:
                 st.header("📝 Evaluación: Módulo 4")
@@ -1692,7 +1733,6 @@ else:
                         
                         st.session_state['modo_examen'] = False
                         st.rerun()
-
         # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 5: Análisis":
             if not st.session_state.get('modo_examen', False):
@@ -1703,9 +1743,9 @@ else:
                     "🔬 Estudio Especializado", 
                     "🧩 Proceso de Análisis", 
                     "⏳ Línea LCA",
-                    "💡 Síntesis y Resultados"
-                ])
-                
+                "💡 Síntesis y Resultados"
+            ])
+            
                 with tab_estudio:
                     st.subheader("Estudio Especializado de la Información")
                     st.write("El análisis es un proceso cuyo objeto es **generar conocimiento**, con base en la información disponible.")
@@ -1791,10 +1831,25 @@ else:
                     """)
                     st.warning("⚠️ Sin una síntesis clara que oriente la acción, la inteligencia pierde su valor operativo.")
 
-                st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 5"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+                    st.divider()
+
+                    # Sistema de evaluación
+                    try:
+                        nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 5: Análisis", engine)
+                    except:
+                        # Intento con el nombre alternativo por si acaso
+                        try:
+                            nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 5", engine)
+                        except:
+                            nota_p = None
+
+                    if nota_p is None:
+                        if st.button("🚀 INICIAR EXAMEN MÓDULO 5", key="btn_examen_m5"):
+                            st.session_state['modo_examen'] = True
+                            st.rerun()
+                    else: 
+                        st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
+        
             else:
                 st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN DE COMPETENCIAS: MÓDULO 5</h2>", unsafe_allow_html=True)
                 st.info("Responda con precisión. Una vez enviada, la calificación se registrará en su expediente oficial.")
@@ -1807,14 +1862,16 @@ else:
                          "Generar conocimiento con base en la información disponible", 
                          "Archivar antecedentes históricos", 
                          "Interceptar comunicaciones en tiempo real"],
-                        index=None
+                        index=None,
+                        key="m5_q1_fixed"
                     )
 
                     # Pregunta 2: Fases del Análisis
                     q2 = st.multiselect(
                         "2. Seleccione las 4 fases que componen el Estudio Especializado de la Información:",
                         ["Interpretación", "Recolección", "Integración", "Hipótesis", "Difusión", "Conclusiones"],
-                        max_selections=4
+                        max_selections=4,
+                        key="m5_q2_fixed"
                     )
 
                     # Pregunta 3: Proceso Analítico
@@ -1823,7 +1880,8 @@ else:
                         [None, 
                          "Recomponer las partes para entender el significado final", 
                          "Descomponer el todo e identificar cada elemento individual", 
-                         "Ignorar las ideas secundarias para enfocarse en el todo"]
+                         "Ignorar las ideas secundarias para enfocarse en el todo"],
+                        key="m5_q3_fixed"
                     )
 
                     # Pregunta 4: Línea del Conocimiento Analítico (LCA)
@@ -1833,7 +1891,8 @@ else:
                          "La interpretación técnica del presente", 
                          "El almacenamiento masivo de datos", 
                          "La suerte y el azar"],
-                        index=None
+                        index=None,
+                        key="m5_q4_fixed"
                     )
 
                     # Pregunta 5: Valor de la Inteligencia
@@ -1843,7 +1902,8 @@ else:
                          "Se vuelve más confidencial", 
                          "Pierde su valor operativo y de orientación", 
                          "Es más fácil de interpretar"],
-                        index=None
+                        index=None,
+                        key="m5_q5_fixed"
                     )
 
                     enviar = st.form_submit_button("FINALIZAR Y REGISTRAR EVALUACIÓN")
@@ -1861,11 +1921,11 @@ else:
                     try:
                         from datetime import datetime
                         with engine.connect() as conn:
-                            query = text("""
+                            query_reg = text("""
                                 INSERT INTO calificaciones (funcionario, modulo, nota, fecha) 
                                 VALUES (:f, :m, :n, :d)
                             """)
-                            conn.execute(query, {
+                            conn.execute(query_reg, {
                                 "f": st.session_state['agente_nombre'],
                                 "m": "Módulo 5: Análisis",
                                 "n": puntos,
@@ -1880,23 +1940,19 @@ else:
                         else:
                             st.warning(f"⚠️ Evaluación Finalizada. Calificación: {puntos}%. Se recomienda repasar el material.")
                         
-                        if st.button("Finalizar Módulo"):
-                            st.session_state['modo_examen'] = False
-                            st.rerun()
+                        st.session_state['modo_examen'] = False
+                        st.rerun()
 
                     except Exception as e:
                         st.error(f"Error al registrar la nota: {e}")
 
-                if st.button("⬅️ Cancelar y Volver al Material"):
+                if st.button("⬅️ Cancelar y Volver al Material", key="btn_cancel_m5_fixed"):
                     st.session_state['modo_examen'] = False
                     st.rerun()
-                    
-        # --- MÓDULO 6: COMUNICAR E INTEGRAR ---
+        # --- MÓDULO 6: COMUNICACIÓN DE INTELIGENCIA ---
         elif modulo_selec == "Módulo 6: Comunicación":
             if not st.session_state.get('modo_examen', False):
-                st.header("📢 Material: Comunicar e Integrar")
-                
-                # Introducción breve
+                st.header("📢 Material: Comunicación de Inteligencia")
                 st.info("La inteligencia no sirve si no llega a quien debe tomar la decisión en el momento oportuno.")
 
                 tab_pasos, tab_ejemplos, tab_seguridad = st.tabs([
@@ -1946,9 +2002,19 @@ else:
                         </ul></div>""", unsafe_allow_html=True)
 
                 st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 6"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+
+                # Sistema de evaluación
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 6", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN MÓDULO 6", key="btn_examen_m6"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
 
             else:
                 st.markdown("<h2 style='text-align: center; color: #D4AF37;'>📝 EVALUACIÓN: MÓDULO 6</h2>", unsafe_allow_html=True)
@@ -2050,9 +2116,19 @@ else:
                     """, unsafe_allow_html=True)
 
                 st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 7"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+
+                # Sistema de evaluación
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 7", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN MÓDULO 7", key="btn_examen_m7"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
             
             else:
                 # --- EXAMEN MÓDULO 7 ---
@@ -2109,7 +2185,7 @@ else:
                     st.session_state['modo_examen'] = False
                     st.rerun()
 
-    elif seccion == "📊 Mi Progreso":
+    elif st.session_state.menu_seccion == "📊 Mi Progreso":
         st.markdown(f"""
             <div style="background: linear-gradient(90deg, #001f3f 0%, #003366 100%); padding: 20px; border-radius: 15px; border-left: 8px solid #D4AF37; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
                 <h1 style="color: white; margin: 0; font-family: sans-serif;">📊 Mi Expediente Académico</h1>
@@ -2157,8 +2233,8 @@ else:
             # Esto te dirá el error real si vuelve a fallar
             st.error(f"Error técnico de conexión: {e}")
             st.warning("Asegúrate de que la variable 'engine' esté definida al inicio del script.")
-            
-    elif seccion == "📈 Dashboard General":
+        
+    elif st.session_state.menu_seccion == "📈 Dashboard General":
         if st.session_state.get('es_admin', False):
             # Título consolidado con estilo institucional profesional
             st.markdown("""
@@ -2287,39 +2363,4 @@ else:
         else:
             st.error("🚫 Acceso Denegado: Esta sección requiere credenciales de Administrador.")
 
-# --- MARCA DE AGUA VISIBLE EN PANTALLA (3-4 VECES, SIN JAVASCRIPT) ---
-st.markdown(
-    """
-    <style>
-    .watermark-inline {
-        position: relative;
-        display: inline-block;
-        color: rgba(0, 240, 255, 0.3) !important;
-        font-size: 16px;
-        font-family: monospace;
-        letter-spacing: 1px;
-        opacity: 0.3;
-        text-shadow: 0 0 5px rgba(0, 240, 255, 0.5);
-        transform: rotate(-45deg);
-        transform-origin: center;
-        margin: 20px;
-        padding: 10px;
-        background: rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
-
-    [data-theme="light"] .watermark-inline {
-        color: rgba(0, 0, 0, 0.3) !important;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-        background: rgba(255, 255, 255, 0.1);
-    }
-    </style>
-    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; pointer-events: none;">
-        <div class="watermark-inline">CONFIDENCIAL-DIPOL</div>
-        <div class="watermark-inline" style="transform: rotate(45deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
-        <div class="watermark-inline" style="transform: rotate(135deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
-        <div class="watermark-inline" style="transform: rotate(225deg); margin-top: 50px;">CONFIDENCIAL-DIPOL</div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+# --- FIN DEL ARCHIVO ---
