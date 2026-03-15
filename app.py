@@ -406,7 +406,23 @@ body:hover .watermark {
     box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1) !important;
 }
 
-.modulo-card + div[data-testid='stButton'] > button:hover {
+.footer-btn button {
+    background: rgba(0, 240, 255, 0.08) !important;
+    border: 1px solid rgba(0, 240, 255, 0.4) !important;
+    border-top: 2px solid rgba(0, 240, 255, 0.6) !important;
+    border-radius: 0 0 12px 12px !important;
+    color: #00f0ff !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    font-size: 0.85rem !important;
+    padding: 10px !important;
+    margin-top: -5px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 5px 15px rgba(0, 240, 255, 0.1) !important;
+}
+
+.footer-btn button:hover {
     background: rgba(0, 240, 255, 0.2) !important;
     box-shadow: 0 5px 25px rgba(0, 240, 255, 0.4) !important;
     color: #ffffff !important;
