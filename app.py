@@ -1670,6 +1670,7 @@ else:
                     except:
                         nota_p = None
                     
+                    # Corregido: Se añade la condición del modo_examen para que el else tenga sentido
                     if not st.session_state.get('modo_examen', False):
                         if nota_p is None:
                             if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_exam_m4"):
@@ -1711,7 +1712,7 @@ else:
                                 
                                 st.session_state['modo_examen'] = False
                                 st.rerun()
-                    
+                                        
                     
        # --- MÓDULO 5: ANÁLISIS DE LA INFORMACIÓN (CONTENIDO COMPLETO) ---
         elif modulo_selec == "Módulo 5: Análisis":
