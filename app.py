@@ -1689,9 +1689,19 @@ else:
                         st.error("**Ejemplo D-4 (25%):** Llamada anónima con datos imposibles de verificar.")
 
                 st.divider()
-                if st.button("🚀 INICIAR EXAMEN MÓDULO 4"):
-                    st.session_state['modo_examen'] = True
-                    st.rerun()
+                
+                # Sistema de evaluación
+                try:
+                    nota_p = verificar_intento(st.session_state['agente_nombre'], "Módulo 4", engine)
+                except:
+                    nota_p = None
+
+                if nota_p is None:
+                    if st.button("🚀 INICIAR EXAMEN MÓDULO 4", key="btn_examen_m4"):
+                        st.session_state['modo_examen'] = True
+                        st.rerun()
+                else: 
+                    st.success(f"✅ Módulo completado. Calificación obtenida: {nota_p}%")
             
             else:
                 st.header("📝 Evaluación: Módulo 4")
